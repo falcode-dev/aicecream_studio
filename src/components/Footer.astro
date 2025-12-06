@@ -7,9 +7,37 @@ const today = new Date();
 </footer>
 <style>
 	footer {
-		padding: 2em 1em 6em 1em;
-		background: linear-gradient(var(--gray-gradient)) no-repeat;
+		padding: 3rem 2rem;
+		background: rgb(var(--white));
+		border-top: 1px solid rgb(var(--border));
 		color: rgb(var(--gray));
 		text-align: center;
+		font-size: 0.875rem;
+		margin-top: 4rem;
+	}
+	
+	/* タブレット */
+	@media (max-width: 1024px) {
+		footer {
+			padding: 2.5rem 2rem;
+		}
+	}
+	
+	/* モバイル */
+	@media (max-width: 768px) {
+		footer {
+			padding: 2rem 1.5rem;
+			margin-top: 3rem;
+			font-size: 0.8125rem;
+		}
+	}
+	
+	/* 小さなモバイル */
+	@media (max-width: 480px) {
+		footer {
+			padding: 1.5rem 1.25rem;
+			margin-top: 2rem;
+			font-size: 0.75rem;
+		}
 	}
 </style>

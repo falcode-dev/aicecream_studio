@@ -17,71 +17,87 @@ const posts = (await getCollection('blog')).sort(
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
-			main {
-				width: 960px;
-			}
 			ul {
-				display: flex;
-				flex-wrap: wrap;
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 				gap: 2rem;
 				list-style-type: none;
 				margin: 0;
 				padding: 0;
 			}
 			ul li {
-				width: calc(50% - 1rem);
+				display: flex;
+				flex-direction: column;
 			}
 			ul li * {
 				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
+				transition: all 0.2s ease;
 			}
 			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
+				margin-bottom: 1rem;
+				border-radius: 0;
+				width: 100%;
+				height: auto;
+				aspect-ratio: 16 / 9;
+				object-fit: cover;
 			}
 			ul li a {
 				display: block;
+				color: inherit;
+			}
+			ul li a:hover {
+				opacity: 0.8;
 			}
 			.title {
-				margin: 0;
+				margin: 0 0 0.5rem 0;
 				color: rgb(var(--black));
-				line-height: 1;
+				line-height: 1.4;
+				font-size: 1.25rem;
 			}
 			.date {
 				margin: 0;
 				color: rgb(var(--gray));
+				font-size: 0.875rem;
 			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
+			ul li a:hover .title {
+				color: var(--accent);
 			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
+			/* タブレット */
+			@media (max-width: 1024px) {
 				ul {
-					gap: 0.5em;
+					grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+					gap: 1.5rem;
 				}
-				ul li {
-					width: 100%;
-					text-align: center;
+			}
+			
+			/* モバイル */
+			@media (max-width: 768px) {
+				ul {
+					grid-template-columns: 1fr;
+					gap: 2rem;
 				}
-				ul li:first-child {
-					margin-bottom: 0;
+				
+				.title {
+					font-size: 1.125rem;
 				}
-				ul li:first-child .title {
-					font-size: 1.563em;
+				
+				.date {
+					font-size: 0.8125rem;
+				}
+			}
+			
+			/* 小さなモバイル */
+			@media (max-width: 480px) {
+				ul {
+					gap: 1.5rem;
+				}
+				
+				ul li img {
+					margin-bottom: 0.75rem;
+				}
+				
+				.title {
+					font-size: 1rem;
 				}
 			}
 		</style>

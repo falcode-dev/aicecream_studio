@@ -16,41 +16,94 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 		<BaseHead title={title} description={description} />
 		<style>
 			main {
-				width: calc(100% - 2em);
+				width: 100%;
 				max-width: 100%;
 				margin: 0;
+				padding: 0;
 			}
 			.hero-image {
 				width: 100%;
+				margin-bottom: 3rem;
 			}
 			.hero-image img {
 				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
+				width: 100%;
+				height: auto;
+				border-radius: 0;
 			}
 			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
+				width: 100%;
+				max-width: 800px;
+				margin: 0 auto;
+				padding: 0 2rem;
+				color: rgb(var(--black));
 			}
 			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
+				margin-bottom: 3rem;
+				padding: 0;
+				text-align: left;
 			}
 			.title h1 {
-				margin: 0 0 0.5em 0;
+				margin: 0 0 1rem 0;
+				font-size: 2.5rem;
+				line-height: 1.2;
 			}
 			.date {
-				margin-bottom: 0.5em;
+				margin-bottom: 1rem;
 				color: rgb(var(--gray));
+				font-size: 0.875rem;
 			}
 			.last-updated-on {
-				font-style: italic;
+				margin-top: 0.5rem;
+				font-size: 0.875rem;
+				color: rgb(var(--gray));
+			}
+			/* タブレット */
+			@media (max-width: 1024px) {
+				.prose {
+					padding: 0 2rem;
+				}
+				.title h1 {
+					font-size: 2.25rem;
+				}
+			}
+			
+			/* モバイル */
+			@media (max-width: 768px) {
+				.prose {
+					padding: 0 1.5rem;
+				}
+				.title {
+					margin-bottom: 2rem;
+				}
+				.title h1 {
+					font-size: 1.875rem;
+				}
+				.hero-image {
+					margin-bottom: 2rem;
+				}
+				.date {
+					font-size: 0.8125rem;
+				}
+				.last-updated-on {
+					font-size: 0.8125rem;
+				}
+			}
+			
+			/* 小さなモバイル */
+			@media (max-width: 480px) {
+				.prose {
+					padding: 0 1.25rem;
+				}
+				.title {
+					margin-bottom: 1.5rem;
+				}
+				.title h1 {
+					font-size: 1.625rem;
+				}
+				.hero-image {
+					margin-bottom: 1.5rem;
+				}
 			}
 		</style>
 	</head>
