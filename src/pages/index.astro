@@ -11,12 +11,48 @@ import '../styles/index.css';
 const latestPosts = (await getCollection('blog'))
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 	.slice(0, 6);
+
+// 構造化データの生成
+const siteURL = Astro.site || Astro.url.origin;
+
+// WebSite構造化データ
+const websiteData = {
+	"@context": "https://schema.org",
+	"@type": "WebSite",
+	"name": SITE_TITLE,
+	"description": SITE_DESCRIPTION,
+	"url": siteURL,
+	"potentialAction": {
+		"@type": "SearchAction",
+		"target": {
+			"@type": "EntryPoint",
+			"urlTemplate": `${siteURL}/blog?category={search_term_string}`
+		},
+		"query-input": "required search_term_string"
+	}
+};
+const websiteJson = JSON.stringify(websiteData);
+
+// Organization構造化データ
+const orgData = {
+	"@context": "https://schema.org",
+	"@type": "Organization",
+	"name": "aice cream studio",
+	"url": siteURL,
+	"logo": new URL("/icon.png", siteURL).href,
+	"sameAs": []
+};
+const orgJson = JSON.stringify(orgData);
 ---
 
 <!doctype html>
 <html lang="ja">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		{/* 構造化データ - WebSite */}
+		<script type="application/ld+json" set:html={websiteJson} />
+		{/* 構造化データ - Organization */}
+		<script type="application/ld+json" set:html={orgJson} />
 	</head>
 	<body>
 		<Header />
