@@ -9,7 +9,7 @@ import '../styles/blog-post.css';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, category } = Astro.props;
 
 // 日付を「yyyy年mm月dd日 hh時mm分」形式にフォーマット
 function formatDateTime(date: Date): string {
@@ -31,11 +31,30 @@ function formatDateTime(date: Date): string {
 		<Header />
 		<main>
 			<article>
+				<div class="breadcrumb">
+					<nav aria-label="パンくずリスト">
+						<ol>
+							<li><a href="/">ホーム</a></li>
+							<li><a href="/blog">ブログ</a></li>
+							{category && (
+								<li>
+									<a href={`/blog?category=${encodeURIComponent(category)}`}>{category}</a>
+								</li>
+							)}
+							<li aria-current="page">{title}</li>
+						</ol>
+					</nav>
+				</div>
 				<div class="hero-image">
 					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
 				</div>
 				<div class="prose">
 					<div class="title">
+						{category && (
+							<div class="category-badge">
+								<span>{category}</span>
+							</div>
+						)}
 						<div class="date-time">
 							<div class="date-item">
 								<div class="date-icon">
