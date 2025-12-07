@@ -14,18 +14,31 @@ interface Props {
 const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin);
 
 const { title, description, image } = Astro.props;
+
+// ベースURLの構築
+const baseURL = Astro.site || Astro.url.origin;
+const basePath = import.meta.env.BASE_URL;
+const getBaseURL = (path: string) => {
+	// ベースパスが '/' の場合はそのまま、それ以外は結合
+	if (basePath === '/') {
+		return baseURL + path;
+	}
+	// パスが '/' で始まる場合は削除
+	const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+	return baseURL + basePath + cleanPath;
+};
 ---
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="icon" type="image/png" href={new URL('icon.png', import.meta.env.BASE_URL).href} />
-<link rel="sitemap" href={new URL('sitemap-index.xml', import.meta.env.BASE_URL).href} />
+<link rel="icon" type="image/png" href={getBaseURL('icon.png')} />
+<link rel="sitemap" href={getBaseURL('sitemap-index.xml')} />
 <link
 	rel="alternate"
 	type="application/rss+xml"
 	title={SITE_TITLE}
-	href={new URL('rss.xml', import.meta.env.BASE_URL).href}
+	href={getBaseURL('rss.xml')}
 />
 <meta name="generator" content={Astro.generator} />
 

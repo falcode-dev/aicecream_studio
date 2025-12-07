@@ -117,11 +117,11 @@ const breadcrumbJson = JSON.stringify(breadcrumbData);
 				<div class="breadcrumb">
 					<nav aria-label="パンくずリスト">
 						<ol>
-							<li><a href={new URL('/', import.meta.env.BASE_URL).pathname}>ホーム</a></li>
-							<li><a href={new URL('blog', import.meta.env.BASE_URL).pathname}>ブログ</a></li>
+							<li><a href={import.meta.env.BASE_URL}>ホーム</a></li>
+							<li><a href={`${import.meta.env.BASE_URL}blog`}>ブログ</a></li>
 							{category && (
 								<li>
-									<a href={new URL(`blog?category=${encodeURIComponent(category)}`, import.meta.env.BASE_URL).pathname}>{category}</a>
+									<a href={`${import.meta.env.BASE_URL}blog?category=${encodeURIComponent(category)}`}>{category}</a>
 								</li>
 							)}
 							<li aria-current="page">{title}</li>

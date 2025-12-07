@@ -1,15 +1,26 @@
 ---
 import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
+
+// ベースパスを考慮したパスの生成
+const getPath = (path: string) => {
+	const basePath = import.meta.env.BASE_URL;
+	if (basePath === '/') {
+		return path;
+	}
+	// パスが '/' で始まる場合は削除
+	const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+	return basePath + cleanPath;
+};
 ---
 
 <header>
 	<nav>
-		<h2><a href={new URL('/', import.meta.env.BASE_URL).pathname}>{SITE_TITLE}</a></h2>
+		<h2><a href={getPath('/')}>{SITE_TITLE}</a></h2>
 		<div class="internal-links">
-			<HeaderLink href={new URL('/', import.meta.env.BASE_URL).pathname}>ホーム</HeaderLink>
-			<HeaderLink href={new URL('blog', import.meta.env.BASE_URL).pathname}>ブログ</HeaderLink>
-			<HeaderLink href={new URL('about', import.meta.env.BASE_URL).pathname}>プロフィール</HeaderLink>
+			<HeaderLink href={getPath('/')}>ホーム</HeaderLink>
+			<HeaderLink href={getPath('/blog')}>ブログ</HeaderLink>
+			<HeaderLink href={getPath('/about')}>プロフィール</HeaderLink>
 		</div>
 	</nav>
 </header>
