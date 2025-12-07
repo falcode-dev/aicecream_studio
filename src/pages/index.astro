@@ -39,7 +39,7 @@ const orgData = {
 	"@type": "Organization",
 	"name": "aice cream studio",
 	"url": siteURL,
-	"logo": new URL("/icon.png", siteURL).href,
+	"logo": new URL("icon.png", siteURL + import.meta.env.BASE_URL).href,
 	"sameAs": []
 };
 const orgJson = JSON.stringify(orgData);
@@ -75,7 +75,7 @@ const orgJson = JSON.stringify(orgData);
 					<ul class="posts-grid">
 						{latestPosts.map((post) => (
 							<li>
-								<a href={post.data.category ? `/blog/${categoryToSlug(post.data.category)}/${post.id}/` : `/blog/${post.id}/`} class="post-card">
+								<a href={new URL(`blog/${post.data.category ? `${categoryToSlug(post.data.category)}/${post.id}/` : `${post.id}/`}`, import.meta.env.BASE_URL).pathname} class="post-card">
 									{post.data.heroImage ? (
 										<Image
 											width={400}
@@ -96,7 +96,7 @@ const orgJson = JSON.stringify(orgData);
 						))}
 					</ul>
 					<div class="view-all">
-						<a href="/blog" class="view-all-link">もっと見る</a>
+						<a href={new URL('blog', import.meta.env.BASE_URL).pathname} class="view-all-link">もっと見る</a>
 					</div>
 				</section>
 			)}

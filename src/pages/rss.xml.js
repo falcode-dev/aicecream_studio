@@ -11,8 +11,8 @@ export async function GET(context) {
 		items: posts.map((post) => ({
 			...post.data,
 			link: post.data.category 
-				? `/blog/${categoryToSlug(post.data.category)}/${post.id}/`
-				: `/blog/${post.id}/`,
+				? `${import.meta.env.BASE_URL}blog/${categoryToSlug(post.data.category)}/${post.id}/`
+				: `${import.meta.env.BASE_URL}blog/${post.id}/`,
 		})),
 	});
 }

@@ -11,7 +11,7 @@ interface Props {
 	image?: ImageMetadata;
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin);
 
 const { title, description, image } = Astro.props;
 ---
@@ -19,13 +19,13 @@ const { title, description, image } = Astro.props;
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="icon" type="image/png" href="/icon.png" />
-<link rel="sitemap" href="/sitemap-index.xml" />
+<link rel="icon" type="image/png" href={new URL('icon.png', import.meta.env.BASE_URL).href} />
+<link rel="sitemap" href={new URL('sitemap-index.xml', import.meta.env.BASE_URL).href} />
 <link
 	rel="alternate"
 	type="application/rss+xml"
 	title={SITE_TITLE}
-	href={new URL('rss.xml', Astro.site)}
+	href={new URL('rss.xml', import.meta.env.BASE_URL).href}
 />
 <meta name="generator" content={Astro.generator} />
 

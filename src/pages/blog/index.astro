@@ -27,7 +27,7 @@ const categories = ['Microsoft Tech Blog', 'のんびり生きるための副業
 		<nav class="category-navigation" aria-label="カテゴリナビゲーション">
 			<div class="category-navigation-container">
 				<a 
-					href="/blog"
+					href={new URL('blog', import.meta.env.BASE_URL).pathname}
 					data-category="all" 
 					class={`category-nav-link ${selectedCategory === 'all' ? 'active' : ''}`}
 				>
@@ -35,7 +35,7 @@ const categories = ['Microsoft Tech Blog', 'のんびり生きるための副業
 				</a>
 				{categories.map((category) => (
 					<a 
-						href={`/blog?category=${encodeURIComponent(category)}`}
+						href={new URL(`blog?category=${encodeURIComponent(category)}`, import.meta.env.BASE_URL).pathname}
 						data-category={category}
 						class={`category-nav-link ${selectedCategory === category ? 'active' : ''}`}
 					>
@@ -56,7 +56,7 @@ const categories = ['Microsoft Tech Blog', 'のんびり生きるための副業
 									data-category={postCategory}
 									style={isVisible ? '' : 'display: none;'}
 								>
-									<a href={post.data.category ? `/blog/${categoryToSlug(post.data.category)}/${post.id}/` : `/blog/${post.id}/`}>
+									<a href={new URL(`blog/${post.data.category ? `${categoryToSlug(post.data.category)}/${post.id}/` : `${post.id}/`}`, import.meta.env.BASE_URL).pathname}>
 										{post.data.heroImage && (
 											<Image width={720} height={360} src={post.data.heroImage} alt={post.data.title} />
 										)}
