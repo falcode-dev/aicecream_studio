@@ -3,6 +3,7 @@ title: My New Article
 description: 記事の説明をここに記入してください
 pubDate: 2025-12-07
 heroImage: ../../assets/blog-placeholder-1.jpg
+category: のんびり生きるための副業
 ---
 
 # My New Article

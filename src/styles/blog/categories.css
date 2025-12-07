@@ -1,0 +1,76 @@
+.categories-filter {
+	display: flex;
+	gap: 0.75rem;
+	margin-bottom: 2.5rem;
+	padding: 0 2rem;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.category-button {
+	padding: 0.625rem 1.25rem;
+	background: rgb(var(--white));
+	border: 1px solid rgb(var(--border));
+	border-radius: 6px;
+	color: rgb(var(--gray-dark));
+	font-size: 0.9375rem;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	text-decoration: none;
+	display: inline-block;
+	font-family: inherit;
+}
+
+.category-button:hover {
+	border-color: var(--main-color);
+	color: var(--main-color);
+	background: var(--main-color-light);
+}
+
+.category-button.active {
+	background: var(--main-color);
+	color: white;
+	border-color: var(--main-color);
+}
+
+.category-button.active:hover {
+	background: var(--main-color-hover);
+	border-color: var(--main-color-hover);
+}
+
+/* タブレット */
+@media (max-width: 1024px) {
+	.categories-filter {
+		padding: 0 2rem;
+		margin-bottom: 2rem;
+	}
+}
+
+/* モバイル */
+@media (max-width: 768px) {
+	.categories-filter {
+		padding: 0 1.5rem;
+		margin-bottom: 2rem;
+		gap: 0.5rem;
+	}
+	
+	.category-button {
+		padding: 0.5rem 1rem;
+		font-size: 0.875rem;
+	}
+}
+
+/* 小さなモバイル */
+@media (max-width: 480px) {
+	.categories-filter {
+		padding: 0 1.25rem;
+		margin-bottom: 1.5rem;
+	}
+	
+	.category-button {
+		padding: 0.5rem 0.875rem;
+		font-size: 0.8125rem;
+	}
+}
+

@@ -4,6 +4,7 @@ description: これはブログ記事のサンプルです。このテンプレ�
 pubDate: 2024-01-15
 updatedDate: 2024-01-16
 heroImage: ../../assets/blog-placeholder-1.jpg
+category: Microsoft Tech Blog
 ---
 
 # サンプル記事

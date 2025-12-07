@@ -7,10 +7,14 @@ import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 import '../../styles/blog/index.css';
+import '../../styles/blog/categories.css';
 
-const posts = (await getCollection('blog')).sort(
+const allPosts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+const selectedCategory = Astro.url.searchParams.get('category') || 'all';
+const categories = ['Microsoft Tech Blog', 'のんびり生きるための副業'];
 ---
 
 <!doctype html>
@@ -22,23 +26,100 @@ const posts = (await getCollection('blog')).sort(
 		<Header />
 		<main>
 			<section>
-				<ul>
+				<div class="categories-filter">
+					<button 
+						data-category="all" 
+						class={`category-button ${selectedCategory === 'all' ? 'active' : ''}`}
+					>
+						すべて
+					</button>
+					{categories.map((category) => (
+						<button 
+							data-category={category}
+							class={`category-button ${selectedCategory === category ? 'active' : ''}`}
+						>
+							{category}
+						</button>
+					))}
+				</div>
+				<ul id="posts-list">
 					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
+						allPosts.map((post) => {
+							const postCategory = post.data.category || '';
+							const isVisible = selectedCategory === 'all' || postCategory === selectedCategory;
+							return (
+								<li 
+									data-category={postCategory}
+									style={isVisible ? '' : 'display: none;'}
+								>
+									<a href={`/blog/${post.id}/`}>
+										{post.data.heroImage && (
+											<Image width={720} height={360} src={post.data.heroImage} alt="" />
+										)}
+										<h4 class="title">{post.data.title}</h4>
+										<p class="date">
+											<FormattedDate date={post.data.pubDate} />
+										</p>
+									</a>
+								</li>
+							);
+						})
 					}
 				</ul>
+				<script define:vars={{ allPosts: allPosts.map(p => ({ id: p.id, category: p.data.category || '' })) }}>
+					document.addEventListener('DOMContentLoaded', () => {
+						const categoryButtons = document.querySelectorAll('.category-button');
+						const postsList = document.getElementById('posts-list');
+						const posts = Array.from(postsList?.querySelectorAll('li') || []);
+						
+						categoryButtons.forEach(button => {
+							button.addEventListener('click', () => {
+								const selectedCategory = button.getAttribute('data-category');
+								
+								// アクティブ状態を更新
+								categoryButtons.forEach(btn => {
+									btn.classList.remove('active');
+								});
+								button.classList.add('active');
+								
+								// URLを更新（履歴に追加）
+								const url = selectedCategory === 'all' 
+									? '/blog' 
+									: `/blog?category=${encodeURIComponent(selectedCategory)}`;
+								window.history.pushState({ category: selectedCategory }, '', url);
+								
+								// 記事をフィルタリング
+								posts.forEach(post => {
+									const postCategory = post.getAttribute('data-category');
+									if (selectedCategory === 'all' || postCategory === selectedCategory) {
+										post.style.display = '';
+									} else {
+										post.style.display = 'none';
+									}
+								});
+							});
+						});
+						
+						// ブラウザの戻る/進むボタンに対応
+						window.addEventListener('popstate', (e) => {
+							const category = e.state?.category || new URLSearchParams(window.location.search).get('category') || 'all';
+							const button = document.querySelector(`[data-category="${category}"]`);
+							if (button) {
+								categoryButtons.forEach(btn => btn.classList.remove('active'));
+								button.classList.add('active');
+								
+								posts.forEach(post => {
+									const postCategory = post.getAttribute('data-category');
+									if (category === 'all' || postCategory === category) {
+										post.style.display = '';
+									} else {
+										post.style.display = 'none';
+									}
+								});
+							}
+						});
+					});
+				</script>
 			</section>
 		</main>
 		<Footer />

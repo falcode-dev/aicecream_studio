@@ -30,13 +30,17 @@ if (fs.existsSync(filePath)) {
 const today = new Date();
 const dateStr = today.toISOString().split('T')[0];
 
+// カテゴリを取得（オプション）
+const category = args[1] || '';
+
 // テンプレート
+const categoryLine = category ? `category: ${category}\n` : '';
 const template = `---
 title: ${slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
 description: 記事の説明をここに記入してください
 pubDate: ${dateStr}
 heroImage: ../../assets/blog-placeholder-1.jpg
----
+${categoryLine}---
 
 # ${slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
 

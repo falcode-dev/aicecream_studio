@@ -13,6 +13,7 @@ const blog = defineCollection({
 			pubDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
 			heroImage: image().optional(),
+			category: z.enum(['Microsoft Tech Blog', 'のんびり生きるための副業']).optional(),
 		}),
 });
 
