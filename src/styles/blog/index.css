@@ -1,0 +1,93 @@
+ul {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	gap: 2rem;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+ul li {
+	display: flex;
+	flex-direction: column;
+}
+
+ul li * {
+	text-decoration: none;
+	transition: all 0.2s ease;
+}
+
+ul li img {
+	margin-bottom: 1rem;
+	border-radius: 0;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 16 / 9;
+	object-fit: cover;
+}
+
+ul li a {
+	display: block;
+	color: inherit;
+}
+
+ul li a:hover {
+	opacity: 0.8;
+}
+
+.title {
+	margin: 0 0 0.5rem 0;
+	color: rgb(var(--black));
+	line-height: 1.4;
+	font-size: 1.25rem;
+}
+
+.date {
+	margin: 0;
+	color: rgb(var(--gray));
+	font-size: 0.875rem;
+}
+
+ul li a:hover .title {
+	color: var(--accent);
+}
+
+/* タブレット */
+@media (max-width: 1024px) {
+	ul {
+		grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+		gap: 1.5rem;
+	}
+}
+
+/* モバイル */
+@media (max-width: 768px) {
+	ul {
+		grid-template-columns: 1fr;
+		gap: 2rem;
+	}
+	
+	.title {
+		font-size: 1.125rem;
+	}
+	
+	.date {
+		font-size: 0.8125rem;
+	}
+}
+
+/* 小さなモバイル */
+@media (max-width: 480px) {
+	ul {
+		gap: 1.5rem;
+	}
+	
+	ul li img {
+		margin-bottom: 0.75rem;
+	}
+	
+	.title {
+		font-size: 1rem;
+	}
+}
+
