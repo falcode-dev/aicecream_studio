@@ -51,8 +51,19 @@
 	margin: 0 0 1rem 0;
 	color: rgb(var(--black));
 	font-weight: 600;
-	border-bottom: 2px solid rgba(52, 211, 153, 0.2);
+	border-bottom: 2px solid var(--main-color-border);
 	padding-bottom: 0.5rem;
+	position: relative;
+}
+
+.about-section h2::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	bottom: -2px;
+	width: 60px;
+	height: 2px;
+	background: var(--main-color);
 }
 
 .about-section p {
@@ -76,8 +87,8 @@
 .skill-tag {
 	display: inline-block;
 	padding: 0.5rem 1rem;
-	background: rgba(52, 211, 153, 0.1);
-	color: var(--accent);
+	background: var(--main-color-light);
+	color: var(--main-color);
 	border-radius: 6px;
 	font-size: 0.9375rem;
 	font-weight: 500;

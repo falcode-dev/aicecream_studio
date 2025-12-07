@@ -49,7 +49,7 @@ ul li a:hover {
 }
 
 ul li a:hover .title {
-	color: var(--accent);
+	color: var(--main-color);
 }
 
 /* タブレット */

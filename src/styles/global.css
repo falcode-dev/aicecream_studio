@@ -5,8 +5,12 @@
  */
 
 :root {
-	--accent: #2563eb;
-	--accent-hover: #1d4ed8;
+	--main-color: #1bafad;
+	--main-color-hover: rgba(52, 211, 184, 0.8);
+	--main-color-light: rgba(52, 211, 184, 0.1);
+	--main-color-border: rgba(52, 211, 184, 0.2);
+	--accent: #d99346;
+	--accent-hover: rgba(217, 147, 70, 0.8);
 	--black: 17, 24, 39;
 	--gray: 107, 114, 128;
 	--gray-light: 243, 244, 246;
@@ -121,7 +125,7 @@ pre > code {
 	all: unset;
 }
 blockquote {
-	border-left: 3px solid var(--accent);
+	border-left: 3px solid var(--main-color);
 	padding: 0 0 0 1.5rem;
 	margin: 0 0 1.5rem 0;
 	color: rgb(var(--gray-dark));

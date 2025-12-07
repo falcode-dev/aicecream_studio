@@ -24,7 +24,7 @@ heroImage: ../../assets/blog-placeholder-1.jpg
 - `updatedDate`: 最終更新日（任意、YYYY-MM-DD形式）
 - `heroImage`: ヒーロー画像のパス（任意、`../../assets/` からの相対パス）
 
-## Markdownの書き方
+### Markdownの書き方
 
 通常のMarkdown記法が使用できます。
 

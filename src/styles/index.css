@@ -14,7 +14,7 @@
 	transform: translateX(-50%);
 	width: 200px;
 	height: 200px;
-	background: linear-gradient(135deg, rgba(52, 211, 153, 0.1), rgba(16, 185, 129, 0.05));
+	background: linear-gradient(135deg, rgba(52, 211, 184, 0.1), rgba(52, 211, 184, 0.05));
 	border-radius: 50%;
 	filter: blur(60px);
 	z-index: -1;
@@ -23,11 +23,11 @@
 .hero-badge {
 	display: inline-block;
 	padding: 0.5rem 1.25rem;
-	background: rgba(52, 211, 153, 0.1);
-	border: 1px solid rgba(52, 211, 153, 0.2);
+	background: var(--main-color-light);
+	border: 1px solid var(--main-color-border);
 	border-radius: 50px;
 	font-size: 0.875rem;
-	color: var(--accent);
+	color: var(--main-color);
 	margin-bottom: 2rem;
 	font-weight: 500;
 	letter-spacing: 0.05em;
@@ -61,27 +61,27 @@
 .btn-primary {
 	display: inline-block;
 	padding: 1rem 2.5rem;
-	background-color: var(--accent);
+	background-color: var(--main-color);
 	color: white;
 	border-radius: 8px;
 	text-decoration: none;
 	transition: all 0.3s ease;
 	font-weight: 500;
 	font-size: 1.0625rem;
-	box-shadow: 0 4px 12px rgba(52, 211, 153, 0.3);
+	box-shadow: 0 4px 12px rgba(52, 211, 184, 0.25);
 }
 
 .btn-primary:hover {
-	background-color: var(--accent-hover);
+	background-color: var(--main-color-hover);
 	transform: translateY(-2px);
-	box-shadow: 0 6px 16px rgba(52, 211, 153, 0.4);
+	box-shadow: 0 6px 16px rgba(52, 211, 184, 0.3);
 }
 
 .btn-secondary {
 	display: inline-block;
 	padding: 1rem 2.5rem;
-	color: var(--accent);
-	border: 2px solid var(--accent);
+	color: var(--main-color);
+	border: 2px solid var(--main-color);
 	border-radius: 8px;
 	text-decoration: none;
 	transition: all 0.3s ease;
@@ -91,7 +91,7 @@
 }
 
 .btn-secondary:hover {
-	background-color: var(--accent);
+	background-color: var(--main-color);
 	color: white;
 	transform: translateY(-2px);
 }
@@ -131,9 +131,9 @@
 }
 
 .skill-item:hover {
-	border-color: var(--accent);
+	border-color: var(--main-color);
 	transform: translateY(-2px);
-	box-shadow: 0 4px 12px rgba(52, 211, 153, 0.1);
+	box-shadow: 0 4px 12px var(--main-color-light);
 }
 
 .skill-name {
@@ -152,8 +152,8 @@
 .skill-tags span {
 	display: inline-block;
 	padding: 0.375rem 0.875rem;
-	background: rgba(52, 211, 153, 0.1);
-	color: var(--accent);
+	background: var(--main-color-light);
+	color: var(--main-color);
 	border-radius: 6px;
 	font-size: 0.875rem;
 	font-weight: 500;
@@ -178,11 +178,11 @@
 	justify-content: center;
 	width: 60px;
 	height: 60px;
-	background: linear-gradient(135deg, rgba(52, 211, 153, 0.1), rgba(16, 185, 129, 0.05));
+	background: linear-gradient(135deg, rgba(52, 211, 184, 0.1), rgba(52, 211, 184, 0.05));
 	border-radius: 50%;
 	font-size: 1.5rem;
 	font-weight: 700;
-	color: var(--accent);
+	color: var(--main-color);
 	margin-bottom: 1.5rem;
 }
 
@@ -220,13 +220,13 @@
 .feature-card:hover {
 	transform: translateY(-4px);
 	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-	border-color: var(--accent);
+	border-color: var(--main-color);
 }
 
 .feature-icon {
 	width: 56px;
 	height: 56px;
-	background: linear-gradient(135deg, rgba(52, 211, 153, 0.1), rgba(16, 185, 129, 0.05));
+	background: linear-gradient(135deg, rgba(52, 211, 184, 0.1), rgba(52, 211, 184, 0.05));
 	border-radius: 12px;
 	display: flex;
 	align-items: center;
@@ -267,7 +267,7 @@
 	display: inline-block;
 	margin-top: 1rem;
 	padding: 0.875rem 2rem;
-	background-color: var(--accent);
+	background-color: var(--main-color);
 	color: white;
 	border-radius: 6px;
 	text-decoration: none;
@@ -276,7 +276,7 @@
 }
 
 .about-link:hover {
-	background-color: var(--accent-hover);
+	background-color: var(--main-color-hover);
 }
 
 .cta-section {
@@ -340,7 +340,7 @@
 }
 
 .post-card:hover .post-card-title {
-	color: var(--accent);
+	color: var(--main-color);
 }
 
 .post-card-date {
@@ -358,8 +358,8 @@
 .view-all-link {
 	display: inline-block;
 	padding: 0.875rem 2rem;
-	color: var(--accent);
-	border: 2px solid var(--accent);
+	color: var(--main-color);
+	border: 2px solid var(--main-color);
 	border-radius: 6px;
 	text-decoration: none;
 	transition: all 0.2s ease;
@@ -367,7 +367,7 @@
 }
 
 .view-all-link:hover {
-	background-color: var(--accent);
+	background-color: var(--main-color);
 	color: white;
 }
 
