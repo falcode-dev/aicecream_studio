@@ -9,6 +9,16 @@ import Header from '../components/Header.astro';
 type Props = CollectionEntry<'blog'>['data'];
 
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+
+// 日付を「yyyy年mm月dd日 hh時mm分」形式にフォーマット
+function formatDateTime(date: Date): string {
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	const day = String(date.getDate()).padStart(2, '0');
+	const hours = String(date.getHours()).padStart(2, '0');
+	const minutes = String(date.getMinutes()).padStart(2, '0');
+	return `${year}年${month}月${day}日 ${hours}時${minutes}分`;
+}
 ---
 
 <html lang="ja">
@@ -23,7 +33,10 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			}
 			.hero-image {
 				width: 100%;
-				margin-bottom: 3rem;
+				max-width: 800px;
+				margin: 3rem auto;
+				padding: 0 2rem;
+				    box-sizing: border-box;
 			}
 			.hero-image img {
 				display: block;
@@ -37,6 +50,7 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				margin: 0 auto;
 				padding: 0 2rem;
 				color: rgb(var(--black));
+				box-sizing: border-box;
 			}
 			.title {
 				margin-bottom: 3rem;
@@ -44,22 +58,93 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				text-align: left;
 			}
 			.title h1 {
-				margin: 0 0 1rem 0;
+				margin: 0 0 0.75rem 0;
 				font-size: 2.5rem;
 				line-height: 1.2;
 			}
-			.date {
-				margin-bottom: 1rem;
-				color: rgb(var(--gray));
-				font-size: 0.875rem;
-			}
-			.last-updated-on {
+			.icon-buttons {
 				margin-top: 0.5rem;
-				font-size: 0.875rem;
+			}
+			.date-time {
+				display: flex;
+				flex-direction: row;
+				gap: 1rem;
+				margin-bottom: 0.75rem;
+				align-items: center;
+				flex-wrap: wrap;
+			}
+			.date-item {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				padding: 0.375rem 0.625rem;
+				background: transparent;
+				border: none;
+				border-radius: 4px;
+			}
+			.date-icon {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 14px;
+				height: 14px;
+				flex-shrink: 0;
 				color: rgb(var(--gray));
+				opacity: 0.6;
+			}
+			.date-icon svg {
+				width: 100%;
+				height: 100%;
+			}
+			.date-label {
+				font-size: 0.8125rem;
+				font-weight: 400;
+				color: rgb(var(--gray));
+				min-width: auto;
+				letter-spacing: 0.01em;
+				opacity: 0.7;
+			}
+			.date-value {
+				font-size: 0.8125rem;
+				color: rgb(var(--gray));
+				font-weight: 400;
+				letter-spacing: 0.01em;
+			}
+			.icon-buttons {
+				display: flex;
+				align-items: center;
+				gap: 1rem;
+			}
+			.icon-button {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				width: 32px;
+				height: 32px;
+				border: 1px solid rgb(var(--border));
+				border-radius: 6px;
+				background: transparent;
+				cursor: pointer;
+				transition: all 0.2s ease;
+				color: rgb(var(--gray));
+				text-decoration: none;
+			}
+			.icon-button:hover {
+				border-color: var(--accent);
+				color: var(--accent);
+				background: rgba(52, 211, 153, 0.05);
+			}
+			.icon-button svg {
+				width: 18px;
+				height: 18px;
+				fill: currentColor;
 			}
 			/* タブレット */
 			@media (max-width: 1024px) {
+				.hero-image {
+					padding: 0 2rem;
+					margin: 2.5rem auto;
+				}
 				.prose {
 					padding: 0 2rem;
 				}
@@ -70,6 +155,10 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 			
 			/* モバイル */
 			@media (max-width: 768px) {
+				.hero-image {
+					padding: 0 1.5rem;
+					margin: 2rem auto;
+				}
 				.prose {
 					padding: 0 1.5rem;
 				}
@@ -79,19 +168,43 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				.title h1 {
 					font-size: 1.875rem;
 				}
-				.hero-image {
-					margin-bottom: 2rem;
+				.date-time {
+					width: 100%;
+					flex-direction: column;
+					gap: 0.5rem;
+					align-items: flex-start;
+					margin-bottom: 0.5rem;
 				}
-				.date {
-					font-size: 0.8125rem;
+				.date-item {
+					padding: 0.25rem 0.5rem;
 				}
-				.last-updated-on {
-					font-size: 0.8125rem;
+				.date-icon {
+					width: 12px;
+					height: 12px;
+				}
+				.date-label {
+					font-size: 0.75rem;
+					min-width: auto;
+				}
+				.date-value {
+					font-size: 0.75rem;
+				}
+				.icon-button {
+					width: 28px;
+					height: 28px;
+				}
+				.icon-button svg {
+					width: 16px;
+					height: 16px;
 				}
 			}
 			
 			/* 小さなモバイル */
 			@media (max-width: 480px) {
+				.hero-image {
+					padding: 0 1.25rem;
+					margin: 1.5rem auto;
+				}
 				.prose {
 					padding: 0 1.25rem;
 				}
@@ -100,9 +213,6 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				}
 				.title h1 {
 					font-size: 1.625rem;
-				}
-				.hero-image {
-					margin-bottom: 1.5rem;
 				}
 			}
 		</style>
@@ -117,23 +227,89 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 				</div>
 				<div class="prose">
 					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
+						<div class="date-time">
+							<div class="date-item">
+								<div class="date-icon">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<circle cx="12" cy="12" r="10" />
+										<polyline points="12 6 12 12 16 14" />
+									</svg>
+								</div>
+								<span class="date-label">公開日</span>
+								<time datetime={pubDate.toISOString()} class="date-value">
+									{formatDateTime(pubDate)}
+								</time>
+							</div>
 							{
 								updatedDate && (
-									<div class="last-updated-on">
-										最終更新日: <FormattedDate date={updatedDate} />
+									<div class="date-item">
+										<div class="date-icon">
+											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+												<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+												<circle cx="12" cy="10" r="3" />
+											</svg>
+										</div>
+										<span class="date-label">更新日</span>
+										<time datetime={updatedDate.toISOString()} class="date-value">
+											{formatDateTime(updatedDate)}
+										</time>
 									</div>
 								)
 							}
 						</div>
 						<h1>{title}</h1>
-						<hr />
+						<div class="icon-buttons">
+							<button class="icon-button" title="勉強" aria-label="勉強">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+									<path d="M8 8h6" />
+									<path d="M8 12h6" />
+								</svg>
+							</button>
+							<button class="icon-button share-button" title="共有" aria-label="共有">
+								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+									<circle cx="18" cy="5" r="3" />
+									<circle cx="6" cy="12" r="3" />
+									<circle cx="18" cy="19" r="3" />
+									<line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+									<line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+								</svg>
+							</button>
+						</div>
 					</div>
 					<slot />
 				</div>
 			</article>
 		</main>
 		<Footer />
+		<script is:inline>
+			document.addEventListener('DOMContentLoaded', () => {
+				const shareButton = document.querySelector('.share-button');
+				if (shareButton) {
+					shareButton.addEventListener('click', async () => {
+						const url = window.location.href;
+						const title = document.title;
+						
+						if (navigator.share) {
+							try {
+								await navigator.share({
+									title: title,
+									url: url
+								});
+							} catch (err) {
+								console.log('共有がキャンセルされました');
+							}
+						} else {
+							try {
+								await navigator.clipboard.writeText(url);
+								alert('リンクをコピーしました');
+							} catch (err) {
+								console.error('コピーに失敗しました:', err);
+							}
+						}
+					});
+				}
+			});
+		</script>
 	</body>
 </html>
