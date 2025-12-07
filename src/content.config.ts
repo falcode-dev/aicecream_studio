@@ -5,16 +5,20 @@ const blog = defineCollection({
 	// Load Markdown and MDX files in the `src/content/blog/` directory.
 	loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
 	// Type-check frontmatter using a schema
-	schema: ({ image }) =>
-		z.object({
-			title: z.string(),
-			description: z.string(),
-			// Transform string to Date object
-			pubDate: z.coerce.date(),
-			updatedDate: z.coerce.date().optional(),
-			heroImage: image().optional(),
-			category: z.enum(['Microsoft Tech Blog', 'のんびり生きるための副業']).optional(),
-		}),
+		schema: ({ image }) =>
+			z.object({
+				title: z.string(),
+				description: z.string(),
+				// Transform string to Date object
+				pubDate: z.coerce.date(),
+				updatedDate: z.coerce.date().optional(),
+				heroImage: image().optional(),
+				category: z.enum(['Microsoft Tech Blog', 'のんびり生きるための副業']).optional(),
+				// 記事ごとの表示設定
+				showTOC: z.boolean().optional(),
+				showSidebar: z.boolean().optional(),
+				showCTA: z.boolean().optional(),
+			}),
 });
 
 export const collections = { blog };

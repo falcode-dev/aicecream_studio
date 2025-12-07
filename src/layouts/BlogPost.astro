@@ -5,12 +5,22 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
-import { categoryToSlug } from '../consts';
+import { categoryToSlug, BLOG_POST_DEFAULTS } from '../consts';
 import '../styles/blog-post.css';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage, category } = Astro.props;
+const { 
+	title, 
+	description, 
+	pubDate, 
+	updatedDate, 
+	heroImage, 
+	category,
+	showTOC = BLOG_POST_DEFAULTS.showTOC,
+	showSidebar = BLOG_POST_DEFAULTS.showSidebar,
+	showCTA = BLOG_POST_DEFAULTS.showCTA,
+} = Astro.props;
 
 // 日付を「yyyy年mm月dd日」形式にフォーマット
 function formatDate(date: Date): string {
@@ -28,8 +38,8 @@ function formatDate(date: Date): string {
 
 	<body>
 		<Header />
-		<main>
-			<article>
+		<main class="blog-post-main">
+			<article class="blog-post-article">
 				<div class="breadcrumb">
 					<nav aria-label="パンくずリスト">
 						<ol>
@@ -47,77 +57,104 @@ function formatDate(date: Date): string {
 				<div class="hero-image">
 					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
 				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="title-header">
-							{category && (
-								<div class="category-badge">
-									<span>{category}</span>
+				<div class="blog-post-content">
+					<div class="prose">
+						<div class="title">
+							<div class="title-header">
+								{category && (
+									<div class="category-badge">
+										<span>{category}</span>
+									</div>
+								)}
+								<div class="icon-buttons">
+									<button class="icon-button" title="勉強" aria-label="勉強">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+											<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+											<path d="M8 8h6" />
+											<path d="M8 12h6" />
+										</svg>
+									</button>
+									<button class="icon-button share-button" title="共有" aria-label="共有">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+											<circle cx="18" cy="5" r="3" />
+											<circle cx="6" cy="12" r="3" />
+											<circle cx="18" cy="19" r="3" />
+											<line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+											<line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+										</svg>
+									</button>
 								</div>
-							)}
-							<div class="icon-buttons">
-								<button class="icon-button" title="勉強" aria-label="勉強">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-										<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
-										<path d="M8 8h6" />
-										<path d="M8 12h6" />
-									</svg>
-								</button>
-								<button class="icon-button share-button" title="共有" aria-label="共有">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-										<circle cx="18" cy="5" r="3" />
-										<circle cx="6" cy="12" r="3" />
-										<circle cx="18" cy="19" r="3" />
-										<line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-										<line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-									</svg>
-								</button>
 							</div>
-						</div>
-						<h1>{title}</h1>
-						<div class="date-time">
-							<div class="date-item">
-								<div class="date-icon">
-									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-										<circle cx="12" cy="12" r="10" />
-										<polyline points="12 6 12 12 16 14" />
-									</svg>
+							<h1>{title}</h1>
+							<div class="date-time">
+								<div class="date-item">
+									<div class="date-icon">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+											<circle cx="12" cy="12" r="10" />
+											<polyline points="12 6 12 12 16 14" />
+										</svg>
+									</div>
+									<span class="date-label">公開日：</span>
+									<time datetime={pubDate.toISOString()} class="date-value">
+										{formatDate(pubDate)}
+									</time>
 								</div>
-								<span class="date-label">公開日：</span>
-								<time datetime={pubDate.toISOString()} class="date-value">
-									{formatDate(pubDate)}
-								</time>
-							</div>
-							{
-								updatedDate && (
-									<>
-										<span class="date-separator">/</span>
-										<div class="date-item">
-											<div class="date-icon">
-												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-													<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
-													<path d="M21 3v5h-5" />
-													<path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
-													<path d="M3 21v-5h5" />
-												</svg>
+								{
+									updatedDate && (
+										<>
+											<span class="date-separator">/</span>
+											<div class="date-item">
+												<div class="date-icon">
+													<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+														<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+														<path d="M21 3v5h-5" />
+														<path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+														<path d="M3 21v-5h5" />
+													</svg>
+												</div>
+												<span class="date-label">更新日：</span>
+												<time datetime={updatedDate.toISOString()} class="date-value">
+													{formatDate(updatedDate)}
+												</time>
 											</div>
-											<span class="date-label">更新日：</span>
-											<time datetime={updatedDate.toISOString()} class="date-value">
-												{formatDate(updatedDate)}
-											</time>
-										</div>
-									</>
-								)
-							}
+										</>
+									)
+								}
+							</div>
 						</div>
+						<slot />
+						{showCTA && (
+							<div class="cta-section">
+								<h2 class="cta-title">この記事はいかがでしたか？</h2>
+								<p class="cta-description">もっと知りたいことがあれば、お気軽にお問い合わせください。</p>
+								<a href="/about" class="cta-button">プロフィールを見る</a>
+							</div>
+						)}
 					</div>
-					<slot />
+					{showSidebar && (
+						<aside class="sidebar" id="sidebar">
+							{showTOC && (
+								<nav class="table-of-contents" id="toc">
+									<h3 class="toc-title">目次</h3>
+									<ul class="toc-list" id="toc-list"></ul>
+								</nav>
+							)}
+							<div class="ad-container">
+								<div class="ad-label">広告</div>
+								<div class="ad-placeholder">
+									<p class="ad-text">300×250</p>
+									<p class="ad-description">広告枠</p>
+								</div>
+							</div>
+						</aside>
+					)}
 				</div>
 			</article>
 		</main>
 		<Footer />
 		<script is:inline>
 			document.addEventListener('DOMContentLoaded', () => {
+				// 共有ボタン
 				const shareButton = document.querySelector('.share-button');
 				if (shareButton) {
 					shareButton.addEventListener('click', async () => {
@@ -142,6 +179,77 @@ function formatDate(date: Date): string {
 							}
 						}
 					});
+				}
+
+				// 目次生成
+				const headings = document.querySelectorAll('.prose h2, .prose h3, .prose h4');
+				const tocList = document.getElementById('toc-list');
+				const sidebar = document.getElementById('sidebar');
+				const toc = document.getElementById('toc');
+				
+				if (headings.length > 0 && tocList && toc) {
+					headings.forEach((heading, index) => {
+						const id = `heading-${index}`;
+						heading.id = id;
+						
+						const level = parseInt(heading.tagName.charAt(1));
+						const text = heading.textContent || '';
+						
+						const li = document.createElement('li');
+						li.className = `toc-item toc-level-${level}`;
+						
+						const a = document.createElement('a');
+						a.href = `#${id}`;
+						a.textContent = text;
+						a.className = 'toc-link';
+						
+						li.appendChild(a);
+						tocList.appendChild(li);
+						
+						// スムーズスクロール
+						a.addEventListener('click', (e) => {
+							e.preventDefault();
+							heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+							// URLを更新
+							window.history.pushState(null, '', `#${id}`);
+						});
+					});
+					
+					// アクティブな見出しをハイライト
+					const observerOptions = {
+						root: null,
+						rootMargin: '-20% 0px -70% 0px',
+						threshold: 0
+					};
+					
+					const observer = new IntersectionObserver((entries) => {
+						entries.forEach(entry => {
+							if (entry.isIntersecting) {
+								const id = entry.target.id;
+								const activeLink = tocList.querySelector(`a[href="#${id}"]`);
+								if (activeLink) {
+									tocList.querySelectorAll('.toc-link').forEach(link => {
+										link.classList.remove('active');
+									});
+									activeLink.classList.add('active');
+								}
+							}
+						});
+					}, observerOptions);
+					
+					headings.forEach(heading => observer.observe(heading));
+				} else if (toc) {
+					// 見出しがない場合は目次を非表示
+					toc.style.display = 'none';
+				}
+				
+				// サイドバーに目次も広告もない場合は非表示
+				if (sidebar) {
+					const hasTOC = toc && toc.style.display !== 'none' && headings.length > 0;
+					const hasAd = sidebar.querySelector('.ad-container');
+					if (!hasTOC && !hasAd) {
+						sidebar.style.display = 'none';
+					}
 				}
 			});
 		</script>

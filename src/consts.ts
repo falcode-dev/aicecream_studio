@@ -20,3 +20,10 @@ export function slugToCategory(slug: string): string | undefined {
 	const entry = Object.entries(CATEGORY_SLUGS).find(([_, s]) => s === slug);
 	return entry ? entry[0] : undefined;
 }
+
+// ブログ記事のデフォルト設定
+export const BLOG_POST_DEFAULTS = {
+	showTOC: true,
+	showSidebar: true,
+	showCTA: true,
+} as const;

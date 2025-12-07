@@ -5,6 +5,10 @@ pubDate: 2024-01-15
 updatedDate: 2024-01-16
 heroImage: ../../assets/blog-placeholder-1.jpg
 category: Microsoft Tech Blog
+# 記事ごとの表示設定（任意、デフォルト値は consts.ts で定義）
+# showTOC: true      # 目次を表示（デフォルト: true）
+# showSidebar: true  # サイドバーを表示（デフォルト: true）
+# showCTA: true      # CTAセクションを表示（デフォルト: true）
 ---
 
 # サンプル記事
