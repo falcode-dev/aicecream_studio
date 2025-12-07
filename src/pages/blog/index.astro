@@ -5,7 +5,7 @@ import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import { SITE_DESCRIPTION, SITE_TITLE, categoryToSlug } from '../../consts';
 import '../../styles/blog/index.css';
 import '../../styles/blog/categories.css';
 
@@ -24,24 +24,28 @@ const categories = ['Microsoft Tech Blog', 'のんびり生きるための副業
 	</head>
 	<body>
 		<Header />
+		<nav class="category-navigation" aria-label="カテゴリナビゲーション">
+			<div class="category-navigation-container">
+				<a 
+					href="/blog"
+					data-category="all" 
+					class={`category-nav-link ${selectedCategory === 'all' ? 'active' : ''}`}
+				>
+					<span>すべて</span>
+				</a>
+				{categories.map((category) => (
+					<a 
+						href={`/blog?category=${encodeURIComponent(category)}`}
+						data-category={category}
+						class={`category-nav-link ${selectedCategory === category ? 'active' : ''}`}
+					>
+						<span>{category}</span>
+					</a>
+				))}
+			</div>
+		</nav>
 		<main>
 			<section>
-				<div class="categories-filter">
-					<button 
-						data-category="all" 
-						class={`category-button ${selectedCategory === 'all' ? 'active' : ''}`}
-					>
-						すべて
-					</button>
-					{categories.map((category) => (
-						<button 
-							data-category={category}
-							class={`category-button ${selectedCategory === category ? 'active' : ''}`}
-						>
-							{category}
-						</button>
-					))}
-				</div>
 				<ul id="posts-list">
 					{
 						allPosts.map((post) => {
@@ -52,7 +56,7 @@ const categories = ['Microsoft Tech Blog', 'のんびり生きるための副業
 									data-category={postCategory}
 									style={isVisible ? '' : 'display: none;'}
 								>
-									<a href={`/blog/${post.id}/`}>
+									<a href={post.data.category ? `/blog/${categoryToSlug(post.data.category)}/${post.id}/` : `/blog/${post.id}/`}>
 										{post.data.heroImage && (
 											<Image width={720} height={360} src={post.data.heroImage} alt="" />
 										)}
@@ -68,55 +72,57 @@ const categories = ['Microsoft Tech Blog', 'のんびり生きるための副業
 				</ul>
 				<script define:vars={{ allPosts: allPosts.map(p => ({ id: p.id, category: p.data.category || '' })) }}>
 					document.addEventListener('DOMContentLoaded', () => {
-						const categoryButtons = document.querySelectorAll('.category-button');
+						const categoryLinks = document.querySelectorAll('.category-nav-link');
 						const postsList = document.getElementById('posts-list');
 						const posts = Array.from(postsList?.querySelectorAll('li') || []);
 						
-						categoryButtons.forEach(button => {
-							button.addEventListener('click', () => {
-								const selectedCategory = button.getAttribute('data-category');
-								
-								// アクティブ状態を更新
-								categoryButtons.forEach(btn => {
-									btn.classList.remove('active');
-								});
-								button.classList.add('active');
-								
-								// URLを更新（履歴に追加）
-								const url = selectedCategory === 'all' 
-									? '/blog' 
-									: `/blog?category=${encodeURIComponent(selectedCategory)}`;
-								window.history.pushState({ category: selectedCategory }, '', url);
-								
-								// 記事をフィルタリング
-								posts.forEach(post => {
-									const postCategory = post.getAttribute('data-category');
-									if (selectedCategory === 'all' || postCategory === selectedCategory) {
-										post.style.display = '';
-									} else {
-										post.style.display = 'none';
-									}
-								});
-							});
+						// 初期ロード時のフィルタリングとアクティブ状態の設定
+						const urlParams = new URLSearchParams(window.location.search);
+						const initialCategory = urlParams.get('category') || 'all';
+						
+						// アクティブ状態を設定
+						categoryLinks.forEach(link => {
+							const linkCategory = link.getAttribute('data-category');
+							if (linkCategory === initialCategory) {
+								link.classList.add('active');
+							} else {
+								link.classList.remove('active');
+							}
+						});
+						
+						// 初期状態で記事をフィルタリング
+						posts.forEach(post => {
+							const postCategory = post.getAttribute('data-category');
+							if (initialCategory === 'all' || postCategory === initialCategory) {
+								post.style.display = '';
+							} else {
+								post.style.display = 'none';
+							}
 						});
 						
 						// ブラウザの戻る/進むボタンに対応
 						window.addEventListener('popstate', (e) => {
 							const category = e.state?.category || new URLSearchParams(window.location.search).get('category') || 'all';
-							const button = document.querySelector(`[data-category="${category}"]`);
-							if (button) {
-								categoryButtons.forEach(btn => btn.classList.remove('active'));
-								button.classList.add('active');
-								
-								posts.forEach(post => {
-									const postCategory = post.getAttribute('data-category');
-									if (category === 'all' || postCategory === category) {
-										post.style.display = '';
-									} else {
-										post.style.display = 'none';
-									}
-								});
-							}
+							
+							// アクティブ状態を更新
+							categoryLinks.forEach(link => {
+								const linkCategory = link.getAttribute('data-category');
+								if (linkCategory === category) {
+									link.classList.add('active');
+								} else {
+									link.classList.remove('active');
+								}
+							});
+							
+							// 記事をフィルタリング
+							posts.forEach(post => {
+								const postCategory = post.getAttribute('data-category');
+								if (category === 'all' || postCategory === category) {
+									post.style.display = '';
+								} else {
+									post.style.display = 'none';
+								}
+							});
 						});
 					});
 				</script>

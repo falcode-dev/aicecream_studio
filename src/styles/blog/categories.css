@@ -1,76 +1,94 @@
-.categories-filter {
-	display: flex;
-	gap: 0.75rem;
-	margin-bottom: 2.5rem;
-	padding: 0 2rem;
-	flex-wrap: wrap;
-	justify-content: center;
+/* カテゴリナビゲーション（ヘッダー下） */
+.category-navigation {
+	background: rgb(var(--white));
+	/* border-bottom: 1px solid rgb(var(--border)); */
+	position: sticky;
+	top: 73px; /* ヘッダーの高さに合わせて調整 */
+	z-index: 99;
+	backdrop-filter: blur(10px);
+	background-color: rgba(255, 255, 255, 0.95);
 }
 
-.category-button {
-	padding: 0.625rem 1.25rem;
-	background: rgb(var(--white));
-	border: 1px solid rgb(var(--border));
-	border-radius: 6px;
+.category-navigation-container {
+	display: flex;
+	gap: 1.5rem;
+	padding: 0.625rem 2rem;
+	max-width: 1200px;
+	margin: 0 auto;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+.category-nav-link {
+	padding: 0.5rem 0;
 	color: rgb(var(--gray-dark));
-	font-size: 0.9375rem;
+	font-size: 0.875rem;
 	font-weight: 500;
 	cursor: pointer;
 	transition: all 0.2s ease;
 	text-decoration: none;
-	display: inline-block;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 	font-family: inherit;
+	position: relative;
+	border-bottom: 1.5px solid transparent;
+	letter-spacing: 0.01em;
 }
 
-.category-button:hover {
-	border-color: var(--main-color);
+.category-nav-link:hover {
 	color: var(--main-color);
-	background: var(--main-color-light);
+	border-bottom-color: rgba(52, 211, 184, 0.3);
 }
 
-.category-button.active {
-	background: var(--main-color);
-	color: white;
-	border-color: var(--main-color);
-}
-
-.category-button.active:hover {
-	background: var(--main-color-hover);
-	border-color: var(--main-color-hover);
+.category-nav-link.active {
+	color: var(--main-color);
+	border-bottom-color: var(--main-color);
+	font-weight: 600;
 }
 
 /* タブレット */
 @media (max-width: 1024px) {
-	.categories-filter {
-		padding: 0 2rem;
-		margin-bottom: 2rem;
+	.category-navigation {
+		top: 70px;
+	}
+	
+	.category-navigation-container {
+		padding: 0.5rem 1.75rem;
+		gap: 1.25rem;
+	}
+	
+	.category-nav-link {
+		font-size: 0.8125rem;
 	}
 }
 
 /* モバイル */
 @media (max-width: 768px) {
-	.categories-filter {
-		padding: 0 1.5rem;
-		margin-bottom: 2rem;
-		gap: 0.5rem;
+	.category-navigation {
+		top: 100px; /* モバイルではヘッダーが折りたたまれるため、高めに設定 */
 	}
 	
-	.category-button {
-		padding: 0.5rem 1rem;
-		font-size: 0.875rem;
+	.category-navigation-container {
+		padding: 0.5rem 1.25rem;
+		gap: 1rem;
+	}
+	
+	.category-nav-link {
+		font-size: 0.8125rem;
 	}
 }
 
 /* 小さなモバイル */
 @media (max-width: 480px) {
-	.categories-filter {
-		padding: 0 1.25rem;
-		margin-bottom: 1.5rem;
+	.category-navigation-container {
+		padding: 0.5rem 1rem;
+		gap: 0.875rem;
 	}
 	
-	.category-button {
-		padding: 0.5rem 0.875rem;
-		font-size: 0.8125rem;
+	.category-nav-link {
+		font-size: 0.75rem;
 	}
 }
 
