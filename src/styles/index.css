@@ -625,12 +625,14 @@
 	}
 	
 	.hero h1 {
-		font-size: 2.25rem;
+		font-size: 2.5rem;
+		line-height: 1.2;
 	}
 	
 	.hero p {
-		font-size: 1.125rem;
+		font-size: 1.25rem;
 		margin: 0 0 2rem 0;
+		line-height: 1.7;
 	}
 	
 	.hero-cta {
@@ -642,8 +644,8 @@
 	.btn-primary,
 	.btn-secondary {
 		text-align: center;
-		padding: 0.9375rem 2rem;
-		font-size: 1rem;
+		padding: 1rem 2rem;
+		font-size: 1.0625rem;
 	}
 	
 	.section {
@@ -651,12 +653,12 @@
 	}
 	
 	.section-title {
-		font-size: 2rem;
-		margin: 0 0 0.5rem 0;
+		font-size: 2.25rem;
+		margin: 0 0 0.75rem 0;
 	}
 	
 	.section-subtitle {
-		font-size: 1rem;
+		font-size: 1.125rem;
 		margin: 0 0 3rem 0;
 	}
 	
@@ -755,7 +757,12 @@
 	}
 	
 	.post-card-title {
-		font-size: 1.125rem;
+		font-size: 1.25rem;
+		line-height: 1.4;
+	}
+	
+	.post-card-date {
+		font-size: 0.9375rem;
 	}
 	
 	.view-all {
@@ -794,12 +801,14 @@
 	}
 	
 	.hero h1 {
-		font-size: 2rem;
+		font-size: 2.25rem;
+		line-height: 1.2;
 	}
 	
 	.hero p {
-		font-size: 1rem;
+		font-size: 1.125rem;
 		margin: 0 0 1.75rem 0;
+		line-height: 1.7;
 	}
 	
 	.section {
@@ -807,11 +816,11 @@
 	}
 	
 	.section-title {
-		font-size: 1.75rem;
+		font-size: 2rem;
 	}
 	
 	.section-subtitle {
-		font-size: 0.9375rem;
+		font-size: 1rem;
 		margin: 0 0 2.5rem 0;
 	}
 	
