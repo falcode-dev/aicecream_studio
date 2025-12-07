@@ -53,6 +53,58 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
 
+## 📝 ブログ記事の作成方法
+
+### コマンドで新規記事を作成する（推奨）
+
+以下のコマンドで新しい記事を作成できます：
+
+```bash
+npm run create-post 記事のスラッグ名
+```
+
+例：
+```bash
+npm run create-post my-new-article
+```
+
+このコマンドを実行すると、`src/content/blog/my-new-article.md` が作成され、基本的なテンプレートが自動的に記入されます。
+
+### 手動で新しい記事を作成する
+
+1. `src/content/blog/` ディレクトリに新しい `.md` または `.mdx` ファイルを作成します
+2. ファイル名が記事のURLスラッグになります（例: `my-article.md` → `/blog/my-article/`）
+3. フロントマター（ファイルの先頭の `---` で囲まれた部分）に必要な情報を記入します
+
+### フロントマターの項目
+
+```yaml
+---
+title: 記事のタイトル（必須）
+description: 記事の説明（必須）
+pubDate: 2024-01-15（必須、YYYY-MM-DD形式）
+updatedDate: 2024-01-16（任意、YYYY-MM-DD形式）
+heroImage: ../../assets/blog-placeholder-1.jpg（任意、画像のパス）
+---
+```
+
+### プレビューと編集
+
+1. 開発サーバーを起動：
+   ```bash
+   npm run dev
+   ```
+
+2. ブラウザで `http://localhost:4321` にアクセス
+
+3. 記事を編集すると、開発サーバーが自動的に再読み込みされ、変更がすぐに反映されます
+
+4. 個別の記事は `/blog/[記事のファイル名]/` でアクセスできます
+
+### サンプル記事
+
+`src/content/blog/sample-post.md` を参考にしてください。このファイルをコピーして新しい記事を作成できます。
+
 ## 👀 Want to learn more?
 
 Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
