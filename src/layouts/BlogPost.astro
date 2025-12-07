@@ -11,14 +11,12 @@ type Props = CollectionEntry<'blog'>['data'];
 
 const { title, description, pubDate, updatedDate, heroImage, category } = Astro.props;
 
-// 日付を「yyyy年mm月dd日 hh時mm分」形式にフォーマット
-function formatDateTime(date: Date): string {
+// 日付を「yyyy年mm月dd日」形式にフォーマット
+function formatDate(date: Date): string {
 	const year = date.getFullYear();
 	const month = String(date.getMonth() + 1).padStart(2, '0');
 	const day = String(date.getDate()).padStart(2, '0');
-	const hours = String(date.getHours()).padStart(2, '0');
-	const minutes = String(date.getMinutes()).padStart(2, '0');
-	return `${year}年${month}月${day}日 ${hours}時${minutes}分`;
+	return `${year}年${month}月${day}日`;
 }
 ---
 
@@ -50,11 +48,32 @@ function formatDateTime(date: Date): string {
 				</div>
 				<div class="prose">
 					<div class="title">
-						{category && (
-							<div class="category-badge">
-								<span>{category}</span>
+						<div class="title-header">
+							{category && (
+								<div class="category-badge">
+									<span>{category}</span>
+								</div>
+							)}
+							<div class="icon-buttons">
+								<button class="icon-button" title="勉強" aria-label="勉強">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+										<path d="M8 8h6" />
+										<path d="M8 12h6" />
+									</svg>
+								</button>
+								<button class="icon-button share-button" title="共有" aria-label="共有">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<circle cx="18" cy="5" r="3" />
+										<circle cx="6" cy="12" r="3" />
+										<circle cx="18" cy="19" r="3" />
+										<line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+										<line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+									</svg>
+								</button>
 							</div>
-						)}
+						</div>
+						<h1>{title}</h1>
 						<div class="date-time">
 							<div class="date-item">
 								<div class="date-icon">
@@ -63,46 +82,32 @@ function formatDateTime(date: Date): string {
 										<polyline points="12 6 12 12 16 14" />
 									</svg>
 								</div>
-								<span class="date-label">公開日</span>
+								<span class="date-label">公開日：</span>
 								<time datetime={pubDate.toISOString()} class="date-value">
-									{formatDateTime(pubDate)}
+									{formatDate(pubDate)}
 								</time>
 							</div>
 							{
 								updatedDate && (
-									<div class="date-item">
-										<div class="date-icon">
-											<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-												<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-												<circle cx="12" cy="10" r="3" />
-											</svg>
+									<>
+										<span class="date-separator">/</span>
+										<div class="date-item">
+											<div class="date-icon">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+													<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+													<path d="M21 3v5h-5" />
+													<path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+													<path d="M3 21v-5h5" />
+												</svg>
+											</div>
+											<span class="date-label">更新日：</span>
+											<time datetime={updatedDate.toISOString()} class="date-value">
+												{formatDate(updatedDate)}
+											</time>
 										</div>
-										<span class="date-label">更新日</span>
-										<time datetime={updatedDate.toISOString()} class="date-value">
-											{formatDateTime(updatedDate)}
-										</time>
-									</div>
+									</>
 								)
 							}
-						</div>
-						<h1>{title}</h1>
-						<div class="icon-buttons">
-							<button class="icon-button" title="勉強" aria-label="勉強">
-								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-									<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
-									<path d="M8 8h6" />
-									<path d="M8 12h6" />
-								</svg>
-							</button>
-							<button class="icon-button share-button" title="共有" aria-label="共有">
-								<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-									<circle cx="18" cy="5" r="3" />
-									<circle cx="6" cy="12" r="3" />
-									<circle cx="18" cy="19" r="3" />
-									<line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-									<line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-								</svg>
-							</button>
 						</div>
 					</div>
 					<slot />
