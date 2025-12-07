@@ -3,7 +3,7 @@
 	background: rgb(var(--white));
 	/* border-bottom: 1px solid rgb(var(--border)); */
 	position: sticky;
-	top: 73px; /* ヘッダーの高さに合わせて調整 */
+	/* top: 73px; ヘッダーの高さに合わせて調整 */
 	z-index: 99;
 	backdrop-filter: blur(10px);
 	background-color: rgba(255, 255, 255, 0.95);
@@ -50,9 +50,9 @@
 
 /* タブレット */
 @media (max-width: 1024px) {
-	.category-navigation {
+	/* .category-navigation {
 		top: 70px;
-	}
+	} */
 	
 	.category-navigation-container {
 		padding: 0.5rem 1.75rem;
@@ -66,9 +66,9 @@
 
 /* モバイル */
 @media (max-width: 768px) {
-	.category-navigation {
-		top: 100px; /* モバイルではヘッダーが折りたたまれるため、高めに設定 */
-	}
+	/* .category-navigation {
+		top: 100px; 
+	} */
 	
 	.category-navigation-container {
 		padding: 0.5rem 1.25rem;

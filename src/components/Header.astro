@@ -17,7 +17,15 @@ const getPath = (path: string) => {
 <header>
 	<nav>
 		<h2><a href={getPath('/')}>{SITE_TITLE}</a></h2>
-		<div class="internal-links">
+		<button class="menu-toggle" aria-label="メニュー" aria-expanded="false" id="menu-toggle">
+			<span class="menu-icon">
+				<span></span>
+				<span></span>
+				<span></span>
+			</span>
+		</button>
+		<div class="menu-overlay" id="menu-overlay"></div>
+		<div class="internal-links" id="nav-menu">
 			<HeaderLink href={getPath('/')}>ホーム</HeaderLink>
 			<HeaderLink href={getPath('/blog')}>ブログ</HeaderLink>
 			<HeaderLink href={getPath('/about')}>プロフィール</HeaderLink>
@@ -38,8 +46,9 @@ const getPath = (path: string) => {
 	}
 	h2 {
 		margin: 0;
-		font-size: 1.25rem;
+		font-size: 1.75rem;
 		font-weight: 600;
+		white-space: nowrap;
 	}
 
 	h2 a,
@@ -60,11 +69,61 @@ const getPath = (path: string) => {
 		max-width: 1200px;
 		margin: 0 auto;
 		padding: 1.25rem 2rem;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		scrollbar-width: none;
+	}
+	
+	nav::-webkit-scrollbar {
+		display: none;
+	}
+	
+	.menu-toggle {
+		display: none;
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 0.5rem;
+		flex-shrink: 0;
+		z-index: 101;
+	}
+	
+	.menu-icon {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		width: 24px;
+		height: 18px;
+		position: relative;
+	}
+	
+	.menu-icon span {
+		display: block;
+		width: 100%;
+		height: 2px;
+		background-color: rgb(var(--black));
+		border-radius: 2px;
+		transition: all 0.3s ease;
+		transform-origin: center;
+	}
+	
+	.menu-toggle[aria-expanded="true"] .menu-icon span:nth-child(1) {
+		transform: translateY(8px) rotate(45deg);
+	}
+	
+	.menu-toggle[aria-expanded="true"] .menu-icon span:nth-child(2) {
+		opacity: 0;
+		transform: scaleX(0);
+	}
+	
+	.menu-toggle[aria-expanded="true"] .menu-icon span:nth-child(3) {
+		transform: translateY(-8px) rotate(-45deg);
 	}
 	
 	.internal-links {
 		display: flex;
 		gap: 0.5rem;
+		flex-shrink: 0;
 	}
 	
 	nav a {
@@ -73,7 +132,8 @@ const getPath = (path: string) => {
 		text-decoration: none;
 		border-radius: 6px;
 		transition: all 0.2s ease;
-		font-size: 0.95rem;
+		font-size: 1rem;
+		white-space: nowrap;
 	}
 	
 	nav a:hover {
@@ -97,24 +157,80 @@ const getPath = (path: string) => {
 	@media (max-width: 768px) {
 		nav {
 			padding: 1rem 1.25rem;
-			flex-wrap: wrap;
+			position: relative;
 		}
 		
 		h2 {
-			font-size: 1.125rem;
-			margin-bottom: 0.5rem;
+			font-size: 1.5rem;
+			margin: 0;
+			flex-shrink: 0;
+		}
+		
+		.menu-toggle {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		
+		.menu-overlay {
+			display: none;
 		}
 		
 		.internal-links {
-			width: 100%;
-			justify-content: flex-start;
-			gap: 0.25rem;
-			margin-top: 0.5rem;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 280px;
+			height: 100vh;
+			background: rgb(246 246 246 / 98%);
+			backdrop-filter: blur(20px);
+			flex-direction: column;
+			align-items: stretch;
+			padding: 5rem 1.5rem 2rem;
+			gap: 0;
+			transform: translateX(-100%);
+			transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+			z-index: 100;
+			overflow-y: auto;
+			-webkit-overflow-scrolling: touch;
+		}
+		
+		.internal-links[aria-hidden="false"] {
+			transform: translateX(0);
+		}
+		
+		.menu-overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: rgba(0, 0, 0, 0.4);
+			opacity: 0;
+			visibility: hidden;
+			transition: opacity 0.3s ease, visibility 0.3s ease;
+			z-index: 99;
+			cursor: pointer;
+		}
+		
+		.menu-overlay[aria-hidden="false"] {
+			opacity: 1;
+			visibility: visible;
 		}
 		
 		nav a {
-			padding: 0.5rem 0.75rem;
-			font-size: 0.875rem;
+			padding: 1rem 1.25rem;
+			font-size: 1.125rem;
+			border-radius: 8px;
+			margin-bottom: 0.5rem;
+			text-align: left;
+			display: block;
+		}
+		
+		nav a:hover,
+		nav a.active {
+			background-color: var(--main-color-light);
+			color: var(--main-color);
 		}
 	}
 	
@@ -125,16 +241,69 @@ const getPath = (path: string) => {
 		}
 		
 		h2 {
-			font-size: 1rem;
+			font-size: 1.375rem;
 		}
 		
 		.internal-links {
-			flex-wrap: wrap;
+			width: 260px;
+			padding: 4.5rem 1.25rem 1.5rem;
 		}
 		
 		nav a {
-			padding: 0.5rem 0.625rem;
-			font-size: 0.8125rem;
+			padding: 0.875rem 1rem;
+			font-size: 1.0625rem;
 		}
 	}
 </style>
+
+<script is:inline>
+	document.addEventListener('DOMContentLoaded', () => {
+		const menuToggle = document.getElementById('menu-toggle');
+		const navMenu = document.getElementById('nav-menu');
+		const menuOverlay = document.getElementById('menu-overlay');
+		
+		const closeMenu = () => {
+			menuToggle?.setAttribute('aria-expanded', 'false');
+			navMenu?.setAttribute('aria-hidden', 'true');
+			menuOverlay?.setAttribute('aria-hidden', 'true');
+			document.body.style.overflow = '';
+		};
+		
+		const openMenu = () => {
+			menuToggle?.setAttribute('aria-expanded', 'true');
+			navMenu?.setAttribute('aria-hidden', 'false');
+			menuOverlay?.setAttribute('aria-hidden', 'false');
+			document.body.style.overflow = 'hidden';
+		};
+		
+		if (menuToggle && navMenu && menuOverlay) {
+			menuToggle.addEventListener('click', () => {
+				const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+				if (isExpanded) {
+					closeMenu();
+				} else {
+					openMenu();
+				}
+			});
+			
+			// オーバーレイをクリックしたらメニューを閉じる
+			menuOverlay.addEventListener('click', closeMenu);
+			
+			// メニュー内のリンクをクリックしたらメニューを閉じる
+			navMenu.querySelectorAll('a').forEach(link => {
+				link.addEventListener('click', closeMenu);
+			});
+			
+			// 初期状態を設定
+			navMenu.setAttribute('aria-hidden', 'true');
+			menuOverlay.setAttribute('aria-hidden', 'true');
+			
+			// ウィンドウリサイズ時にメニューを閉じる
+			window.addEventListener('resize', () => {
+				if (window.innerWidth > 768) {
+					closeMenu();
+				}
+			});
+		}
+	});
+</script>

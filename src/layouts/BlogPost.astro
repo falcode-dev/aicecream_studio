@@ -5,6 +5,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import TableOfContents from '../components/TableOfContents.astro';
 import { categoryToSlug, BLOG_POST_DEFAULTS } from '../consts';
 import '../styles/blog-post.css';
 
@@ -207,12 +208,7 @@ const breadcrumbJson = JSON.stringify(breadcrumbData);
 					</div>
 					{showSidebar && (
 						<aside class="sidebar" id="sidebar">
-							{showTOC && (
-								<nav class="table-of-contents" id="toc">
-									<h3 class="toc-title">目次</h3>
-									<ul class="toc-list" id="toc-list"></ul>
-								</nav>
-							)}
+							{showTOC && <TableOfContents />}
 							<div class="ad-container">
 								<div class="ad-label">広告</div>
 								<div class="ad-placeholder">
@@ -255,99 +251,11 @@ const breadcrumbJson = JSON.stringify(breadcrumbData);
 					});
 				}
 
-				// 目次生成
-				const headings = document.querySelectorAll('.prose h2, .prose h3, .prose h4');
-				const tocList = document.getElementById('toc-list');
-				const sidebar = document.getElementById('sidebar');
-				const toc = document.getElementById('toc');
-				
-				if (headings.length > 0 && tocList && toc) {
-					headings.forEach((heading, index) => {
-						const id = `heading-${index}`;
-						heading.id = id;
-						
-						const level = parseInt(heading.tagName.charAt(1));
-						const text = heading.textContent || '';
-						
-						const li = document.createElement('li');
-						li.className = `toc-item toc-level-${level}`;
-						
-						const a = document.createElement('a');
-						a.href = `#${id}`;
-						a.textContent = text;
-						a.className = 'toc-link';
-						
-						li.appendChild(a);
-						tocList.appendChild(li);
-						
-						// スムーズスクロール
-						a.addEventListener('click', (e) => {
-							e.preventDefault();
-							heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
-							// URLを更新
-							window.history.pushState(null, '', `#${id}`);
-						});
-					});
-					
-					// アクティブな見出しをハイライト
-					const observerOptions = {
-						root: null,
-						rootMargin: '-20% 0px -70% 0px',
-						threshold: 0
-					};
-					
-					const tocContainer = document.querySelector('.table-of-contents');
-					
-					const observer = new IntersectionObserver((entries) => {
-						entries.forEach(entry => {
-							if (entry.isIntersecting) {
-								const id = entry.target.id;
-								const activeLink = tocList.querySelector(`a[href="#${id}"]`);
-								if (activeLink) {
-									tocList.querySelectorAll('.toc-link').forEach(link => {
-										link.classList.remove('active');
-									});
-									activeLink.classList.add('active');
-									
-									// アクティブな目次項目が常に表示されるようにスクロール位置を調整
-									if (tocContainer) {
-										const containerRect = tocContainer.getBoundingClientRect();
-										const linkRect = activeLink.getBoundingClientRect();
-										const containerTop = containerRect.top;
-										const containerBottom = containerRect.bottom;
-										const linkTop = linkRect.top;
-										const linkBottom = linkRect.bottom;
-										const containerHeight = containerRect.height;
-										
-										// アクティブな項目がコンテナの上に出ている場合
-										if (linkTop < containerTop) {
-											const currentScroll = tocContainer.scrollTop;
-											const linkOffsetTop = activeLink.offsetTop;
-											const newScrollTop = linkOffsetTop - 20; // 少し余白を追加
-											tocContainer.scrollTo({ top: newScrollTop, behavior: 'smooth' });
-										}
-										// アクティブな項目がコンテナの下に出ている場合
-										else if (linkBottom > containerBottom) {
-											const currentScroll = tocContainer.scrollTop;
-											const linkOffsetTop = activeLink.offsetTop;
-											const linkHeight = activeLink.offsetHeight;
-											const newScrollTop = linkOffsetTop + linkHeight - containerHeight + 20; // 少し余白を追加
-											tocContainer.scrollTo({ top: newScrollTop, behavior: 'smooth' });
-										}
-									}
-								}
-							}
-						});
-					}, observerOptions);
-					
-					headings.forEach(heading => observer.observe(heading));
-				} else if (toc) {
-					// 見出しがない場合は目次を非表示
-					toc.style.display = 'none';
-				}
-				
 				// サイドバーに目次も広告もない場合は非表示
+				const sidebar = document.getElementById('sidebar');
 				if (sidebar) {
+					const toc = sidebar.querySelector('.table-of-contents');
+					const headings = document.querySelectorAll('.prose h2, .prose h3, .prose h4');
 					const hasTOC = toc && toc.style.display !== 'none' && headings.length > 0;
 					const hasAd = sidebar.querySelector('.ad-container');
 					if (!hasTOC && !hasAd) {
