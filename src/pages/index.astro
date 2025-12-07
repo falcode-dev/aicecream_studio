@@ -7,6 +7,8 @@ import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE, categoryToSlug } from '../consts';
 import '../styles/index.css';
+import aiceIcon from '../assets/aice_icon_500.png.png';
+import puniBunny from '../assets/puni_bunny_bg_fast.gif';
 
 const latestPosts = (await getCollection('blog'))
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
@@ -54,22 +56,48 @@ const orgJson = JSON.stringify(orgData);
 		{/* 構造化データ - Organization */}
 		<script type="application/ld+json" set:html={orgJson} />
 	</head>
-	<body>
+	<body class="index-page">
 		<Header />
 		<main>
-			<!-- WELCOMEメッセージ -->
-			<section class="hero">
-				<div class="hero-badge">WEBクリエイター</div>
-				<h1>シンプルだけど、<br />スタイリッシュ。</h1>
-				<p>
-					TypeScriptを中心としたモダンな開発スタックで、<br />
-					シンプルで静かなデザインのアプリケーションを作っています
-				</p>
+			<!-- 1画面目: WELCOMEメッセージ -->
+			<section class="fullscreen-section welcome-screen">
+				<div class="welcome-section">
+					<div class="welcome-image-wrapper">
+						<div class="speech-bubble show whisper-bubble" id="speech-bubble">
+							<span class="speech-bubble-text" id="speech-bubble-text">触ってみて！</span>
+						</div>
+						<img
+							id="welcome-icon"
+							src={aiceIcon.src}
+							alt="aice cream studio"
+							class="welcome-image"
+							data-png-src={aiceIcon.src}
+							data-gif-src={puniBunny.src}
+						/>
+					</div>
+					<div class="welcome-message">
+						<span class="welcome-text">ようこそ、</span>
+						<span class="welcome-brand">aice cream studio</span>
+						<span class="welcome-text">へ！</span>
+					</div>
+				</div>
 			</section>
 			
-			<!-- ブログ -->
+			<!-- 2画面目: テーマ・特徴 -->
+			<section class="fullscreen-section theme-screen">
+				<div class="theme-content">
+					<div class="hero-badge">WEBクリエイター</div>
+					<h1>のんびり、ゆっくり、<br />そんなアプリでみんなを癒す。</h1>
+					<p>
+						慌ただしい日常の中で、<br />
+						少しでも心が休まるような、優しいデザインのアプリケーションを作っています
+					</p>
+				</div>
+			</section>
+			
+			<!-- 3画面目: ブログ -->
 			{latestPosts.length > 0 && (
-				<section class="section">
+				<section class="fullscreen-section blog-screen">
 					<h2 class="section-title">ブログ</h2>
 					<p class="section-subtitle">技術的な知見や考え方を共有しています</p>
 					<ul class="posts-grid">
@@ -101,38 +129,8 @@ const orgJson = JSON.stringify(orgData);
 				</section>
 			)}
 			
-			<!-- スキル -->
-			<section class="section">
-				<h2 class="section-title">スキル</h2>
-				<p class="section-subtitle">日々の制作で使っている技術とツール</p>
-				<div class="skills-grid">
-					<div class="skill-item">
-						<div class="skill-name">Frontend</div>
-						<div class="skill-tags">
-							<span>TypeScript</span>
-							<span>React</span>
-							<span>Astro</span>
-						</div>
-					</div>
-					<div class="skill-item">
-						<div class="skill-name">Design</div>
-						<div class="skill-tags">
-							<span>Figma</span>
-							<span>デザイン</span>
-						</div>
-					</div>
-					<div class="skill-item">
-						<div class="skill-name">Tools</div>
-						<div class="skill-tags">
-							<span>Git</span>
-							<span>VS Code</span>
-						</div>
-					</div>
-				</div>
-			</section>
-			
-			<!-- プロダクト -->
-			<section class="section">
+			<!-- 4画面目: プロダクト -->
+			<section class="fullscreen-section product-screen">
 				<h2 class="section-title">プロダクト</h2>
 				<p class="section-subtitle">開発したアプリケーション</p>
 				<div class="coming-soon">
@@ -142,5 +140,92 @@ const orgJson = JSON.stringify(orgData);
 			</section>
 		</main>
 		<Footer />
+		<script>
+			document.addEventListener('DOMContentLoaded', () => {
+				const iconImage = document.getElementById('welcome-icon');
+				const speechBubble = document.getElementById('speech-bubble');
+				const speechBubbleText = document.getElementById('speech-bubble-text');
+				if (!iconImage || !speechBubble || !speechBubbleText) return;
+				
+				const pngSrc = iconImage.getAttribute('data-png-src');
+				const gifSrc = iconImage.getAttribute('data-gif-src');
+				if (!pngSrc || !gifSrc) return;
+				
+				// ランダムメッセージの配列
+				const randomMessages = [
+					'わーい！',
+					'ゆっくりしていってねー',
+					'ワクワク',
+					'お腹すいたー！',
+					'仕事休みたーい！',
+					'何するのー？'
+				];
+				
+				let isAnimating = false;
+				
+				// ランダムメッセージを取得する関数
+				const getRandomMessage = () => {
+					return randomMessages[Math.floor(Math.random() * randomMessages.length)];
+				};
+				
+				// メッセージを表示する関数
+				const showMessage = (message, isWhisper = false) => {
+					// スタイルを先に切り替え
+					if (isWhisper) {
+						speechBubble.classList.add('whisper-bubble');
+					} else {
+						speechBubble.classList.remove('whisper-bubble');
+					}
+					
+					// メッセージを更新
+					speechBubbleText.textContent = message;
+					
+					// フェードインアニメーション
+					speechBubble.classList.add('show');
+				};
+				
+				// メッセージを非表示にする関数
+				const hideMessage = () => {
+					speechBubble.classList.remove('show');
+				};
+				
+				// メッセージを切り替える関数（アニメーション付き）
+				const switchMessage = (newMessage, isWhisper = false) => {
+					// フェードアウト
+					hideMessage();
+					
+					// アニメーション完了後に新しいメッセージを表示
+					setTimeout(() => {
+						showMessage(newMessage, isWhisper);
+					}, 300); // フェードアウトの時間に合わせる
+				};
+				
+				iconImage.addEventListener('click', () => {
+					if (isAnimating) return; // アニメーション中は無視
+					
+					isAnimating = true;
+					
+					// GIFを再生（タイムスタンプを追加して強制的に再読み込み）
+					const timestamp = new Date().getTime();
+					iconImage.src = `${gifSrc}?t=${timestamp}`;
+					
+					// ランダムメッセージに切り替え（アニメーション付き）
+					switchMessage(getRandomMessage(), false);
+					
+				// GIFの再生時間を考慮して、約1.9秒後にPNGに戻す
+				setTimeout(() => {
+					iconImage.src = pngSrc;
+					
+					// 「触ってみて！」に切り替え（アニメーション付き）
+					switchMessage('触ってみて！', true);
+					
+					// アニメーション完了後にフラグをリセット
+					setTimeout(() => {
+						isAnimating = false;
+					}, 600); // フェードアウト + フェードインの時間
+				}, 1900);
+				});
+			});
+		</script>
 	</body>
 </html>
