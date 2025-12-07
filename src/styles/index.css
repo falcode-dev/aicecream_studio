@@ -364,11 +364,96 @@
 	text-decoration: none;
 	transition: all 0.2s ease;
 	font-weight: 500;
+	box-sizing: border-box;
 }
 
 .view-all-link:hover {
 	background-color: var(--main-color);
 	color: white;
+}
+
+/* プロダクトセクション */
+.products-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	gap: 2rem;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	max-width: 1200px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.product-item {
+	margin: 0;
+}
+
+.product-link {
+	display: block;
+	padding: 2rem;
+	background: rgb(var(--white));
+	border: 1px solid rgb(var(--border));
+	border-radius: 12px;
+	text-decoration: none;
+	transition: all 0.3s ease;
+	height: 100%;
+	box-sizing: border-box;
+}
+
+.product-link:hover {
+	border-color: var(--main-color);
+	background: var(--main-color-light);
+	transform: translateY(-4px);
+	box-shadow: 0 8px 24px rgba(52, 211, 184, 0.15);
+}
+
+.product-content {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.product-name {
+	font-size: 1.375rem;
+	font-weight: 600;
+	color: rgb(var(--black));
+	margin: 0;
+	line-height: 1.4;
+}
+
+.product-link:hover .product-name {
+	color: var(--main-color);
+}
+
+.product-description {
+	font-size: 0.9375rem;
+	color: rgb(var(--gray-dark));
+	line-height: 1.7;
+	margin: 0;
+}
+
+/* Coming Soon */
+.coming-soon {
+	text-align: center;
+	padding: 4rem 2rem;
+	max-width: 600px;
+	margin: 0 auto;
+}
+
+.coming-soon-text {
+	font-size: 2.5rem;
+	font-weight: 600;
+	color: rgb(var(--gray));
+	margin: 0 0 1rem 0;
+	letter-spacing: 0.1em;
+}
+
+.coming-soon-description {
+	font-size: 1rem;
+	color: rgb(var(--gray-dark));
+	margin: 0;
+	line-height: 1.6;
 }
 
 /* 大きなタブレット */
@@ -681,6 +766,20 @@
 		width: 100%;
 		text-align: center;
 	}
+	
+	.products-grid {
+		grid-template-columns: 1fr;
+		gap: 1.5rem;
+		padding: 0 1.5rem;
+	}
+	
+	.product-link {
+		padding: 1.5rem;
+	}
+	
+	.product-name {
+		font-size: 1.25rem;
+	}
 }
 
 /* 小さなモバイル */
@@ -814,6 +913,18 @@
 		padding: 0 1.25rem;
 		margin-top: 2.5rem;
 	}
+	
+	.coming-soon {
+		padding: 3rem 1.25rem;
+	}
+	
+	.coming-soon-text {
+		font-size: 2rem;
+	}
+	
+	.coming-soon-description {
+		font-size: 0.9375rem;
+	}
 }
 
 /* 非常に小さなモバイル */
@@ -904,6 +1015,18 @@
 	
 	.view-all {
 		padding: 0 1rem;
+	}
+	
+	.coming-soon {
+		padding: 2.5rem 1rem;
+	}
+	
+	.coming-soon-text {
+		font-size: 1.75rem;
+	}
+	
+	.coming-soon-description {
+		font-size: 0.875rem;
 	}
 }
 

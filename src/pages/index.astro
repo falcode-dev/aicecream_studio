@@ -5,7 +5,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { SITE_DESCRIPTION, SITE_TITLE, categoryToSlug } from '../consts';
 import '../styles/index.css';
 
 const latestPosts = (await getCollection('blog'))
@@ -21,101 +21,25 @@ const latestPosts = (await getCollection('blog'))
 	<body>
 		<Header />
 		<main>
+			<!-- WELCOMEメッセージ -->
 			<section class="hero">
-				<div class="hero-badge">Creative Developer & Designer</div>
-				<h1>アイデアを形にする、<br />デジタルなものづくり</h1>
+				<div class="hero-badge">WEBクリエイター</div>
+				<h1>シンプルだけど、<br />スタイリッシュ。</h1>
 				<p>
-					コードとデザインで、<br />
-					あなたのビジョンを現実に変えます
+					TypeScriptを中心としたモダンな開発スタックで、<br />
+					シンプルで静かなデザインのアプリケーションを作っています
 				</p>
-				<div class="hero-cta">
-					<a href="/about" class="btn-primary">一緒に作りませんか？</a>
-					<a href="/blog" class="btn-secondary">作品を見る</a>
-				</div>
 			</section>
 			
-			<section class="section">
-				<h2 class="section-title">使っているもの</h2>
-				<p class="section-subtitle">日々の制作で使っている技術とツール</p>
-				<div class="skills-grid">
-					<div class="skill-item">
-						<div class="skill-name">Design</div>
-						<div class="skill-tags">
-							<span>Figma</span>
-							<span>Illustrator</span>
-							<span>Photoshop</span>
-						</div>
-					</div>
-					<div class="skill-item">
-						<div class="skill-name">Frontend</div>
-						<div class="skill-tags">
-							<span>React</span>
-							<span>TypeScript</span>
-							<span>Astro</span>
-						</div>
-					</div>
-					<div class="skill-item">
-						<div class="skill-name">Backend</div>
-						<div class="skill-tags">
-							<span>Node.js</span>
-							<span>Python</span>
-							<span>PostgreSQL</span>
-						</div>
-					</div>
-					<div class="skill-item">
-						<div class="skill-name">Tools</div>
-						<div class="skill-tags">
-							<span>Git</span>
-							<span>VS Code</span>
-							<span>Notion</span>
-						</div>
-					</div>
-				</div>
-			</section>
-			
-			<section class="section">
-				<h2 class="section-title">制作の流れ</h2>
-				<p class="section-subtitle">アイデアから完成まで、一緒に進めます</p>
-				<div class="workflow">
-					<div class="workflow-item">
-						<div class="workflow-number">01</div>
-						<h3 class="workflow-title">ヒアリング</h3>
-						<p class="workflow-description">
-							お客様の想いや目標をじっくりお聞きします。どんな小さなことでも、遠慮なくお話しください。
-						</p>
-					</div>
-					<div class="workflow-item">
-						<div class="workflow-number">02</div>
-						<h3 class="workflow-title">デザイン</h3>
-						<p class="workflow-description">
-							コンセプトを形にします。何度でも修正OK。納得いくまで一緒に作り上げましょう。
-						</p>
-					</div>
-					<div class="workflow-item">
-						<div class="workflow-number">03</div>
-						<h3 class="workflow-title">開発</h3>
-						<p class="workflow-description">
-							デザインをコードに落とし込みます。モダンな技術で、美しく快適な体験を実現します。
-						</p>
-					</div>
-					<div class="workflow-item">
-						<div class="workflow-number">04</div>
-						<h3 class="workflow-title">リリース</h3>
-						<p class="workflow-description">
-							完成したら、一緒にリリースを祝いましょう。その後もサポートします。
-						</p>
-					</div>
-				</div>
-			</section>
-			
+			<!-- ブログ -->
 			{latestPosts.length > 0 && (
 				<section class="section">
-					<h2 class="section-title">最近の作品</h2>
-					<p class="section-subtitle">作ったもの、書いたもの、考えたこと</p>
+					<h2 class="section-title">ブログ</h2>
+					<p class="section-subtitle">技術的な知見や考え方を共有しています</p>
 					<ul class="posts-grid">
 						{latestPosts.map((post) => (
 							<li>
-								<a href={`/blog/${post.id}/`} class="post-card">
+								<a href={post.data.category ? `/blog/${categoryToSlug(post.data.category)}/${post.id}/` : `/blog/${post.id}/`} class="post-card">
 									{post.data.heroImage ? (
 										<Image
 											width={400}
@@ -141,34 +65,43 @@ const latestPosts = (await getCollection('blog'))
 				</section>
 			)}
 			
+			<!-- スキル -->
 			<section class="section">
-				<div class="about">
-					<h2 class="section-title">こんにちは、よろしく</h2>
-					<p class="section-subtitle">デザインとコードで、ものづくりをしています</p>
-					<p>
-						デザイナーであり、開発者でもあります。<br />
-						美しい見た目と、快適な体験を両立させることを大切にしています。
-					</p>
-					<p>
-						小さなプロジェクトから大きなプロジェクトまで、<br />
-						お客様の想いを形にするお手伝いをしています。
-					</p>
-					<p>
-						一緒に何か作りませんか？<br />
-						お気軽にご連絡ください。
-					</p>
-					<a href="/about" class="about-link">もっと知る</a>
+				<h2 class="section-title">スキル</h2>
+				<p class="section-subtitle">日々の制作で使っている技術とツール</p>
+				<div class="skills-grid">
+					<div class="skill-item">
+						<div class="skill-name">Frontend</div>
+						<div class="skill-tags">
+							<span>TypeScript</span>
+							<span>React</span>
+							<span>Astro</span>
+						</div>
+					</div>
+					<div class="skill-item">
+						<div class="skill-name">Design</div>
+						<div class="skill-tags">
+							<span>Figma</span>
+							<span>デザイン</span>
+						</div>
+					</div>
+					<div class="skill-item">
+						<div class="skill-name">Tools</div>
+						<div class="skill-tags">
+							<span>Git</span>
+							<span>VS Code</span>
+						</div>
+					</div>
 				</div>
 			</section>
 			
+			<!-- プロダクト -->
 			<section class="section">
-				<div class="cta-section">
-					<h2>一緒に何か作りませんか？</h2>
-					<p>
-						お気軽にご連絡ください。<br />
-						お話を聞かせていただければ、一緒にアイデアを形にしていきましょう。
-					</p>
-					<a href="/about" class="btn-primary">お問い合わせ</a>
+				<h2 class="section-title">プロダクト</h2>
+				<p class="section-subtitle">開発したアプリケーション</p>
+				<div class="coming-soon">
+					<p class="coming-soon-text">Coming Soon</p>
+					<p class="coming-soon-description">随時アプリを開発・公開予定です</p>
 				</div>
 			</section>
 		</main>

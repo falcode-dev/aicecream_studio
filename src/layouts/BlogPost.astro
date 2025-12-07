@@ -222,6 +222,8 @@ function formatDate(date: Date): string {
 						threshold: 0
 					};
 					
+					const tocContainer = document.querySelector('.table-of-contents');
+					
 					const observer = new IntersectionObserver((entries) => {
 						entries.forEach(entry => {
 							if (entry.isIntersecting) {
@@ -232,6 +234,33 @@ function formatDate(date: Date): string {
 										link.classList.remove('active');
 									});
 									activeLink.classList.add('active');
+									
+									// アクティブな目次項目が常に表示されるようにスクロール位置を調整
+									if (tocContainer) {
+										const containerRect = tocContainer.getBoundingClientRect();
+										const linkRect = activeLink.getBoundingClientRect();
+										const containerTop = containerRect.top;
+										const containerBottom = containerRect.bottom;
+										const linkTop = linkRect.top;
+										const linkBottom = linkRect.bottom;
+										const containerHeight = containerRect.height;
+										
+										// アクティブな項目がコンテナの上に出ている場合
+										if (linkTop < containerTop) {
+											const currentScroll = tocContainer.scrollTop;
+											const linkOffsetTop = activeLink.offsetTop;
+											const newScrollTop = linkOffsetTop - 20; // 少し余白を追加
+											tocContainer.scrollTo({ top: newScrollTop, behavior: 'smooth' });
+										}
+										// アクティブな項目がコンテナの下に出ている場合
+										else if (linkBottom > containerBottom) {
+											const currentScroll = tocContainer.scrollTop;
+											const linkOffsetTop = activeLink.offsetTop;
+											const linkHeight = activeLink.offsetHeight;
+											const newScrollTop = linkOffsetTop + linkHeight - containerHeight + 20; // 少し余白を追加
+											tocContainer.scrollTo({ top: newScrollTop, behavior: 'smooth' });
+										}
+									}
 								}
 							}
 						});
