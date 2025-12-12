@@ -1,0 +1,98 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../../components/BaseHead.astro';
+import BlogCard from '../../../components/BlogCard.astro';
+import Footer from '../../../components/Footer.astro';
+import Header from '../../../components/Header.astro';
+import { SITE_TITLE } from '../../../consts';
+
+export async function getStaticPaths() {
+	const allPosts = await getCollection('blog');
+	const tags = new Set<string>();
+	allPosts.forEach((post) => {
+		post.data.tags.forEach((tag) => tags.add(tag));
+	});
+
+	return Array.from(tags).map((tag) => ({
+		params: { tag },
+	}));
+}
+
+const { tag } = Astro.params;
+if (!tag) {
+	return Astro.redirect('/blog');
+}
+
+const allPosts = await getCollection('blog');
+const posts = allPosts
+	.filter((post) => post.data.tags.includes(tag))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<!doctype html>
+<html lang="ja">
+	<head>
+		<BaseHead
+			title={`タグ: ${tag} | ブログ | ${SITE_TITLE}`}
+			description={`「${tag}」に関する記事一覧です。`}
+		/>
+		<style>
+			.tag-header {
+				margin-bottom: 2em;
+			}
+			
+			.tag-header h1 {
+				margin: 0 0 0.5em 0;
+				font-size: 1.5em;
+				font-weight: 500;
+			}
+			
+			.tag-description {
+				color: rgb(var(--gray));
+				margin: 0;
+				font-size: 0.9em;
+			}
+			
+			.posts-list {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+				gap: 1.25em;
+				list-style: none;
+				margin: 0;
+				padding: 0;
+			}
+			
+			@media (max-width: 768px) {
+				.posts-list {
+					grid-template-columns: 1fr;
+					gap: 1em;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="tag-header">
+				<h1>タグ：{tag}</h1>
+				<p class="tag-description">「{tag}」に関する記事一覧</p>
+			</div>
+			<section>
+				{posts.length > 0 ? (
+					<ul class="posts-list">
+						{
+							posts.map((post) => (
+								<li>
+									<BlogCard post={post} />
+								</li>
+							))
+						}
+					</ul>
+				) : (
+					<p>このタグにはまだ記事がありません。</p>
+				)}
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

@@ -1,48 +1,298 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
+import BlogCard from '../components/BlogCard.astro';
+import Button from '../components/Button.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+// 最新記事（6件）
+const allPosts = await getCollection('blog');
+const latestPosts = allPosts
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 6);
+
+// 人気記事/代表記事（固定スラッグで指定）
+const featuredSlugs = [
+	'first-post',
+	'second-post',
+	'third-post',
+];
+const featuredPosts = featuredSlugs
+	.map((slug) => allPosts.find((post) => post.data.slug === slug))
+	.filter((post) => post !== undefined) as typeof allPosts;
+
+// カテゴリ情報
+const categoryLabels: Record<string, { label: string; description: string }> = {
+	life: {
+		label: '自由に生きる',
+		description: '働き方・価値観・生き方の話',
+	},
+	career: {
+		label: 'キャリア・副業',
+		description: '自分で稼ぐ力をつけるロードマップ',
+	},
+	engineering: {
+		label: 'エンジニアリング',
+		description: 'SEが現場で使える知識',
+	},
+	typescript: {
+		label: 'TypeScript',
+		description: '技術Tips・実装ガイド',
+	},
+};
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="ja">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead
+			title={`${SITE_TITLE} | 自分のペースで働く。`}
+			description={SITE_DESCRIPTION}
+		/>
+		<style>
+			/* ヒーローセクション */
+			.hero {
+				text-align: center;
+				padding: 3em 0;
+				margin-bottom: 4em;
+			}
+			
+			.hero h1 {
+				font-size: 2em;
+				margin-bottom: 1em;
+				line-height: 1.4;
+				font-weight: 500;
+			}
+			
+			.hero-subtitle {
+				font-size: 1em;
+				color: rgb(var(--gray));
+				margin-bottom: 2em;
+				line-height: 1.7;
+			}
+			
+			.hero-buttons {
+				display: flex;
+				gap: 1em;
+				justify-content: center;
+				flex-wrap: wrap;
+			}
+			
+			/* セクション共通 */
+			.section {
+				margin-bottom: 4em;
+			}
+			
+			.section-header {
+				margin-bottom: 2em;
+			}
+			
+			.section-header h2 {
+				margin: 0 0 0.5em 0;
+				font-size: 1.5em;
+				font-weight: 500;
+				color: rgb(var(--black));
+				line-height: 1.4;
+			}
+			
+			.section-description {
+				color: rgb(var(--gray));
+				margin: 0;
+				font-size: 0.9em;
+				line-height: 1.6;
+			}
+			
+			/* 記事カード */
+			.posts-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+				gap: 2em;
+				margin-bottom: 2em;
+			}
+			
+			.view-all {
+				text-align: center;
+				margin-top: 2em;
+			}
+			
+			.view-all a {
+				color: var(--accent);
+				font-weight: 600;
+				text-decoration: none;
+			}
+			
+			.view-all a:hover {
+				text-decoration: underline;
+			}
+			
+			/* カテゴリガイド */
+			.categories-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+				gap: 2em;
+			}
+			
+			.category-card {
+				padding: 1.5em 0;
+			}
+			
+			.category-card h3 {
+				margin: 0 0 0.5em 0;
+				color: rgb(var(--black));
+				font-weight: 500;
+			}
+			
+			.category-card p {
+				margin: 0 0 1em 0;
+				color: rgb(var(--gray));
+				font-size: 0.9em;
+			}
+			
+			.category-card a {
+				color: var(--accent);
+				font-weight: 400;
+				font-size: 0.9em;
+			}
+			
+			/* 著者紹介 */
+			.author-section {
+				padding: 2em 0;
+				text-align: center;
+			}
+			
+			.author-name {
+				font-size: 1.25em;
+				font-weight: 500;
+				margin-bottom: 0.5em;
+				color: rgb(var(--black));
+			}
+			
+			.author-title {
+				color: rgb(var(--gray));
+				margin-bottom: 1.5em;
+				font-size: 0.95em;
+			}
+			
+			.author-description {
+				color: rgb(var(--gray-dark));
+				line-height: 1.7;
+				margin-bottom: 1.5em;
+				max-width: 600px;
+				margin-left: auto;
+				margin-right: auto;
+				font-size: 0.95em;
+			}
+			
+			@media (max-width: 768px) {
+				.hero {
+					padding: 3em 1.5em;
+				}
+				
+				.hero h1 {
+					font-size: 2em;
+				}
+				
+				.hero-subtitle {
+					font-size: 1.1em;
+				}
+				
+				.posts-grid {
+					grid-template-columns: 1fr;
+				}
+				
+				.categories-grid {
+					grid-template-columns: 1fr;
+				}
+				
+				.author-section {
+					padding: 2em 1.5em;
+				}
+			}
+		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+			<!-- ヒーローセクション -->
+			<section class="hero">
+				<h1>自分のペースで働く。</h1>
+				<p class="hero-subtitle">
+					働き方・キャリア戦略・副業・TypeScriptなど、<br />
+					「自分で選べる人生」を実現するための情報を発信しています。
+				</p>
+				<div class="hero-buttons">
+					<Button href="/blog/" variant="primary">ブログを見る</Button>
+					<Button href="/profile/" variant="secondary">プロフィール</Button>
+				</div>
+			</section>
+
+			<!-- 最新記事 -->
+			<section class="section">
+				<div class="section-header">
+					<h2>最新記事</h2>
+				</div>
+				<div class="posts-grid">
+					{
+						latestPosts.map((post) => (
+							<BlogCard post={post} />
+						))
+					}
+				</div>
+				<div class="view-all">
+					<a href="/blog/">すべての記事を見る →</a>
+				</div>
+			</section>
+
+			<!-- よく読まれている記事 -->
+			{featuredPosts.length > 0 && (
+				<section class="section">
+					<div class="section-header">
+						<h2>よく読まれている記事</h2>
+						<p class="section-description">まずはここから読んでみてください</p>
+					</div>
+					<div class="posts-grid">
+						{
+							featuredPosts.map((post) => (
+								<BlogCard post={post} />
+							))
+						}
+					</div>
+				</section>
+			)}
+
+			<!-- テーマ別ガイド -->
+			<section class="section">
+				<div class="section-header">
+					<h2>テーマ別ガイド</h2>
+					<p class="section-description">カテゴリから記事を探す</p>
+				</div>
+				<div class="categories-grid">
+					{
+						Object.entries(categoryLabels).map(([key, { label, description }]) => (
+							<div class="category-card">
+								<h3>{label}</h3>
+								<p>{description}</p>
+								<a href={`/blog/category/${key}/`}>記事を見る →</a>
+							</div>
+						))
+					}
+				</div>
+			</section>
+
+			<!-- 著者について -->
+			<section class="section">
+				<div class="author-section">
+					<div class="author-name">あいす</div>
+					<div class="author-title">金融系SE × 副業クリエイター</div>
+					<p class="author-description">
+						残業まみれの金融SEから、副業で月20万円を達成。<br />
+						技術と文章を武器に「会社に縛られない働き方」を追求しています。
+					</p>
+					<Button href="/profile/" variant="secondary">プロフィールを見る</Button>
+				</div>
+			</section>
 		</main>
 		<Footer />
 	</body>
