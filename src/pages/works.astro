@@ -1,0 +1,520 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Button from '../components/Button.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+---
+
+<!doctype html>
+<html lang="ja">
+	<head>
+		<BaseHead
+			title={`成果物 | ${SITE_TITLE}`}
+			description="金融系SEとしての4年間の経験と、副業で培った文章力・情報発信力を活かして、技術 × ライティングで価値を提供しています。"
+		/>
+		<style>
+			/* 成果物ページ専用スタイル */
+			.works-hero {
+				text-align: center;
+				padding: 3em 0;
+				margin-bottom: 4em;
+			}
+
+			.works-hero h1 {
+				font-size: 2em;
+				margin-bottom: 1em;
+				line-height: 1.4;
+				font-weight: 500;
+				color: rgb(var(--black));
+			}
+
+			.works-hero-intro {
+				font-size: 1.1em;
+				color: rgb(var(--gray-dark));
+				line-height: 1.8;
+				margin-bottom: 1.5em;
+				max-width: 700px;
+				margin-left: auto;
+				margin-right: auto;
+			}
+
+			.works-hero-intro strong {
+				color: rgb(var(--black));
+				font-weight: 600;
+			}
+
+			/* セクション共通 */
+			.works-section {
+				margin-bottom: 4em;
+			}
+
+			.works-section-header {
+				margin-bottom: 2em;
+			}
+
+			.works-section-header h2 {
+				margin: 0 0 0.5em 0;
+				font-size: 1.5em;
+				font-weight: 500;
+				color: rgb(var(--black));
+				line-height: 1.4;
+			}
+
+			.works-section-description {
+				color: rgb(var(--gray));
+				margin: 0;
+				font-size: 0.9em;
+				line-height: 1.6;
+			}
+
+			/* note実績 */
+			.note-stats {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+				gap: 1.5em;
+				margin-bottom: 2em;
+			}
+
+			.stat-item {
+				padding: 1.5em;
+				background: rgb(var(--gray-lighter));
+				border-radius: var(--border-radius);
+				text-align: center;
+			}
+
+			.stat-item .stat-value {
+				font-size: 1.5em;
+				font-weight: 600;
+				color: var(--accent);
+				margin-bottom: 0.5em;
+			}
+
+			.stat-item .stat-label {
+				font-size: 0.9em;
+				color: rgb(var(--gray-dark));
+			}
+
+			.note-articles {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+				gap: 1.5em;
+			}
+
+			.note-article-card {
+				padding: 1.5em;
+				background: rgb(var(--gray-lighter));
+				border-radius: var(--border-radius);
+			}
+
+			.note-article-card h3 {
+				margin: 0 0 0.5em 0;
+				font-size: 1.1em;
+				font-weight: 600;
+				color: rgb(var(--black));
+			}
+
+			.note-article-card p {
+				margin: 0;
+				color: rgb(var(--gray-dark));
+				font-size: 0.95em;
+				line-height: 1.6;
+			}
+
+			/* ブログ記事 */
+			.blog-categories {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+				gap: 2em;
+			}
+
+			.blog-category {
+				padding: 1.5em;
+				background: rgb(var(--gray-lighter));
+				border-radius: var(--border-radius);
+			}
+
+			.blog-category h3 {
+				margin: 0 0 1em 0;
+				font-size: 1.2em;
+				font-weight: 600;
+				color: rgb(var(--black));
+			}
+
+			.blog-category ul {
+				margin: 0;
+				padding-left: 1.5em;
+				color: rgb(var(--gray-dark));
+				line-height: 1.8;
+			}
+
+			.blog-category li {
+				margin-bottom: 0.5em;
+			}
+
+			/* 実務実績 */
+			.work-experience {
+				display: flex;
+				flex-direction: column;
+				gap: 1.5em;
+			}
+
+			.experience-item {
+				padding: 1.5em;
+				background: rgb(var(--gray-lighter));
+				border-radius: var(--border-radius);
+			}
+
+			.experience-item h3 {
+				margin: 0 0 0.75em 0;
+				font-size: 1.1em;
+				font-weight: 600;
+				color: rgb(var(--black));
+			}
+
+			.experience-item ul {
+				margin: 0.5em 0;
+				padding-left: 1.5em;
+				color: rgb(var(--gray-dark));
+				line-height: 1.8;
+			}
+
+			.experience-item li {
+				margin-bottom: 0.5em;
+			}
+
+			/* 技術プロジェクト */
+			.project-card {
+				padding: 1.5em;
+				background: rgb(var(--gray-lighter));
+				border-radius: var(--border-radius);
+				margin-bottom: 1.5em;
+			}
+
+			.project-card h3 {
+				margin: 0 0 0.75em 0;
+				font-size: 1.1em;
+				font-weight: 600;
+				color: rgb(var(--black));
+			}
+
+			.project-card ul {
+				margin: 0.5em 0;
+				padding-left: 1.5em;
+				color: rgb(var(--gray-dark));
+				line-height: 1.8;
+			}
+
+			.project-card li {
+				margin-bottom: 0.5em;
+			}
+
+			/* スキルセット */
+			.skills-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+				gap: 1.5em;
+			}
+
+			.skill-category {
+				padding: 1.5em;
+				background: rgb(var(--gray-lighter));
+				border-radius: var(--border-radius);
+			}
+
+			.skill-category h3 {
+				margin: 0 0 0.75em 0;
+				font-size: 1.1em;
+				font-weight: 600;
+				color: rgb(var(--black));
+			}
+
+			.skill-category ul {
+				margin: 0;
+				padding-left: 1.5em;
+				color: rgb(var(--gray-dark));
+				line-height: 1.8;
+				font-size: 0.95em;
+			}
+
+			.skill-category li {
+				margin-bottom: 0.4em;
+			}
+
+			/* 実績まとめ */
+			.stats-summary {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+				gap: 1.5em;
+				padding: 2em;
+				background: rgb(var(--gray-lighter));
+				border-radius: var(--border-radius);
+			}
+
+			.summary-item {
+				text-align: center;
+			}
+
+			.summary-item .summary-value {
+				font-size: 1.75em;
+				font-weight: 600;
+				color: var(--accent);
+				margin-bottom: 0.5em;
+			}
+
+			.summary-item .summary-label {
+				font-size: 0.9em;
+				color: rgb(var(--gray-dark));
+			}
+
+			/* CTA */
+			.cta-section {
+				padding: 2em 0;
+				border-top: 1px solid rgb(var(--gray-light));
+				text-align: center;
+			}
+
+			.cta-buttons {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 1em;
+				justify-content: center;
+			}
+
+			@media (max-width: 768px) {
+				.works-hero {
+					padding: 2em 1.5em;
+				}
+
+				.works-hero h1 {
+					font-size: 1.75em;
+				}
+
+				.note-stats,
+				.stats-summary {
+					grid-template-columns: repeat(2, 1fr);
+				}
+
+				.blog-categories,
+				.skills-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<!-- 冒頭メッセージ -->
+			<section class="works-hero">
+				<h1>成果物</h1>
+				<p class="works-hero-intro">
+					金融系SEとしての4年間の経験と、<br />
+					副業で培った文章力・情報発信力を活かして、<br />
+					<strong>"技術 × ライティング" で価値を提供しています。</strong>
+				</p>
+			</section>
+
+			<!-- note実績 -->
+			<section class="works-section">
+				<div class="works-section-header">
+					<h2>note実績（コンテンツ制作）</h2>
+					<p class="works-section-description">副業で培った文章力とマーケティングスキルの実績</p>
+				</div>
+				<div class="note-stats">
+					<div class="stat-item">
+						<div class="stat-value">20万円</div>
+						<div class="stat-label">最高月収（安定）</div>
+					</div>
+					<div class="stat-item">
+						<div class="stat-value">継続中</div>
+						<div class="stat-label">毎日執筆</div>
+					</div>
+					<div class="stat-item">
+						<div class="stat-value">複数シリーズ</div>
+						<div class="stat-label">人気コンテンツ</div>
+					</div>
+				</div>
+				<div class="note-articles">
+					<div class="note-article-card">
+						<h3>「疲弊する会社員のリアル」シリーズ</h3>
+						<p>働き方の現実と向き合い、変えていくための思考法を発信</p>
+					</div>
+					<div class="note-article-card">
+						<h3>「副業で人生の自由度を上げる方法」</h3>
+						<p>実践的な副業戦略と、収益化までの具体的なロードマップ</p>
+					</div>
+					<div class="note-article-card">
+						<h3>「金融SEが副業で月20万円を作るまで」</h3>
+						<p>実際の経験に基づいた、再現可能な収益化のプロセス</p>
+					</div>
+				</div>
+				<p style="margin-top: 1.5em; color: rgb(var(--gray)); font-size: 0.9em;">
+					主なテーマ：働き方・キャリア戦略・副業・SEのリアル
+				</p>
+			</section>
+
+			<!-- ブログ記事 -->
+			<section class="works-section">
+				<div class="works-section-header">
+					<h2>ブログ記事（技術・キャリア）</h2>
+					<p class="works-section-description">技術と文章の両軸で価値を提供</p>
+				</div>
+				<div class="blog-categories">
+					<div class="blog-category">
+						<h3>技術記事</h3>
+						<ul>
+							<li>TypeScript Utility Types 入門</li>
+							<li>実務で役立ったMicrosoft 365 Tips</li>
+							<li>React × Astroでつくる高速ブログ</li>
+							<li>金融システム現場で使える設計の考え方</li>
+						</ul>
+					</div>
+					<div class="blog-category">
+						<h3>キャリア / 働き方記事</h3>
+						<ul>
+							<li>会社に依存しないキャリア戦略</li>
+							<li>残業地獄から抜け出すための思考法</li>
+							<li>副業で月1〜5万円を安定させるロードマップ</li>
+							<li>文系SEが現場で生き残る方法</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<!-- 金融SEとしての実務実績 -->
+			<section class="works-section">
+				<div class="works-section-header">
+					<h2>SEとしての実務実績（金融系システム）</h2>
+					<p class="works-section-description">4年間の現場経験で培った専門性</p>
+				</div>
+				<div class="work-experience">
+					<div class="experience-item">
+						<h3>金融システムの障害対応チーム（2年間）</h3>
+						<ul>
+							<li>深夜対応・緊急コールの経験</li>
+							<li>根本原因分析・改善提案</li>
+							<li>顧客への迅速な報告と対応</li>
+						</ul>
+					</div>
+					<div class="experience-item">
+						<h3>顧客折衝・要件定義</h3>
+						<ul>
+							<li>金融機関との直接的なコミュニケーション</li>
+							<li>複雑な要件の整理と文書化</li>
+							<li>技術的な制約を考慮した提案</li>
+						</ul>
+					</div>
+					<div class="experience-item">
+						<h3>後輩育成・レビュー体制の構築</h3>
+						<ul>
+							<li>コードレビュー・ドキュメントレビューの実施</li>
+							<li>新人教育プログラムの改善提案</li>
+							<li>知識共有の仕組みづくり</li>
+						</ul>
+					</div>
+					<div class="experience-item">
+						<h3>業務効率化の実施</h3>
+						<ul>
+							<li>紙文化の改善提案</li>
+							<li>Microsoft 365を活用した業務改善</li>
+							<li>自動化スクリプトの作成（PowerShell）</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<!-- 技術プロジェクト -->
+			<section class="works-section">
+				<div class="works-section-header">
+					<h2>Web制作・技術プロジェクト</h2>
+					<p class="works-section-description">実装力と設計力を示すプロジェクト</p>
+				</div>
+				<div class="project-card">
+					<h3>このブログ（Astro, React, TypeScript）</h3>
+					<ul>
+						<li>Astro + React + TypeScriptで構築</li>
+						<li>コンポーネント設計と再利用性の追求</li>
+						<li>Performance / SEO対策の実装</li>
+						<li>情報設計とユーザビリティの最適化</li>
+						<li>Content Collectionsを活用した記事管理</li>
+					</ul>
+				</div>
+			</section>
+
+			<!-- スキルセット -->
+			<section class="works-section">
+				<div class="works-section-header">
+					<h2>スキルセット</h2>
+					<p class="works-section-description">技術・発信・ビジネスの3軸で価値を提供</p>
+				</div>
+				<div class="skills-grid">
+					<div class="skill-category">
+						<h3>技術</h3>
+						<ul>
+							<li>TypeScript</li>
+							<li>React</li>
+							<li>Astro</li>
+							<li>Microsoft 365</li>
+							<li>Git / GitHub</li>
+							<li>PowerShell</li>
+						</ul>
+					</div>
+					<div class="skill-category">
+						<h3>発信・文章</h3>
+						<ul>
+							<li>noteでのコンテンツ制作</li>
+							<li>SEOライティング</li>
+							<li>情報整理</li>
+							<li>ストーリーテリング</li>
+							<li>マーケティング（副業経験ベース）</li>
+						</ul>
+					</div>
+					<div class="skill-category">
+						<h3>ビジネス</h3>
+						<ul>
+							<li>要件定義</li>
+							<li>顧客調整</li>
+							<li>プロジェクトコミュニケーション</li>
+							<li>教育・育成</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<!-- 実績まとめ -->
+			<section class="works-section">
+				<div class="works-section-header">
+					<h2>実績まとめ</h2>
+				</div>
+				<div class="stats-summary">
+					<div class="summary-item">
+						<div class="summary-value">20万円</div>
+						<div class="summary-label">note最高月収</div>
+					</div>
+					<div class="summary-item">
+						<div class="summary-value">継続中</div>
+						<div class="summary-label">毎日執筆</div>
+					</div>
+					<div class="summary-item">
+						<div class="summary-value">4年</div>
+						<div class="summary-label">金融システム経験</div>
+					</div>
+					<div class="summary-item">
+						<div class="summary-value">複数</div>
+						<div class="summary-label">技術・キャリア記事</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- CTA -->
+			<section class="cta-section">
+				<div class="cta-buttons">
+					<Button href="/contact/" variant="primary">お問い合わせ</Button>
+					<Button href="/blog/" variant="secondary">ブログを見る</Button>
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

@@ -1,66 +1,134 @@
 #!/usr/bin/env node
 
-import fs from 'fs';
-import path from 'path';
+import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import readline from 'readline';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = dirname(__filename);
+const rootDir = join(__dirname, '..');
+const blogDir = join(rootDir, 'src', 'content', 'blog');
 
-// コマンドライン引数を取得
-const args = process.argv.slice(2);
+const rl = readline.createInterface({
+	input: process.stdin,
+	output: process.stdout,
+});
 
-if (args.length === 0) {
-	console.error('エラー: 記事のファイル名を指定してください');
-	console.log('使用例: npm run create-post my-new-article');
-	process.exit(1);
+function question(query) {
+	return new Promise((resolve) => {
+		rl.question(query, resolve);
+	});
 }
 
-const slug = args[0];
-const blogDir = path.join(__dirname, '../src/content/blog');
-const filePath = path.join(blogDir, `${slug}.md`);
-
-// ファイルが既に存在するかチェック
-if (fs.existsSync(filePath)) {
-	console.error(`エラー: ファイル ${slug}.md は既に存在します`);
-	process.exit(1);
+function slugify(text) {
+	return text
+		.toString()
+		.toLowerCase()
+		.trim()
+		.replace(/\s+/g, '-')
+		.replace(/[^\w\-]+/g, '')
+		.replace(/\-\-+/g, '-')
+		.replace(/^-+/, '')
+		.replace(/-+$/, '');
 }
 
-// 現在の日付を取得
-const today = new Date();
-const dateStr = today.toISOString().split('T')[0];
+function formatDate(date) {
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	const day = String(date.getDate()).padStart(2, '0');
+	return `${year}-${month}-${day}`;
+}
 
-// カテゴリを取得（オプション）
-const category = args[1] || '';
+async function main() {
+	console.log('\n📝 ブログ記事を作成します\n');
 
-// テンプレート
-const categoryLine = category ? `category: ${category}\n` : '';
-const template = `---
-title: ${slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-description: 記事の説明をここに記入してください
-pubDate: ${dateStr}
-heroImage: ../../assets/blog-placeholder-1.jpg
-${categoryLine}---
+	// タイトル
+	const title = await question('タイトル: ');
+	if (!title.trim()) {
+		console.log('❌ タイトルは必須です');
+		rl.close();
+		process.exit(1);
+	}
 
-# ${slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+	// スラッグ
+	const slugInput = await question(`スラッグ (Enterで自動生成: ${slugify(title)}): `);
+	const slug = slugInput.trim() || slugify(title);
 
-ここに記事の内容を記入してください。
+	// 説明
+	const description = await question('説明: ');
 
-## 見出し
+	// カテゴリ
+	console.log('\nカテゴリを選択してください:');
+	console.log('1. life (価値観・メンタル・働き方・人生観)');
+	console.log('2. career (転職・キャリア戦略・副業戦略)');
+	console.log('3. engineering (プログラミング全般・エンジニア系Tips)');
+	console.log('4. microsoft (Microsoft製品・サービス・働き方)');
+	console.log('5. typescript (TypeScript)');
+	const categoryChoice = await question('カテゴリ (1-5): ');
+	const categories = {
+		'1': 'life',
+		'2': 'career',
+		'3': 'engineering',
+		'4': 'microsoft',
+		'5': 'typescript',
+	};
+	const category = categories[categoryChoice.trim()] || 'life';
 
-本文をここに記入してください。
+	// タグ
+	const tagsInput = await question('タグ (カンマ区切り): ');
+	const tags = tagsInput
+		.split(',')
+		.map((tag) => tag.trim())
+		.filter((tag) => tag.length > 0);
+
+	// 公開日
+	const dateInput = await question(`公開日 (Enterで今日: ${formatDate(new Date())}): `);
+	const pubDate = dateInput.trim() || formatDate(new Date());
+
+	// ファイル形式
+	const formatChoice = await question('ファイル形式 (1: Markdown, 2: MDX) [1]: ');
+	const format = formatChoice.trim() === '2' ? 'mdx' : 'md';
+
+	// ファイル名
+	const filename = `${slug}.${format}`;
+	const filepath = join(blogDir, filename);
+
+	// ファイルが既に存在するかチェック
+	if (existsSync(filepath)) {
+		const overwrite = await question(`ファイル ${filename} は既に存在します。上書きしますか? (y/N): `);
+		if (overwrite.toLowerCase() !== 'y') {
+			console.log('❌ キャンセルしました');
+			rl.close();
+			process.exit(0);
+		}
+	}
+
+	// フロントマター生成
+	const frontmatter = `---
+title: '${title.replace(/'/g, "''")}'
+slug: '${slug}'
+description: '${description.replace(/'/g, "''")}'
+pubDate: '${pubDate}'
+category: '${category}'
+tags: [${tags.map((tag) => `'${tag.replace(/'/g, "''")}'`).join(', ')}]
+---
+
+ここに本文を記述してください。
 
 `;
 
-// ディレクトリが存在しない場合は作成
-if (!fs.existsSync(blogDir)) {
-	fs.mkdirSync(blogDir, { recursive: true });
+	// ファイル書き込み
+	writeFileSync(filepath, frontmatter, 'utf-8');
+
+	console.log(`\n✅ ブログ記事を作成しました: ${filepath}`);
+	console.log(`\n📝 編集してください: ${filepath}\n`);
+
+	rl.close();
 }
 
-// ファイルを作成
-fs.writeFileSync(filePath, template, 'utf-8');
-
-console.log(`✅ 記事を作成しました: ${filePath}`);
-console.log(`📝 編集してください: src/content/blog/${slug}.md`);
-console.log(`🌐 プレビュー: http://localhost:4321/blog/${slug}/`);
-
+main().catch((error) => {
+	console.error('❌ エラーが発生しました:', error);
+	rl.close();
+	process.exit(1);
+});

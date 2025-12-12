@@ -1,0 +1,472 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Button from '../components/Button.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+---
+
+<!doctype html>
+<html lang="ja">
+	<head>
+		<BaseHead
+			title={`プロフィール | ${SITE_TITLE}`}
+			description="金融系SEとして働きながら、副業で月20万円を達成。「自由に生きたい人のための文章を書くエンジニア」として、働き方・キャリア・副業・TypeScript・Microsoft技術などを発信しています。"
+		/>
+		<style>
+			/* プロフィールページ専用スタイル */
+			.profile-hero {
+				text-align: center;
+				padding: 3em 0;
+				margin-bottom: 4em;
+			}
+
+			.profile-hero h1 {
+				font-size: 2em;
+				margin-bottom: 1em;
+				line-height: 1.4;
+				font-weight: 500;
+				color: rgb(var(--black));
+			}
+
+			.profile-hero-intro {
+				font-size: 1.1em;
+				color: rgb(var(--gray-dark));
+				line-height: 1.8;
+				margin-bottom: 1.5em;
+				max-width: 700px;
+				margin-left: auto;
+				margin-right: auto;
+			}
+
+			.profile-hero-intro strong {
+				color: rgb(var(--black));
+				font-weight: 600;
+			}
+
+			.profile-hero-subtitle {
+				font-size: 1em;
+				color: rgb(var(--gray));
+				line-height: 1.7;
+				max-width: 600px;
+				margin: 0 auto 2em;
+			}
+
+			/* セクション共通 */
+			.profile-section {
+				margin-bottom: 4em;
+			}
+
+			.profile-section-header {
+				margin-bottom: 2em;
+			}
+
+			.profile-section-header h2 {
+				margin: 0 0 0.5em 0;
+				font-size: 1.5em;
+				font-weight: 500;
+				color: rgb(var(--black));
+				line-height: 1.4;
+			}
+
+			.profile-section-description {
+				color: rgb(var(--gray));
+				margin: 0;
+				font-size: 0.9em;
+				line-height: 1.6;
+			}
+
+			/* 現在の活動 */
+			.current-activities {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+				gap: 1.5em;
+				margin-bottom: 2em;
+			}
+
+			.activity-item {
+				padding: 1.5em;
+				background: rgb(var(--gray-lighter));
+				border-radius: var(--border-radius);
+			}
+
+			.activity-item h3 {
+				margin: 0 0 0.5em 0;
+				font-size: 1.1em;
+				font-weight: 600;
+				color: rgb(var(--black));
+			}
+
+			.activity-item p {
+				margin: 0;
+				color: rgb(var(--gray-dark));
+				font-size: 0.95em;
+				line-height: 1.6;
+			}
+
+			/* ストーリー */
+			.story-timeline {
+				display: flex;
+				flex-direction: column;
+				gap: 2.5em;
+			}
+
+			.story-item {
+				position: relative;
+				padding-left: 2em;
+			}
+
+			.story-item::before {
+				content: '';
+				position: absolute;
+				left: 0;
+				top: 0.5em;
+				width: 8px;
+				height: 8px;
+				background: var(--accent);
+				border-radius: 50%;
+			}
+
+			.story-item::after {
+				content: '';
+				position: absolute;
+				left: 3px;
+				top: 1.2em;
+				width: 2px;
+				height: calc(100% + 1em);
+				background: rgb(var(--gray-light));
+			}
+
+			.story-item:last-child::after {
+				display: none;
+			}
+
+			.story-item h3 {
+				margin: 0 0 0.75em 0;
+				font-size: 1.2em;
+				font-weight: 600;
+				color: rgb(var(--black));
+			}
+
+			.story-item ul {
+				margin: 0.5em 0;
+				padding-left: 1.5em;
+				color: rgb(var(--gray-dark));
+				line-height: 1.8;
+			}
+
+			.story-item li {
+				margin-bottom: 0.5em;
+			}
+
+			.story-item p {
+				margin: 0.5em 0;
+				color: rgb(var(--gray-dark));
+				line-height: 1.8;
+			}
+
+			/* 発信テーマ */
+			.themes-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+				gap: 1.5em;
+			}
+
+			.theme-card {
+				padding: 1.5em;
+				background: rgb(var(--gray-lighter));
+				border-radius: var(--border-radius);
+			}
+
+			.theme-card h3 {
+				margin: 0 0 0.5em 0;
+				font-size: 1.1em;
+				font-weight: 600;
+				color: rgb(var(--black));
+			}
+
+			.theme-card p {
+				margin: 0;
+				color: rgb(var(--gray-dark));
+				font-size: 0.95em;
+				line-height: 1.6;
+			}
+
+			/* 読者へのメッセージ */
+			.message-box {
+				padding: 2em;
+				background: rgb(var(--gray-lighter));
+				border-radius: var(--border-radius);
+				text-align: center;
+			}
+
+			.message-box p {
+				margin: 0;
+				color: rgb(var(--gray-dark));
+				line-height: 1.8;
+				font-size: 1em;
+			}
+
+			.message-box p:not(:last-child) {
+				margin-bottom: 1em;
+			}
+
+			/* スキル・経験 */
+			.skills-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+				gap: 1.5em;
+			}
+
+			.skill-category {
+				padding: 1.5em;
+				background: rgb(var(--gray-lighter));
+				border-radius: var(--border-radius);
+			}
+
+			.skill-category h3 {
+				margin: 0 0 0.75em 0;
+				font-size: 1.1em;
+				font-weight: 600;
+				color: rgb(var(--black));
+			}
+
+			.skill-category ul {
+				margin: 0;
+				padding-left: 1.5em;
+				color: rgb(var(--gray-dark));
+				line-height: 1.8;
+				font-size: 0.95em;
+			}
+
+			.skill-category li {
+				margin-bottom: 0.4em;
+			}
+
+			/* SNS・リンク集 */
+			.links-section {
+				padding: 2em 0;
+				border-top: 1px solid rgb(var(--gray-light));
+			}
+
+			.links-grid {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 1em;
+				justify-content: center;
+			}
+
+			@media (max-width: 768px) {
+				.profile-hero {
+					padding: 2em 1.5em;
+				}
+
+				.profile-hero h1 {
+					font-size: 1.75em;
+				}
+
+				.story-item {
+					padding-left: 1.5em;
+				}
+
+				.current-activities,
+				.themes-grid,
+				.skills-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<!-- 冒頭メッセージ -->
+			<section class="profile-hero">
+				<h1>プロフィール</h1>
+				<p class="profile-hero-intro">
+					金融系SEとして働きながら、副業で月20万円を稼ぐようになった<br />
+					<strong>"自由に生きたい人のための文章を書くエンジニア"</strong>、あいすです。
+				</p>
+				<p class="profile-hero-subtitle">
+					働き方・キャリア・副業・TypeScript・Microsoft技術など、<br />
+					<strong>「個人で生きる力」</strong>をテーマに発信しています。
+				</p>
+			</section>
+
+			<!-- 現在の活動 -->
+			<section class="profile-section">
+				<div class="profile-section-header">
+					<h2>現在の活動</h2>
+				</div>
+				<div class="current-activities">
+					<div class="activity-item">
+						<h3>システムエンジニア</h3>
+						<p>金融系大手グループのシステムエンジニア（4年目）</p>
+					</div>
+					<div class="activity-item">
+						<h3>コンテンツ販売</h3>
+						<p>noteでコンテンツ販売（月20万円）</p>
+					</div>
+					<div class="activity-item">
+						<h3>ブログ運営</h3>
+						<p>「自由に生きる技術」をテーマに発信</p>
+					</div>
+					<div class="activity-item">
+						<h3>技術領域</h3>
+						<p>TypeScript / Microsoft 365 / React / Astro</p>
+					</div>
+					<div class="activity-item">
+						<h3>興味・関心</h3>
+						<p>キャリア戦略、副業、心理学、働き方改善</p>
+					</div>
+				</div>
+			</section>
+
+			<!-- ストーリー -->
+			<section class="profile-section">
+				<div class="profile-section-header">
+					<h2>ストーリー</h2>
+					<p class="profile-section-description">過去から現在、そして未来への歩み</p>
+				</div>
+				<div class="story-timeline">
+					<div class="story-item">
+						<h3>大学〜入社1年目：文系SEとして苦戦しながらも文章力が武器に</h3>
+						<ul>
+							<li>文学部卒 → IT未経験でSEに</li>
+							<li>研修で苦戦するも「文章力」でドキュメント担当に抜擢</li>
+							<li>残業30h/月 ＋ 休日呼び出し → 最初の冬ボーナスで理不尽を知る</li>
+						</ul>
+						<p>→ "会社だけに頼るのは危険" と強く実感</p>
+					</div>
+
+					<div class="story-item">
+						<h3>2〜3年目：激務、夜中の呼び出し、副業noteの開始</h3>
+						<ul>
+							<li>月40h残業が常態化、深夜帰宅も増える</li>
+							<li>「若いうちは頑張りどき」という言い訳に疑問を持つ</li>
+							<li>noteで副業開始 → 初収益54円</li>
+						</ul>
+						<p>→ "自分でお金を生む快感" に目覚める</p>
+						<p>→ 怒りや悔しさを燃料に執筆習慣を継続</p>
+					</div>
+
+					<div class="story-item">
+						<h3>4年目：副業が資産化し、収益が月20万円へ</h3>
+						<ul>
+							<li>note収益が月3〜5万円 → やがて20万円へ</li>
+							<li>過去記事が自動で売れ続け、「自分の力で稼ぐ感覚」を掴む</li>
+							<li>SEでは後輩育成や顧客折衝を担当、紙資料文化に限界を感じる</li>
+						</ul>
+						<p>→ "副業を育て、自由度の高い働き方へシフトする" と決意</p>
+					</div>
+
+					<div class="story-item">
+						<h3>現在：自由度を高めるために発信する理由</h3>
+						<ul>
+							<li>副業で精神的な余裕ができた</li>
+							<li>将来は「副業月100万円」を目標にし、キャリア選択を完全に自由にしたい</li>
+							<li>同じように悩む人に「選べる人生の作り方」を伝えたい</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<!-- 発信テーマ -->
+			<section class="profile-section">
+				<div class="profile-section-header">
+					<h2>ブログで発信しているテーマ</h2>
+					<p class="profile-section-description">このブログでは、次の4つを中心に発信しています</p>
+				</div>
+				<div class="themes-grid">
+					<div class="theme-card">
+						<h3>自由に生きるための思考法</h3>
+						<p>働き方・メンタル・価値観について</p>
+					</div>
+					<div class="theme-card">
+						<h3>キャリア戦略と副業の実践知</h3>
+						<p>会社に依存しないスキル形成、副業の進め方</p>
+					</div>
+					<div class="theme-card">
+						<h3>エンジニアとしてのリアルと成長方法</h3>
+						<p>文系SEが現場で生き残る技術、働き方改善</p>
+					</div>
+					<div class="theme-card">
+						<h3>TypeScript・Microsoft技術の解説</h3>
+						<p>現場で使える具体的なTips、設計の考え方</p>
+					</div>
+				</div>
+			</section>
+
+			<!-- 読者へのメッセージ -->
+			<section class="profile-section">
+				<div class="profile-section-header">
+					<h2>読者へのメッセージ</h2>
+				</div>
+				<div class="message-box">
+					<p>
+						僕は「努力が報われない環境」でずっと自分をすり減らしてきました。<br />
+						そして、副業で54円を稼いだ瞬間に、人生が変わり始めました。
+					</p>
+					<p>
+						自分の力で稼ぐことは、自由を取り戻す第一歩です。
+					</p>
+					<p>
+						このブログが、あなたが<strong>「選べる側の人生」</strong>を歩むきっかけになれば嬉しいです。
+					</p>
+				</div>
+			</section>
+
+			<!-- スキル・経験 -->
+			<section class="profile-section">
+				<div class="profile-section-header">
+					<h2>スキル・経験</h2>
+				</div>
+				<div class="skills-grid">
+					<div class="skill-category">
+						<h3>経験</h3>
+						<ul>
+							<li>金融システムの保守・障害対応（2年）</li>
+							<li>顧客調整・要件定義</li>
+							<li>後輩育成・ドキュメント作成</li>
+						</ul>
+					</div>
+					<div class="skill-category">
+						<h3>技術</h3>
+						<ul>
+							<li>TypeScript</li>
+							<li>React</li>
+							<li>Astro</li>
+							<li>Microsoft 365</li>
+							<li>PowerShell</li>
+						</ul>
+					</div>
+					<div class="skill-category">
+						<h3>副業</h3>
+						<ul>
+							<li>note累計販売実績</li>
+							<li>月20万円安定収益</li>
+							<li>コンテンツマーケティング</li>
+						</ul>
+					</div>
+					<div class="skill-category">
+						<h3>強み</h3>
+						<ul>
+							<li>文章力</li>
+							<li>情報整理力</li>
+							<li>"感情を燃料にする" 継続力</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<!-- SNS・リンク集 -->
+			<section class="links-section">
+				<div class="links-grid">
+					<Button href="/blog/" variant="primary">ブログを見る</Button>
+					<Button href="/contact/" variant="secondary">お問い合わせ</Button>
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

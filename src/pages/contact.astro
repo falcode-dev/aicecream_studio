@@ -1,0 +1,363 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+---
+
+<!doctype html>
+<html lang="ja">
+	<head>
+		<BaseHead
+			title={`お問い合わせ | ${SITE_TITLE}`}
+			description="お問い合わせ・ご相談はこちらからお願いいたします。技術記事の執筆、TypeScriptの学習サポート、ブログ構築、働き方・キャリア相談など、お気軽にお問い合わせください。"
+		/>
+		<style>
+			/* お問い合わせページ専用スタイル */
+			.contact-hero {
+				text-align: center;
+				padding: 3em 0;
+				margin-bottom: 4em;
+			}
+
+			.contact-hero h1 {
+				font-size: 2em;
+				margin-bottom: 1em;
+				line-height: 1.4;
+				font-weight: 500;
+				color: rgb(var(--black));
+			}
+
+			.contact-hero-intro {
+				font-size: 1.1em;
+				color: rgb(var(--gray-dark));
+				line-height: 1.8;
+				margin-bottom: 1.5em;
+				max-width: 700px;
+				margin-left: auto;
+				margin-right: auto;
+			}
+
+			/* セクション共通 */
+			.contact-section {
+				margin-bottom: 4em;
+			}
+
+			.contact-section-header {
+				margin-bottom: 2em;
+			}
+
+			.contact-section-header h2 {
+				margin: 0 0 0.5em 0;
+				font-size: 1.5em;
+				font-weight: 500;
+				color: rgb(var(--black));
+				line-height: 1.4;
+			}
+
+			.contact-section-description {
+				color: rgb(var(--gray));
+				margin: 0;
+				font-size: 0.9em;
+				line-height: 1.6;
+			}
+
+			/* フォーム */
+			.contact-form {
+				max-width: 600px;
+				margin: 0 auto;
+			}
+
+			.form-group {
+				margin-bottom: 1.5em;
+			}
+
+			.form-group label {
+				display: block;
+				margin-bottom: 0.5em;
+				font-weight: 500;
+				color: rgb(var(--black));
+				font-size: 0.95em;
+			}
+
+			.form-group label .required {
+				color: var(--accent);
+				margin-left: 0.25em;
+			}
+
+			.form-group input,
+			.form-group textarea,
+			.form-group select {
+				width: 100%;
+				padding: 0.75em 1em;
+				border: 1px solid rgb(var(--gray-light));
+				border-radius: var(--border-radius);
+				font-size: 1em;
+				font-family: inherit;
+				color: rgb(var(--black));
+				background: rgb(var(--white));
+				transition: var(--transition);
+			}
+
+			.form-group input:focus,
+			.form-group textarea:focus,
+			.form-group select:focus {
+				outline: none;
+				border-color: var(--accent);
+				box-shadow: 0 0 0 3px rgba(107, 142, 159, 0.1);
+			}
+
+			.form-group textarea {
+				min-height: 150px;
+				resize: vertical;
+			}
+
+			.form-submit {
+				text-align: center;
+				margin-top: 2em;
+			}
+
+			.btn-submit {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				padding: 0.75em 1.75em;
+				border-radius: var(--border-radius);
+				background: var(--accent);
+				color: white;
+				font-weight: 500;
+				font-size: 0.95em;
+				border: none;
+				cursor: pointer;
+				transition: var(--transition);
+				font-family: inherit;
+			}
+
+			.btn-submit:hover {
+				background: var(--accent-dark);
+				transform: translateY(-1px);
+			}
+
+			.btn-submit:active {
+				transform: translateY(0);
+			}
+
+			/* お問い合わせ内容 */
+			.contact-types {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+				gap: 1.5em;
+				margin-bottom: 2em;
+			}
+
+			.contact-type-card {
+				padding: 1.5em;
+				background: rgb(var(--gray-lighter));
+				border-radius: var(--border-radius);
+			}
+
+			.contact-type-card h3 {
+				margin: 0 0 0.5em 0;
+				font-size: 1.1em;
+				font-weight: 600;
+				color: rgb(var(--black));
+			}
+
+			.contact-type-card p {
+				margin: 0;
+				color: rgb(var(--gray-dark));
+				font-size: 0.95em;
+				line-height: 1.6;
+			}
+
+			/* メールアドレス */
+			.email-section {
+				text-align: center;
+				padding: 2em;
+				background: rgb(var(--gray-lighter));
+				border-radius: var(--border-radius);
+			}
+
+			.email-section h3 {
+				margin: 0 0 1em 0;
+				font-size: 1.2em;
+				font-weight: 500;
+				color: rgb(var(--black));
+			}
+
+			.email-section a {
+				color: var(--accent);
+				font-size: 1.1em;
+				text-decoration: none;
+				font-weight: 500;
+			}
+
+			.email-section a:hover {
+				text-decoration: underline;
+			}
+
+			/* 注意事項 */
+			.contact-note {
+				margin-top: 2em;
+				padding: 1.5em;
+				background: rgb(var(--gray-lighter));
+				border-radius: var(--border-radius);
+				font-size: 0.9em;
+				color: rgb(var(--gray-dark));
+				line-height: 1.7;
+			}
+
+			.contact-note ul {
+				margin: 0.5em 0;
+				padding-left: 1.5em;
+			}
+
+			.contact-note li {
+				margin-bottom: 0.5em;
+			}
+
+			@media (max-width: 768px) {
+				.contact-hero {
+					padding: 2em 1.5em;
+				}
+
+				.contact-hero h1 {
+					font-size: 1.75em;
+				}
+
+				.contact-form {
+					max-width: 100%;
+				}
+
+				.contact-types {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<!-- 冒頭メッセージ -->
+			<section class="contact-hero">
+				<h1>お問い合わせ</h1>
+				<p class="contact-hero-intro">
+					お問い合わせ・ご相談はこちらからお願いいたします。<br />
+					技術記事の執筆、TypeScriptの学習サポート、ブログ構築、<br />
+					働き方・キャリア相談など、お気軽にお問い合わせください。
+				</p>
+			</section>
+
+			<!-- お問い合わせ内容 -->
+			<section class="contact-section">
+				<div class="contact-section-header">
+					<h2>お問い合わせ内容</h2>
+					<p class="contact-section-description">以下のような内容についてお問い合わせいただけます</p>
+				</div>
+				<div class="contact-types">
+					<div class="contact-type-card">
+						<h3>技術記事の執筆</h3>
+						<p>TypeScript、React、Microsoft 365などの技術記事の執筆依頼</p>
+					</div>
+					<div class="contact-type-card">
+						<h3>TypeScriptの学習サポート</h3>
+						<p>学習方法の相談、コードレビュー、実務での活用方法</p>
+					</div>
+					<div class="contact-type-card">
+						<h3>ブログ構築（Astro）</h3>
+						<p>Astroを使ったブログ構築のサポート、カスタマイズ</p>
+					</div>
+					<div class="contact-type-card">
+						<h3>働き方・キャリア相談</h3>
+						<p>副業、転職、キャリア戦略についての相談</p>
+					</div>
+					<div class="contact-type-card">
+						<h3>note収益化のアドバイス</h3>
+						<p>コンテンツ制作、マーケティング、収益化の方法</p>
+					</div>
+					<div class="contact-type-card">
+						<h3>その他</h3>
+						<p>その他のご相談もお気軽にお問い合わせください</p>
+					</div>
+				</div>
+			</section>
+
+			<!-- お問い合わせフォーム -->
+			<section class="contact-section">
+				<div class="contact-section-header">
+					<h2>お問い合わせフォーム</h2>
+					<p class="contact-section-description">以下のフォームからお問い合わせいただけます</p>
+				</div>
+				<form class="contact-form" action="#" method="POST">
+					<div class="form-group">
+						<label for="name">
+							お名前
+							<span class="required">*</span>
+						</label>
+						<input type="text" id="name" name="name" required />
+					</div>
+
+					<div class="form-group">
+						<label for="email">
+							メールアドレス
+							<span class="required">*</span>
+						</label>
+						<input type="email" id="email" name="email" required />
+					</div>
+
+					<div class="form-group">
+						<label for="subject">
+							件名
+							<span class="required">*</span>
+						</label>
+						<select id="subject" name="subject" required>
+							<option value="">選択してください</option>
+							<option value="article">技術記事の執筆依頼</option>
+							<option value="support">TypeScriptの学習サポート</option>
+							<option value="blog">ブログ構築（Astro）</option>
+							<option value="career">働き方・キャリア相談</option>
+							<option value="note">note収益化のアドバイス</option>
+							<option value="other">その他</option>
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="message">
+							お問い合わせ内容
+							<span class="required">*</span>
+						</label>
+						<textarea id="message" name="message" required></textarea>
+					</div>
+
+					<div class="form-submit">
+						<button type="submit" class="btn-submit">送信する</button>
+					</div>
+				</form>
+
+				<div class="contact-note">
+					<p><strong>ご注意事項</strong></p>
+					<ul>
+						<li>お問い合わせへの返信には数日かかる場合がございます</li>
+						<li>営業目的のお問い合わせはご遠慮ください</li>
+						<li>個人情報は適切に管理し、お問い合わせ対応以外には使用いたしません</li>
+					</ul>
+				</div>
+			</section>
+
+			<!-- メールアドレス -->
+			<section class="contact-section">
+				<div class="email-section">
+					<h3>メールでのお問い合わせ</h3>
+					<p>
+						フォームがご利用いただけない場合は、<br />
+						以下のメールアドレスまで直接お問い合わせください。
+					</p>
+					<p style="margin-top: 1em;">
+						<a href="mailto:contact@example.com">contact@example.com</a>
+					</p>
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

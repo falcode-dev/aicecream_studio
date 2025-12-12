@@ -1,231 +1,299 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
+import BlogCard from '../components/BlogCard.astro';
+import Button from '../components/Button.astro';
 import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE, categoryToSlug } from '../consts';
-import '../styles/index.css';
-import aiceIcon from '../assets/aice_icon_500.png.png';
-import puniBunny from '../assets/puni_bunny_bg_fast.gif';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
-const latestPosts = (await getCollection('blog'))
+// 最新記事（6件）
+const allPosts = await getCollection('blog');
+const latestPosts = allPosts
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 	.slice(0, 6);
 
-// 構造化データの生成
-const siteURL = Astro.site || Astro.url.origin;
+// 人気記事/代表記事（固定スラッグで指定）
+const featuredSlugs = [
+	'first-post',
+	'second-post',
+	'third-post',
+];
+const featuredPosts = featuredSlugs
+	.map((slug) => allPosts.find((post) => post.data.slug === slug))
+	.filter((post) => post !== undefined) as typeof allPosts;
 
-// WebSite構造化データ
-const websiteData = {
-	"@context": "https://schema.org",
-	"@type": "WebSite",
-	"name": SITE_TITLE,
-	"description": SITE_DESCRIPTION,
-	"url": siteURL,
-	"potentialAction": {
-		"@type": "SearchAction",
-		"target": {
-			"@type": "EntryPoint",
-			"urlTemplate": `${siteURL}/blog?category={search_term_string}`
-		},
-		"query-input": "required search_term_string"
-	}
+// カテゴリ情報
+const categoryLabels: Record<string, { label: string; description: string }> = {
+	life: {
+		label: '自由に生きる',
+		description: '働き方・価値観・生き方の話',
+	},
+	career: {
+		label: 'キャリア・副業',
+		description: '自分で稼ぐ力をつけるロードマップ',
+	},
+	engineering: {
+		label: 'エンジニアリング',
+		description: 'SEが現場で使える知識',
+	},
+	typescript: {
+		label: 'TypeScript',
+		description: '技術Tips・実装ガイド',
+	},
 };
-const websiteJson = JSON.stringify(websiteData);
-
-// Organization構造化データ
-const orgData = {
-	"@context": "https://schema.org",
-	"@type": "Organization",
-	"name": "aice cream studio",
-	"url": siteURL,
-	"logo": new URL("icon.png", siteURL + import.meta.env.BASE_URL).href,
-	"sameAs": []
-};
-const orgJson = JSON.stringify(orgData);
 ---
 
 <!doctype html>
 <html lang="ja">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		{/* 構造化データ - WebSite */}
-		<script type="application/ld+json" set:html={websiteJson} />
-		{/* 構造化データ - Organization */}
-		<script type="application/ld+json" set:html={orgJson} />
+		<BaseHead
+			title={`${SITE_TITLE} | 自分のペースで働く。`}
+			description={SITE_DESCRIPTION}
+		/>
+		<style>
+			/* ヒーローセクション */
+			.hero {
+				text-align: center;
+				padding: 3em 0;
+				margin-bottom: 4em;
+			}
+			
+			.hero h1 {
+				font-size: 2em;
+				margin-bottom: 1em;
+				line-height: 1.4;
+				font-weight: 500;
+			}
+			
+			.hero-subtitle {
+				font-size: 1em;
+				color: rgb(var(--gray));
+				margin-bottom: 2em;
+				line-height: 1.7;
+			}
+			
+			.hero-buttons {
+				display: flex;
+				gap: 1em;
+				justify-content: center;
+				flex-wrap: wrap;
+			}
+			
+			/* セクション共通 */
+			.section {
+				margin-bottom: 4em;
+			}
+			
+			.section-header {
+				margin-bottom: 2em;
+			}
+			
+			.section-header h2 {
+				margin: 0 0 0.5em 0;
+				font-size: 1.5em;
+				font-weight: 500;
+				color: rgb(var(--black));
+				line-height: 1.4;
+			}
+			
+			.section-description {
+				color: rgb(var(--gray));
+				margin: 0;
+				font-size: 0.9em;
+				line-height: 1.6;
+			}
+			
+			/* 記事カード */
+			.posts-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+				gap: 2em;
+				margin-bottom: 2em;
+			}
+			
+			.view-all {
+				text-align: center;
+				margin-top: 2em;
+			}
+			
+			.view-all a {
+				color: var(--accent);
+				font-weight: 600;
+				text-decoration: none;
+			}
+			
+			.view-all a:hover {
+				text-decoration: underline;
+			}
+			
+			/* カテゴリガイド */
+			.categories-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+				gap: 2em;
+			}
+			
+			.category-card {
+				padding: 1.5em 0;
+			}
+			
+			.category-card h3 {
+				margin: 0 0 0.5em 0;
+				color: rgb(var(--black));
+				font-weight: 500;
+			}
+			
+			.category-card p {
+				margin: 0 0 1em 0;
+				color: rgb(var(--gray));
+				font-size: 0.9em;
+			}
+			
+			.category-card a {
+				color: var(--accent);
+				font-weight: 400;
+				font-size: 0.9em;
+			}
+			
+			/* 著者紹介 */
+			.author-section {
+				padding: 2em 0;
+				text-align: center;
+			}
+			
+			.author-name {
+				font-size: 1.25em;
+				font-weight: 500;
+				margin-bottom: 0.5em;
+				color: rgb(var(--black));
+			}
+			
+			.author-title {
+				color: rgb(var(--gray));
+				margin-bottom: 1.5em;
+				font-size: 0.95em;
+			}
+			
+			.author-description {
+				color: rgb(var(--gray-dark));
+				line-height: 1.7;
+				margin-bottom: 1.5em;
+				max-width: 600px;
+				margin-left: auto;
+				margin-right: auto;
+				font-size: 0.95em;
+			}
+			
+			@media (max-width: 768px) {
+				.hero {
+					padding: 3em 1.5em;
+				}
+				
+				.hero h1 {
+					font-size: 2em;
+				}
+				
+				.hero-subtitle {
+					font-size: 1.1em;
+				}
+				
+				.posts-grid {
+					grid-template-columns: 1fr;
+				}
+				
+				.categories-grid {
+					grid-template-columns: 1fr;
+				}
+				
+				.author-section {
+					padding: 2em 1.5em;
+				}
+			}
+		</style>
 	</head>
-	<body class="index-page">
+	<body>
 		<Header />
 		<main>
-			<!-- 1画面目: WELCOMEメッセージ -->
-			<section class="fullscreen-section welcome-screen">
-				<div class="welcome-section">
-					<div class="welcome-image-wrapper">
-						<div class="speech-bubble show whisper-bubble" id="speech-bubble">
-							<span class="speech-bubble-text" id="speech-bubble-text">触ってみて！</span>
-						</div>
-						<img
-							id="welcome-icon"
-							src={aiceIcon.src}
-							alt="aice cream studio"
-							class="welcome-image"
-							data-png-src={aiceIcon.src}
-							data-gif-src={puniBunny.src}
-						/>
-					</div>
-					<div class="welcome-message">
-						<span class="welcome-text">ようこそ、</span>
-						<span class="welcome-brand">aice cream studio</span>
-						<span class="welcome-text">へ！</span>
-					</div>
+			<!-- ヒーローセクション -->
+			<section class="hero">
+				<h1>自分のペースで働く。</h1>
+				<p class="hero-subtitle">
+					働き方・キャリア戦略・副業・TypeScriptなど、<br />
+					「自分で選べる人生」を実現するための情報を発信しています。
+				</p>
+				<div class="hero-buttons">
+					<Button href="/blog/" variant="primary">ブログを見る</Button>
+					<Button href="/profile/" variant="secondary">プロフィール</Button>
 				</div>
 			</section>
-			
-			<!-- 2画面目: テーマ・特徴 -->
-			<section class="fullscreen-section theme-screen">
-				<div class="theme-content">
-					<div class="hero-badge">WEBクリエイター</div>
-					<h1>のんびり、ゆっくり、<br />そんなアプリでみんなを癒す。</h1>
-					<p>
-						慌ただしい日常の中で、<br />
-						少しでも心が休まるような、優しいデザインのアプリケーションを作っています
-					</p>
+
+			<!-- 最新記事 -->
+			<section class="section">
+				<div class="section-header">
+					<h2>最新記事</h2>
+				</div>
+				<div class="posts-grid">
+					{
+						latestPosts.map((post) => (
+							<BlogCard post={post} />
+						))
+					}
+				</div>
+				<div class="view-all">
+					<a href="/blog/">すべての記事を見る →</a>
 				</div>
 			</section>
-			
-			<!-- 3画面目: ブログ -->
-			{latestPosts.length > 0 && (
-				<section class="fullscreen-section blog-screen">
-					<h2 class="section-title">ブログ</h2>
-					<p class="section-subtitle">技術的な知見や考え方を共有しています</p>
-					<ul class="posts-grid">
-						{latestPosts.map((post) => (
-							<li>
-								<a href={`${import.meta.env.BASE_URL}blog/${post.data.category ? `${categoryToSlug(post.data.category)}/${post.id}/` : `${post.id}/`}`} class="post-card">
-									{post.data.heroImage ? (
-										<Image
-											width={400}
-											height={200}
-											src={post.data.heroImage}
-											alt={post.data.title}
-											class="post-card-image"
-										/>
-									) : (
-										<div class="post-card-image"></div>
-									)}
-									<h3 class="post-card-title">{post.data.title}</h3>
-									<p class="post-card-date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))}
-					</ul>
-					<div class="view-all">
-						<a href={`${import.meta.env.BASE_URL}blog`} class="view-all-link">もっと見る</a>
+
+			<!-- よく読まれている記事 -->
+			{featuredPosts.length > 0 && (
+				<section class="section">
+					<div class="section-header">
+						<h2>よく読まれている記事</h2>
+						<p class="section-description">まずはここから読んでみてください</p>
+					</div>
+					<div class="posts-grid">
+						{
+							featuredPosts.map((post) => (
+								<BlogCard post={post} />
+							))
+						}
 					</div>
 				</section>
 			)}
-			
-			<!-- 4画面目: プロダクト -->
-			<section class="fullscreen-section product-screen">
-				<h2 class="section-title">プロダクト</h2>
-				<p class="section-subtitle">開発したアプリケーション</p>
-				<div class="coming-soon">
-					<p class="coming-soon-text">Coming Soon</p>
-					<p class="coming-soon-description">随時アプリを開発・公開予定です</p>
+
+			<!-- テーマ別ガイド -->
+			<section class="section">
+				<div class="section-header">
+					<h2>テーマ別ガイド</h2>
+					<p class="section-description">カテゴリから記事を探す</p>
+				</div>
+				<div class="categories-grid">
+					{
+						Object.entries(categoryLabels).map(([key, { label, description }]) => (
+							<div class="category-card">
+								<h3>{label}</h3>
+								<p>{description}</p>
+								<a href={`/blog/category/${key}/`}>記事を見る →</a>
+							</div>
+						))
+					}
+				</div>
+			</section>
+
+			<!-- 著者について -->
+			<section class="section">
+				<div class="author-section">
+					<div class="author-name">あいす</div>
+					<div class="author-title">金融系SE × 副業クリエイター</div>
+					<p class="author-description">
+						残業まみれの金融SEから、副業で月20万円を達成。<br />
+						技術と文章を武器に「会社に縛られない働き方」を追求しています。
+					</p>
+					<Button href="/profile/" variant="secondary">プロフィールを見る</Button>
 				</div>
 			</section>
 		</main>
 		<Footer />
-		<script>
-			document.addEventListener('DOMContentLoaded', () => {
-				const iconImage = document.getElementById('welcome-icon');
-				const speechBubble = document.getElementById('speech-bubble');
-				const speechBubbleText = document.getElementById('speech-bubble-text');
-				if (!iconImage || !speechBubble || !speechBubbleText) return;
-				
-				const pngSrc = iconImage.getAttribute('data-png-src');
-				const gifSrc = iconImage.getAttribute('data-gif-src');
-				if (!pngSrc || !gifSrc) return;
-				
-				// ランダムメッセージの配列
-				const randomMessages = [
-					'わーい！',
-					'ゆっくりしていってねー',
-					'ワクワク',
-					'お腹すいたー！',
-					'仕事休みたーい！',
-					'何するのー？'
-				];
-				
-				let isAnimating = false;
-				
-				// ランダムメッセージを取得する関数
-				const getRandomMessage = () => {
-					return randomMessages[Math.floor(Math.random() * randomMessages.length)];
-				};
-				
-				// メッセージを表示する関数
-				const showMessage = (message, isWhisper = false) => {
-					// スタイルを先に切り替え
-					if (isWhisper) {
-						speechBubble.classList.add('whisper-bubble');
-					} else {
-						speechBubble.classList.remove('whisper-bubble');
-					}
-					
-					// メッセージを更新
-					speechBubbleText.textContent = message;
-					
-					// フェードインアニメーション
-					speechBubble.classList.add('show');
-				};
-				
-				// メッセージを非表示にする関数
-				const hideMessage = () => {
-					speechBubble.classList.remove('show');
-				};
-				
-				// メッセージを切り替える関数（アニメーション付き）
-				const switchMessage = (newMessage, isWhisper = false) => {
-					// フェードアウト
-					hideMessage();
-					
-					// アニメーション完了後に新しいメッセージを表示
-					setTimeout(() => {
-						showMessage(newMessage, isWhisper);
-					}, 300); // フェードアウトの時間に合わせる
-				};
-				
-				iconImage.addEventListener('click', () => {
-					if (isAnimating) return; // アニメーション中は無視
-					
-					isAnimating = true;
-					
-					// GIFを再生（タイムスタンプを追加して強制的に再読み込み）
-					const timestamp = new Date().getTime();
-					iconImage.src = `${gifSrc}?t=${timestamp}`;
-					
-					// ランダムメッセージに切り替え（アニメーション付き）
-					switchMessage(getRandomMessage(), false);
-					
-				// GIFの再生時間を考慮して、約1.9秒後にPNGに戻す
-				setTimeout(() => {
-					iconImage.src = pngSrc;
-					
-					// 「触ってみて！」に切り替え（アニメーション付き）
-					switchMessage('触ってみて！', true);
-					
-					// アニメーション完了後にフラグをリセット
-					setTimeout(() => {
-						isAnimating = false;
-					}, 600); // フェードアウト + フェードインの時間
-				}, 1900);
-				});
-			});
-		</script>
 	</body>
 </html>

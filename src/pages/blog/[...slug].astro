@@ -2,15 +2,12 @@
 import { type CollectionEntry, getCollection, render } from 'astro:content';
 import BlogPost from '../../layouts/BlogPost.astro';
 
-// カテゴリがない記事のみを処理（カテゴリがある記事は [category]/[...slug].astro で処理）
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
-	return posts
-		.filter((post) => !post.data.category) // カテゴリがない記事のみ
-		.map((post) => ({
-			params: { slug: post.id },
-			props: post,
-		}));
+	return posts.map((post) => ({
+		params: { slug: post.data.slug },
+		props: post,
+	}));
 }
 type Props = CollectionEntry<'blog'>;
 
@@ -18,6 +15,6 @@ const post = Astro.props;
 const { Content } = await render(post);
 ---
 
-<BlogPost {...post.data}>
+<BlogPost {...post.data} slug={post.data.slug}>
 	<Content />
 </BlogPost>

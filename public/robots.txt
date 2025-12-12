@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://falcode-dev.github.io/aicecream_studio/sitemap-index.xml
-
