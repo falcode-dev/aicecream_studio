@@ -30,5 +30,13 @@ export default defineConfig({
 	site: process.env.SITE_URL || 'https://example.com',
 	base: getBasePath(),
 	output: 'static',
-	integrations: [mdx(), react(), sitemap()],
+	integrations: [
+		mdx(),
+		react(),
+		sitemap({
+			changefreq: 'weekly',
+			priority: 0.7,
+			lastmod: new Date(),
+		}),
+	],
 });

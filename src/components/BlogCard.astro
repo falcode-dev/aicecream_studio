@@ -38,7 +38,9 @@ const getUrl = (path: string) => {
 				width={400} 
 				height={200} 
 				src={post.data.heroImage || defaultThumbnail} 
-				alt={post.data.title} 
+				alt={post.data.title}
+				loading="lazy"
+				format="webp"
 			/>
 		</div>
 		<div class="blog-card-content">

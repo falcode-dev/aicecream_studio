@@ -2,19 +2,46 @@
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
 import '../styles/global.css';
+import GoogleAnalytics from './GoogleAnalytics.astro';
 import type { ImageMetadata } from 'astro';
-import { SITE_TITLE } from '../consts';
+import { AUTHOR_NAME, SITE_TITLE, SITE_URL } from '../consts';
 
 interface Props {
 	title: string;
 	description: string;
 	image?: ImageMetadata;
+	noindex?: boolean;
+	nofollow?: boolean;
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || SITE_URL);
 const baseUrl = import.meta.env.BASE_URL;
+const siteURL = Astro.site || new URL(Astro.url.pathname, SITE_URL);
 
-const { title, description, image } = Astro.props;
+const { title, description, image, noindex = false, nofollow = false } = Astro.props;
+
+// サイト全体の構造化データ（Organization）
+const organizationStructuredData = {
+	'@context': 'https://schema.org',
+	'@type': 'Organization',
+	name: SITE_TITLE,
+	url: siteURL.toString(),
+	logo: {
+		'@type': 'ImageObject',
+		url: new URL('/favicon.svg', siteURL).toString(),
+	},
+	sameAs: [
+		// SNSリンクがあれば追加（例: 'https://twitter.com/username', 'https://github.com/username'）
+	],
+};
+
+// Person構造化データ（著者情報）
+const personStructuredData = {
+	'@context': 'https://schema.org',
+	'@type': 'Person',
+	name: AUTHOR_NAME,
+	url: new URL('/profile/', siteURL).toString(),
+};
 ---
 
 <!-- Global Metadata -->
@@ -26,9 +53,23 @@ const { title, description, image } = Astro.props;
 	rel="alternate"
 	type="application/rss+xml"
 	title={SITE_TITLE}
-	href={new URL('rss.xml', Astro.site)}
+	href={new URL('rss.xml', Astro.site || SITE_URL)}
 />
 <meta name="generator" content={Astro.generator} />
+
+<!-- Robots Meta -->
+{noindex || nofollow ? (
+	<meta name="robots" content={`${noindex ? 'noindex' : 'index'},${nofollow ? 'nofollow' : 'follow'}`} />
+) : (
+	<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+)}
+
+<!-- Site-wide Structured Data -->
+<script type="application/ld+json" set:html={JSON.stringify(organizationStructuredData)} />
+<script type="application/ld+json" set:html={JSON.stringify(personStructuredData)} />
+
+<!-- Google Analytics -->
+<GoogleAnalytics />
 
 <!-- Font preloads -->
 <link rel="preload" href={`${baseUrl}fonts/atkinson-regular.woff`} as="font" type="font/woff" crossorigin />
@@ -44,14 +85,18 @@ const { title, description, image } = Astro.props;
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website" />
-<meta property="og:url" content={Astro.url} />
+<meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-{image && <meta property="og:image" content={new URL(image.src, Astro.url)} />}
+<meta property="og:locale" content="ja_JP" />
+<meta property="og:site_name" content={SITE_TITLE} />
+{image && <meta property="og:image" content={new URL(image.src, siteURL)} />}
+{image && <meta property="og:image:width" content="1200" />}
+{image && <meta property="og:image:height" content="630" />}
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={Astro.url} />
+<meta property="twitter:url" content={canonicalURL} />
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
-{image && <meta property="twitter:image" content={new URL(image.src, Astro.url)} />}
+{image && <meta property="twitter:image" content={new URL(image.src, siteURL)} />}

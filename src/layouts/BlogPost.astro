@@ -2,9 +2,10 @@
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { SITE_TITLE } from '../consts';
+import { AUTHOR_NAME, SITE_TITLE, SITE_URL } from '../consts';
 import defaultThumbnail from '../asset/default.jpg';
 
 type Props = CollectionEntry<'blog'>['data'] & { slug?: string };
@@ -37,6 +38,14 @@ const getUrl = (path: string) => {
 	return path;
 };
 
+// パンくずリスト用のアイテム
+const breadcrumbItems = [
+	{ name: 'ホーム', url: '/' },
+	{ name: 'ブログ', url: '/blog/' },
+	...(category ? [{ name: category, url: `/blog/category/${category}/` }] : []),
+	{ name: title, url: `/blog/${slug}/` },
+];
+
 // 構造化データ（JSON-LD）
 const structuredData = {
 	'@context': 'https://schema.org',
@@ -48,11 +57,17 @@ const structuredData = {
 	dateModified: modifiedTime,
 	author: {
 		'@type': 'Person',
-		name: SITE_TITLE,
+		name: AUTHOR_NAME,
+		url: new URL('/profile/', siteURL).toString(),
 	},
 	publisher: {
 		'@type': 'Organization',
 		name: SITE_TITLE,
+		url: siteURL.toString(),
+		logo: {
+			'@type': 'ImageObject',
+			url: new URL('/favicon.svg', siteURL).toString(),
+		},
 	},
 	mainEntityOfPage: {
 		'@type': 'WebPage',
@@ -60,6 +75,7 @@ const structuredData = {
 	},
 	articleSection: category,
 	keywords: tags?.join(', ') || '',
+	inLanguage: 'ja',
 };
 ---
 
@@ -242,6 +258,7 @@ const structuredData = {
 		<Header />
 		<main>
 			<article>
+				<Breadcrumb items={breadcrumbItems} />
 				<div class="hero-image">
 					{category && (
 						<div class="hero-category">
@@ -254,7 +271,10 @@ const structuredData = {
 						width={1020} 
 						height={510} 
 						src={heroImage || defaultThumbnail} 
-						alt={title} 
+						alt={title}
+						loading="eager"
+						fetchpriority="high"
+						format="webp"
 					/>
 				</div>
 				<div class="prose">

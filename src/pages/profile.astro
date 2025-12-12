@@ -3,7 +3,23 @@ import BaseHead from '../components/BaseHead.astro';
 import Button from '../components/Button.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { SITE_TITLE } from '../consts';
+import { AUTHOR_NAME, SITE_TITLE, SITE_URL } from '../consts';
+
+const siteURL = Astro.site || new URL(Astro.url.pathname, SITE_URL);
+
+// Person構造化データ（E-E-A-T強化）
+const personStructuredData = {
+	'@context': 'https://schema.org',
+	'@type': 'Person',
+	name: AUTHOR_NAME,
+	url: new URL('/profile/', siteURL).toString(),
+	description: '金融系SEとして働きながら、副業で月20万円を達成。「自由に生きたい人のための文章を書くエンジニア」として、働き方・キャリア・副業・TypeScript・Microsoft技術などを発信しています。',
+	jobTitle: 'システムエンジニア',
+	knowsAbout: ['TypeScript', 'Microsoft 365', 'PowerApps', 'React', 'Astro', '副業', 'キャリア戦略'],
+	sameAs: [
+		// SNSリンクがあれば追加
+	],
+};
 ---
 
 <!doctype html>
@@ -13,6 +29,7 @@ import { SITE_TITLE } from '../consts';
 			title={`プロフィール | ${SITE_TITLE}`}
 			description="金融系SEとして働きながら、副業で月20万円を達成。「自由に生きたい人のための文章を書くエンジニア」として、働き方・キャリア・副業・TypeScript・Microsoft技術などを発信しています。"
 		/>
+		<script type="application/ld+json" set:html={JSON.stringify(personStructuredData)} />
 		<style>
 			/* プロフィールページ専用スタイル */
 			.profile-hero {
