@@ -53,6 +53,30 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
 
+## 🚀 GitHub Pagesへのデプロイ
+
+このプロジェクトはGitHub Actionsを使用してGitHub Pagesに自動デプロイされます。
+
+### セットアップ手順
+
+1. **GitHubリポジトリの設定**
+   - リポジトリのSettings > Pagesに移動
+   - Sourceを「GitHub Actions」に設定
+
+2. **サイトURLの設定（オプション）**
+   - リポジトリ名が`username.github.io`の場合は、`astro.config.mjs`の`site`を更新する必要はありません
+   - それ以外の場合は、`.github/workflows/deploy.yml`の`SITE_URL`環境変数を設定するか、`astro.config.mjs`の`site`を更新してください
+
+3. **デプロイ**
+   - `main`ブランチにプッシュすると、自動的にビルドとデプロイが実行されます
+   - Actionsタブでデプロイの進行状況を確認できます
+
+### 注意事項
+
+- `.nojekyll`ファイルが`public/`フォルダに含まれているため、Jekyllは無効化されます
+- ビルドはGitHub Actionsで自動実行されます
+- デプロイには数分かかる場合があります
+
 ## 👀 Want to learn more?
 
 Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).

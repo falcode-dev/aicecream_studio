@@ -7,6 +7,7 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://example.com',
+	site: process.env.SITE_URL || 'https://example.com',
+	output: 'static',
 	integrations: [mdx(), react(), sitemap()],
 });
