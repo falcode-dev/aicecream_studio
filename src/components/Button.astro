@@ -7,9 +7,13 @@ interface Props extends HTMLAttributes<'a'> {
 }
 
 const { href, variant = 'primary', class: className, ...props } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL;
+const resolvedHref = href.startsWith('/') 
+	? `${baseUrl}${baseUrl.endsWith('/') ? href.slice(1) : href}` 
+	: href;
 ---
 
-<a href={href} class:list={['btn', `btn-${variant}`, className]} {...props}>
+<a href={resolvedHref} class:list={['btn', `btn-${variant}`, className]} {...props}>
 	<slot />
 </a>
 

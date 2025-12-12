@@ -42,6 +42,14 @@ const categoryLabels: Record<string, { label: string; description: string }> = {
 		description: '技術Tips・実装ガイド',
 	},
 };
+
+const baseUrl = import.meta.env.BASE_URL;
+const getUrl = (path: string) => {
+	if (path.startsWith('/')) {
+		return `${baseUrl}${baseUrl.endsWith('/') ? path.slice(1) : path}`;
+	}
+	return path;
+};
 ---
 
 <!doctype html>
@@ -241,7 +249,7 @@ const categoryLabels: Record<string, { label: string; description: string }> = {
 					}
 				</div>
 				<div class="view-all">
-					<a href="/blog/">すべての記事を見る →</a>
+					<a href={getUrl('/blog/')}>すべての記事を見る →</a>
 				</div>
 			</section>
 
@@ -270,13 +278,13 @@ const categoryLabels: Record<string, { label: string; description: string }> = {
 				</div>
 				<div class="categories-grid">
 					{
-						Object.entries(categoryLabels).map(([key, { label, description }]) => (
-							<div class="category-card">
-								<h3>{label}</h3>
-								<p>{description}</p>
-								<a href={`/blog/category/${key}/`}>記事を見る →</a>
-							</div>
-						))
+							Object.entries(categoryLabels).map(([key, { label, description }]) => (
+								<div class="category-card">
+									<h3>{label}</h3>
+									<p>{description}</p>
+									<a href={getUrl(`/blog/category/${key}/`)}>記事を見る →</a>
+								</div>
+							))
 					}
 				</div>
 			</section>
