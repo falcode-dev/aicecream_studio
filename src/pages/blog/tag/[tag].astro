@@ -9,9 +9,11 @@ import { SITE_TITLE } from '../../../consts';
 export async function getStaticPaths() {
 	const allPosts = await getCollection('blog');
 	const tags = new Set<string>();
-	allPosts.forEach((post) => {
-		post.data.tags.forEach((tag) => tags.add(tag));
-	});
+	allPosts
+		.filter((post) => post.data.public)
+		.forEach((post) => {
+			post.data.tags.forEach((tag) => tags.add(tag));
+		});
 
 	return Array.from(tags).map((tag) => ({
 		params: { tag },
@@ -25,7 +27,7 @@ if (!tag) {
 
 const allPosts = await getCollection('blog');
 const posts = allPosts
-	.filter((post) => post.data.tags.includes(tag))
+	.filter((post) => post.data.public && post.data.tags.includes(tag))
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 

@@ -90,6 +90,10 @@ async function main() {
 	const formatChoice = await question('ファイル形式 (1: Markdown, 2: MDX) [1]: ');
 	const format = formatChoice.trim() === '2' ? 'mdx' : 'md';
 
+	// 公開状態
+	const publicChoice = await question('公開状態 (y: 公開, N: 下書き) [y]: ');
+	const isPublic = publicChoice.trim().toLowerCase() !== 'n';
+
 	// ファイル名
 	const filename = `${slug}.${format}`;
 	const filepath = join(blogDir, filename);
@@ -112,6 +116,7 @@ description: '${description.replace(/'/g, "''")}'
 pubDate: '${pubDate}'
 category: '${category}'
 tags: [${tags.map((tag) => `'${tag.replace(/'/g, "''")}'`).join(', ')}]
+public: ${isPublic}
 ---
 
 ここに本文を記述してください。

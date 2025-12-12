@@ -8,7 +8,7 @@ import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 // 最新記事（6件）
-const allPosts = await getCollection('blog');
+const allPosts = (await getCollection('blog')).filter((post) => post.data.public);
 const latestPosts = allPosts
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 	.slice(0, 6);

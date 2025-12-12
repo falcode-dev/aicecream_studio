@@ -44,7 +44,7 @@ if (!category || !categories.includes(category)) {
 
 const allPosts = await getCollection('blog');
 const posts = allPosts
-	.filter((post) => post.data.category === category)
+	.filter((post) => post.data.public && post.data.category === category)
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const categoryInfo = categoryLabels[category] || { label: category, description: '' };

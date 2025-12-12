@@ -173,7 +173,7 @@ th {
 img {
 	max-width: 100%;
 	height: auto;
-	border-radius: var(--border-radius);
+	/* border-radius: var(--border-radius); */
 }
 
 code {
