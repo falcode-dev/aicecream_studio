@@ -1,110 +1,63 @@
 ---
-import { Image } from 'astro:assets';
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import '../styles/about.css';
-import iconImage from '../assets/icon.png';
+import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
+import Layout from '../layouts/BlogPost.astro';
 ---
 
-<!doctype html>
-<html lang="ja">
-	<head>
-		<BaseHead 
-			title="プロフィール | あいす" 
-			description="WEBクリエイターあいすの紹介ページ。TypeScriptを得意とし、シンプルで静かなデザインのアプリ作成が得意。文章による価値提供と情報発信媒体の運営も行っています。" 
-		/>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<div class="about-page">
-				<div class="about-header">
-					<h1>あいす</h1>
-					<p class="subtitle">WEBクリエイター</p>
-				</div>
-				
-				<div class="about-intro">
-					<div class="intro-text">
-						<p>
-							あいすと申します。<br />
-							WEBクリエイターとして、コードとデザインでものづくりをしています。
-						</p>
-						<p>
-							シンプルで静かなデザインを心がけ、ユーザーにとって本当に必要な機能だけを提供することを大切にしています。
-						</p>
-					</div>
-					<div class="intro-icons">
-						<Image src={iconImage} alt="aice cream studio のアイコン" width={200} height={200} class="intro-icon" />
-					</div>
-				</div>
-				
-				<div class="about-content">
-					<div class="about-section">
-						<h2>得意なこと</h2>
-						<p>
-							<strong>TypeScript</strong>を得意としており、型安全性を重視した開発を行っています。<br />
-							シンプルで静かなデザインのアプリケーション作成が得意です。余計な装飾を排し、機能性と美しさを両立させることを大切にしています。
-						</p>
-						<div class="skills-list">
-							<span class="skill-tag">TypeScript</span>
-							<span class="skill-tag">React</span>
-							<span class="skill-tag">Astro</span>
-							<span class="skill-tag">デザイン</span>
-						</div>
-					</div>
-					
-					<div class="about-section">
-						<h2>価値提供</h2>
-						<p>
-							文章による価値提供も得意としており、技術的な知見や考え方を共有しています。<br />
-							情報発信媒体としてのメディアも運営しており、継続的にコンテンツを発信しています。
-						</p>
-					</div>
-					
-					<div class="about-section">
-						<h2>ものづくりの姿勢</h2>
-						<p>
-							シンプルで静かなデザインを心がけ、ユーザーにとって本当に必要な機能だけを提供することを大切にしています。<br />
-							コードもデザインも、無駄を削ぎ落とし、本質的な価値を追求しています。
-						</p>
-					</div>
-					
-					<div class="about-section">
-						<h2>キャリア経歴</h2>
-						<div class="career-timeline">
-							<div class="career-item">
-								<div class="career-period">2025年 - 現在</div>
-								<div class="career-content">
-									<h3 class="career-title">個人サイト立ち上げ・アプリ開発</h3>
-									<p class="career-description">
-										個人サイトを立ち上げ、随時アプリを開発・公開中。シンプルで静かなデザインを心がけ、ユーザーにとって本当に必要な機能だけを提供することを大切にしています。
-									</p>
-								</div>
-							</div>
-							<div class="career-item">
-								<div class="career-period">2024年</div>
-								<div class="career-content">
-									<h3 class="career-title">SESに転職・副業開始</h3>
-									<p class="career-description">
-										SESに転職し、Microsoft関連のSaaSアプリの開発に着手。副業でnoteを開始し、収益5万円を超える。
-									</p>
-								</div>
-							</div>
-							<div class="career-item">
-								<div class="career-period">2022年</div>
-								<div class="career-content">
-									<h3 class="career-title">システムエンジニアに就職</h3>
-									<p class="career-description">
-										文系・未経験からシステムエンジニアに就職。Javaメインの営業支援システムの開発を担当。
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</main>
-		<Footer />
-	</body>
-</html>
+<Layout
+	title="About Me"
+	description="Lorem ipsum dolor sit amet"
+	pubDate={new Date('August 08 2021')}
+	heroImage={AboutHeroImage}
+>
+	<p>
+		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+		labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo
+		viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam
+		adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus
+		et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus
+		vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque
+		sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
+	</p>
+
+	<p>
+		Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum quisque non
+		tellus. Habitasse platea dictumst quisque sagittis purus sit amet. Tellus molestie nunc non
+		blandit massa. Cursus vitae congue mauris rhoncus. Accumsan tortor posuere ac ut. Fringilla urna
+		porttitor rhoncus dolor. Elit ullamcorper dignissim cras tincidunt lobortis. In cursus turpis
+		massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc.
+		Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis
+		bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed tempus urna et pharetra pharetra
+		massa massa ultricies mi.
+	</p>
+
+	<p>
+		Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam sit amet nisl
+		suscipit. Lacus viverra vitae congue eu consequat ac felis donec. Egestas integer eget aliquet
+		nibh praesent tristique magna sit amet. Eget magna fermentum iaculis eu non diam. In vitae
+		turpis massa sed elementum. Tristique et egestas quis ipsum suspendisse ultrices. Eget lorem
+		dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat
+		semper viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus
+		vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim praesent elementum
+		facilisis. Ultrices tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium quam
+		vulputate. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Fringilla
+		urna porttitor rhoncus dolor purus non. Amet dictum sit amet justo donec enim.
+	</p>
+
+	<p>
+		Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut consequat semper
+		viverra. Tellus mauris a diam maecenas sed enim ut sem viverra. Venenatis urna cursus eget nunc
+		scelerisque viverra mauris in. Arcu ac tortor dignissim convallis aenean et tortor at. Curabitur
+		gravida arcu ac tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus
+		pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet. Ut enim
+		blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt arcu. Id
+		cursus metus aliquam eleifend mi.
+	</p>
+
+	<p>
+		Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus imperdiet. Id porta
+		nibh venenatis cras sed felis eget velit. Ipsum a arcu cursus vitae. Facilisis magna etiam
+		tempor orci eu lobortis elementum. Tincidunt dui ut ornare lectus sit. Quisque non tellus orci
+		ac. Blandit libero volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar
+		proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
+	</p>
+</Layout>

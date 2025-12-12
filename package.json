@@ -1,19 +1,18 @@
 {
-  "name": "",
+  "name": "aice_cream_studio",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro",
-    "create-post": "node scripts/create-post.js"
+    "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.3.12",
+    "@astrojs/mdx": "^4.3.13",
     "@astrojs/rss": "^4.0.14",
     "@astrojs/sitemap": "^3.6.0",
-    "astro": "^5.16.4",
+    "astro": "^5.16.5",
     "sharp": "^0.34.3"
   }
 }
