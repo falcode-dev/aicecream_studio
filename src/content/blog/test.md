@@ -6,6 +6,7 @@ pubDate: '2025-01-15'
 category: 'engineering'
 tags: ['powerapps', 'microsoft', '業務効率化', 'ノーコード']
 public: true
+heroImage: '../../asset/power_apps.jpg'
 ---
 
 プログラミング経験がなくても、業務で使えるアプリを作りたい。そんな思いを実現してくれるのが、Microsoft PowerAppsです。

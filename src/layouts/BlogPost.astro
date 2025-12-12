@@ -76,6 +76,7 @@ const structuredData = {
 			}
 			
 			.hero-image {
+				position: relative;
 				width: 100%;
 				margin-bottom: 2em;
 			}
@@ -87,6 +88,13 @@ const structuredData = {
 				margin: 0 auto;
 				/* border-radius: var(--border-radius); */
 				box-shadow: var(--box-shadow);
+			}
+			
+			.hero-category {
+				position: absolute;
+				top: 0;
+				right: 1em;
+				z-index: 10;
 			}
 			
 			.prose {
@@ -157,7 +165,7 @@ const structuredData = {
 			}
 			
 			.article-date {
-				margin-bottom: 1.25em;
+				/* margin-bottom: 1.25em; */
 				color: rgb(var(--gray));
 				font-size: 0.9em;
 			}
@@ -165,7 +173,7 @@ const structuredData = {
 			.article-meta {
 				display: flex;
 				flex-wrap: wrap;
-				gap: 0.75em;
+				gap: 0.5em;
 				align-items: center;
 				margin-bottom: 2em;
 				padding-bottom: 1.5em;
@@ -174,39 +182,35 @@ const structuredData = {
 			
 			.category-link {
 				display: inline-block;
-				padding: 0.25em 0.6em;
-				background: transparent;
-				color: var(--accent);
-				border: 1px solid var(--accent-light);
-				border-radius: 4px;
+				padding: 0.3em 0.8em;
+				background: var(--accent-light);
+				color: var(--accent-dark);
 				text-decoration: none;
-				font-size: 0.85em;
-				font-weight: 400;
+				font-size: 0.75em;
+				font-weight: 500;
 				transition: var(--transition);
 			}
 			
 			.category-link:hover {
-				background: var(--accent-light);
-				border-color: var(--accent);
+				background: var(--accent);
+				color: white;
 			}
 			
 			.tag-link {
 				display: inline-block;
 				color: var(--accent);
 				text-decoration: none;
-				font-size: 0.85em;
+				font-size: 0.8em;
 				font-weight: 400;
 				transition: var(--transition);
 			}
 			
 			.tag-link:hover {
 				color: var(--accent-dark);
-				text-decoration: underline;
 			}
 			
 			.tag-separator {
-				color: rgb(var(--gray-light));
-				margin: 0 0.25em;
+				display: none;
 			}
 			
 			@media (max-width: 768px) {
@@ -239,6 +243,13 @@ const structuredData = {
 		<main>
 			<article>
 				<div class="hero-image">
+					{category && (
+						<div class="hero-category">
+							<a href={getUrl(`/blog/category/${category}/`)} class="category-link">
+								{category}
+							</a>
+						</div>
+					)}
 					<Image 
 						width={1020} 
 						height={510} 
@@ -260,14 +271,8 @@ const structuredData = {
 							)}
 						</div>
 						<div class="article-meta">
-							{category && (
-								<a href={getUrl(`/blog/category/${category}/`)} class="category-link">
-									{category}
-								</a>
-							)}
 							{tags && tags.length > 0 && (
 								<>
-									{category && <span class="tag-separator">/</span>}
 									{tags.map((tag, index) => (
 										<>
 											<a href={getUrl(`/blog/tag/${tag}/`)} class="tag-link">
