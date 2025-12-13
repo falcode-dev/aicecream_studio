@@ -1,9 +1,11 @@
 ---
+import { Image } from 'astro:assets';
 import BaseHead from '../components/BaseHead.astro';
 import Button from '../components/Button.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { AUTHOR_NAME, SITE_TITLE, SITE_URL } from '../consts';
+import authorIcon from '../asset/aice_icon_500.png.png';
 
 const siteURL = Astro.site || new URL(Astro.url.pathname, SITE_URL);
 
@@ -33,27 +35,104 @@ const personStructuredData = {
 		<style>
 			/* プロフィールページ専用スタイル */
 			.profile-hero {
-				text-align: center;
-				padding: 3em 0;
 				margin-bottom: 4em;
 			}
-
+			
+			.profile-hero-card {
+				position: relative;
+				padding: 3em;
+				border: 1px solid rgb(var(--gray-light));
+				border-radius: var(--border-radius);
+				background: rgb(var(--white));
+				max-width: 800px;
+				margin: 0 auto;
+			}
+			
+			.profile-hero-header {
+				display: flex;
+				align-items: flex-start;
+				gap: 2em;
+				margin-bottom: 2em;
+			}
+			
+			.profile-hero-avatar-wrapper {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 1em;
+				flex-shrink: 0;
+			}
+			
+			.profile-hero-avatar {
+				width: 100px;
+				height: 100px;
+				border-radius: 50%;
+				overflow: hidden;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			
+			.profile-hero-avatar img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+			
+			.profile-hero-info {
+				flex: 1;
+			}
+			
 			.profile-hero h1 {
-				font-size: 2em;
-				margin-bottom: 1em;
+				font-size: 1.75em;
+				margin-bottom: 0.5em;
 				line-height: 1.4;
-				font-weight: 500;
+				font-weight: 600;
 				color: rgb(var(--black));
+			}
+			
+			.profile-hero-title {
+				color: var(--accent);
+				font-size: 1em;
+				font-weight: 500;
+				margin-bottom: 1.5em;
+			}
+			
+			.profile-hero-social {
+				display: flex;
+				gap: 0.75em;
+				flex-wrap: wrap;
+				justify-content: center;
+			}
+			
+			.profile-hero-social-link {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				width: 36px;
+				height: 36px;
+				border-radius: 50%;
+				background: rgb(var(--gray-lighter));
+				color: rgb(var(--gray-dark));
+				text-decoration: none;
+				transition: var(--transition);
+			}
+			
+			.profile-hero-social-link:hover {
+				background: var(--accent);
+				color: white;
+			}
+			
+			.profile-hero-social-link svg {
+				width: 18px;
+				height: 18px;
 			}
 
 			.profile-hero-intro {
-				font-size: 1.1em;
+				font-size: 0.95em;
 				color: rgb(var(--gray-dark));
 				line-height: 1.8;
-				margin-bottom: 1.5em;
-				max-width: 700px;
-				margin-left: auto;
-				margin-right: auto;
+				margin-bottom: 1em;
 			}
 
 			.profile-hero-intro strong {
@@ -62,11 +141,10 @@ const personStructuredData = {
 			}
 
 			.profile-hero-subtitle {
-				font-size: 1em;
+				font-size: 0.9em;
 				color: rgb(var(--gray));
 				line-height: 1.7;
-				max-width: 600px;
-				margin: 0 auto 2em;
+				margin-bottom: 1.5em;
 			}
 
 			/* セクション共通 */
@@ -96,15 +174,26 @@ const personStructuredData = {
 			/* 現在の活動 */
 			.current-activities {
 				display: grid;
-				grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-				gap: 1.5em;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 1em;
 				margin-bottom: 2em;
 			}
 
 			.activity-item {
+				display: flex;
+				flex-direction: column;
 				padding: 1.5em;
-				background: rgb(var(--gray-lighter));
-				border-radius: var(--border-radius);
+				background: rgb(var(--white));
+				border: 2px solid rgb(var(--gray-light));
+				border-radius: 8px;
+				transition: var(--transition);
+				min-height: 100px;
+			}
+			
+			.activity-item:hover {
+				border-color: var(--accent);
+				background: rgba(107, 142, 159, 0.05);
+				transform: translateY(-2px);
 			}
 
 			.activity-item h3 {
@@ -112,12 +201,13 @@ const personStructuredData = {
 				font-size: 1.1em;
 				font-weight: 600;
 				color: rgb(var(--black));
+				letter-spacing: -0.01em;
 			}
 
 			.activity-item p {
 				margin: 0;
 				color: rgb(var(--gray-dark));
-				font-size: 0.95em;
+				font-size: 0.85em;
 				line-height: 1.6;
 			}
 
@@ -185,35 +275,69 @@ const personStructuredData = {
 			/* 発信テーマ */
 			.themes-grid {
 				display: grid;
-				grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-				gap: 1.5em;
+				grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+				gap: 3em;
 			}
 
 			.theme-card {
-				padding: 1.5em;
-				background: rgb(var(--gray-lighter));
-				border-radius: var(--border-radius);
+				position: relative;
+				padding: 0;
+				border: none;
+				background: transparent;
+				transition: var(--transition);
+			}
+			
+			.theme-card-number {
+				position: absolute;
+				top: -0.5em;
+				left: 0;
+				font-size: 4em;
+				font-weight: 700;
+				color: rgba(107, 142, 159, 0.08);
+				line-height: 1;
+				z-index: 0;
+			}
+			
+			.theme-card-content {
+				position: relative;
+				z-index: 1;
+				padding-left: 0;
 			}
 
 			.theme-card h3 {
-				margin: 0 0 0.5em 0;
-				font-size: 1.1em;
+				margin: 0 0 0.75em 0;
+				font-size: 1.3em;
 				font-weight: 600;
 				color: rgb(var(--black));
+				line-height: 1.4;
+				letter-spacing: -0.02em;
 			}
 
 			.theme-card p {
 				margin: 0;
 				color: rgb(var(--gray-dark));
 				font-size: 0.95em;
-				line-height: 1.6;
+				line-height: 1.8;
+			}
+			
+			.theme-card-divider {
+				width: 60px;
+				height: 2px;
+				background: var(--accent);
+				margin: 1.5em 0 0 0;
+				transition: width 0.3s ease;
+			}
+			
+			.theme-card:hover .theme-card-divider {
+				width: 100px;
 			}
 
 			/* 読者へのメッセージ */
 			.message-box {
-				padding: 2em;
-				background: rgb(var(--gray-lighter));
+				padding: 2.5em;
+				border: 1px solid var(--accent-light);
 				border-radius: var(--border-radius);
+				background: rgba(107, 142, 159, 0.08);
 				text-align: center;
 			}
 
@@ -229,41 +353,67 @@ const personStructuredData = {
 			}
 
 			/* スキル・経験 */
-			.skills-grid {
-				display: grid;
-				grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-				gap: 1.5em;
+			.skills-container {
+				display: flex;
+				flex-direction: column;
+				gap: 3em;
 			}
-
-			.skill-category {
-				padding: 1.5em;
-				background: rgb(var(--gray-lighter));
-				border-radius: var(--border-radius);
+			
+			.skill-group {
+				display: flex;
+				flex-direction: column;
+				gap: 1em;
 			}
-
-			.skill-category h3 {
-				margin: 0 0 0.75em 0;
-				font-size: 1.1em;
+			
+			.skill-group-label {
+				font-size: 0.9em;
 				font-weight: 600;
-				color: rgb(var(--black));
+				color: rgb(var(--gray));
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				margin-bottom: 0.5em;
 			}
-
-			.skill-category ul {
-				margin: 0;
-				padding-left: 1.5em;
+			
+			.skills-list {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.75em;
+			}
+			
+			.skill-item {
+				display: inline-flex;
+				align-items: center;
+				padding: 0.5em 1em;
+				background: rgb(var(--white));
+				border: 1px solid rgb(var(--gray-light));
+				border-radius: 20px;
 				color: rgb(var(--gray-dark));
-				line-height: 1.8;
-				font-size: 0.95em;
+				font-size: 0.9em;
+				transition: var(--transition);
 			}
-
-			.skill-category li {
-				margin-bottom: 0.4em;
+			
+			.skill-item:hover {
+				border-color: var(--accent);
+				color: var(--accent);
+				background: rgba(107, 142, 159, 0.05);
+			}
+			
+			.skill-item-highlight {
+				background: var(--accent-light);
+				border-color: var(--accent);
+				color: var(--accent-dark);
+				font-weight: 500;
+			}
+			
+			.skill-item-highlight:hover {
+				background: var(--accent);
+				color: white;
 			}
 
 			/* SNS・リンク集 */
 			.links-section {
-				padding: 2em 0;
-				border-top: 1px solid rgb(var(--gray-light));
+				padding: 3em 0;
+				text-align: center;
 			}
 
 			.links-grid {
@@ -271,25 +421,88 @@ const personStructuredData = {
 				flex-wrap: wrap;
 				gap: 1em;
 				justify-content: center;
+				align-items: center;
 			}
 
 			@media (max-width: 768px) {
-				.profile-hero {
+				.profile-hero-card {
 					padding: 2em 1.5em;
+				}
+				
+				.profile-hero-header {
+					flex-direction: column;
+					gap: 1.5em;
+				}
+				
+				.profile-hero-avatar-wrapper {
+					width: 100%;
+				}
+				
+				.profile-hero-avatar {
+					width: 80px;
+					height: 80px;
+					margin: 0 auto;
+				}
+				
+				.profile-hero-info {
+					text-align: center;
+				}
+				
+				.profile-hero h1 {
+					font-size: 1.5em;
 				}
 
 				.profile-hero h1 {
 					font-size: 1.75em;
+				}
+				
+				.profile-hero-intro,
+				.profile-hero-subtitle {
+					text-align: center;
 				}
 
 				.story-item {
 					padding-left: 1.5em;
 				}
 
-				.current-activities,
-				.themes-grid,
-				.skills-grid {
+				.themes-grid {
 					grid-template-columns: 1fr;
+					gap: 2em;
+				}
+				
+				.current-activities {
+					grid-template-columns: 1fr;
+					gap: 0.75em;
+				}
+				
+				.activity-item {
+					padding: 1.25em;
+					min-height: auto;
+				}
+				
+				.activity-item h3 {
+					font-size: 1em;
+				}
+				
+				.activity-item p {
+					font-size: 0.8em;
+				}
+				
+				.theme-card-number {
+					font-size: 3em;
+				}
+				
+				.theme-card h3 {
+					font-size: 1.2em;
+				}
+				
+				.skills-list {
+					gap: 0.5em;
+				}
+				
+				.skill-item {
+					font-size: 0.85em;
+					padding: 0.4em 0.85em;
 				}
 			}
 		</style>
@@ -299,15 +512,45 @@ const personStructuredData = {
 		<main>
 			<!-- 冒頭メッセージ -->
 			<section class="profile-hero">
-				<h1>プロフィール</h1>
-				<p class="profile-hero-intro">
-					金融系SEとして働きながら、副業で月20万円を稼ぐようになった<br />
-					<strong>"自由に生きたい人のための文章を書くエンジニア"</strong>、あいすです。
-				</p>
-				<p class="profile-hero-subtitle">
-					働き方・キャリア・副業・TypeScript・Microsoft技術など、<br />
-					<strong>「個人で生きる力」</strong>をテーマに発信しています。
-				</p>
+				<div class="profile-hero-card">
+					<div class="profile-hero-header">
+						<div class="profile-hero-avatar-wrapper">
+							<div class="profile-hero-avatar">
+								<Image src={authorIcon} alt="あいす" width={100} height={100} />
+							</div>
+							<div class="profile-hero-social">
+								<a href="https://note.com" class="profile-hero-social-link" target="_blank" rel="noopener noreferrer" aria-label="note">
+									<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+										<path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+									</svg>
+								</a>
+								<a href="https://twitter.com" class="profile-hero-social-link" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+									<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
+									</svg>
+								</a>
+								<a href="https://github.com" class="profile-hero-social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+									<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+										<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+									</svg>
+								</a>
+							</div>
+						</div>
+						<div class="profile-hero-info">
+							<h1>あいす</h1>
+							<div class="profile-hero-title">金融系SE × 副業クリエイター</div>
+							<p class="profile-hero-intro">
+								金融系SEとして働きながら、副業で月20万円を稼ぐようになった<br />
+								<strong>"自由に生きたい人のための文章を書くエンジニア"</strong>、あいすです。
+							</p>
+							<p class="profile-hero-subtitle">
+								働き方・キャリア・副業・TypeScript・Microsoft技術など、<br />
+								<strong>「個人で生きる力」</strong>をテーマに発信しています。
+							</p>
+						</div>
+					</div>
+				</div>
 			</section>
 
 			<!-- 現在の活動 -->
@@ -318,23 +561,23 @@ const personStructuredData = {
 				<div class="current-activities">
 					<div class="activity-item">
 						<h3>システムエンジニア</h3>
-						<p>金融系大手グループのシステムエンジニア（4年目）</p>
+						<p>金融系大手グループ（4年目）</p>
 					</div>
 					<div class="activity-item">
 						<h3>コンテンツ販売</h3>
-						<p>noteでコンテンツ販売（月20万円）</p>
+						<p>noteで月20万円</p>
 					</div>
 					<div class="activity-item">
 						<h3>ブログ運営</h3>
-						<p>「自由に生きる技術」をテーマに発信</p>
+						<p>「自由に生きる技術」を発信</p>
 					</div>
 					<div class="activity-item">
 						<h3>技術領域</h3>
-						<p>TypeScript / Microsoft 365 / React / Astro</p>
+						<p>TypeScript / React / Astro</p>
 					</div>
 					<div class="activity-item">
 						<h3>興味・関心</h3>
-						<p>キャリア戦略、副業、心理学、働き方改善</p>
+						<p>キャリア戦略・副業・心理学</p>
 					</div>
 				</div>
 			</section>
@@ -396,20 +639,36 @@ const personStructuredData = {
 				</div>
 				<div class="themes-grid">
 					<div class="theme-card">
-						<h3>自由に生きるための思考法</h3>
-						<p>働き方・メンタル・価値観について</p>
+						<div class="theme-card-number">01</div>
+						<div class="theme-card-content">
+							<h3>自由に生きるための思考法</h3>
+							<p>働き方・メンタル・価値観について</p>
+							<div class="theme-card-divider"></div>
+						</div>
 					</div>
 					<div class="theme-card">
-						<h3>キャリア戦略と副業の実践知</h3>
-						<p>会社に依存しないスキル形成、副業の進め方</p>
+						<div class="theme-card-number">02</div>
+						<div class="theme-card-content">
+							<h3>キャリア戦略と副業の実践知</h3>
+							<p>会社に依存しないスキル形成、副業の進め方</p>
+							<div class="theme-card-divider"></div>
+						</div>
 					</div>
 					<div class="theme-card">
-						<h3>エンジニアとしてのリアルと成長方法</h3>
-						<p>文系SEが現場で生き残る技術、働き方改善</p>
+						<div class="theme-card-number">03</div>
+						<div class="theme-card-content">
+							<h3>エンジニアとしてのリアルと成長方法</h3>
+							<p>文系SEが現場で生き残る技術、働き方改善</p>
+							<div class="theme-card-divider"></div>
+						</div>
 					</div>
 					<div class="theme-card">
-						<h3>TypeScript・Microsoft技術の解説</h3>
-						<p>現場で使える具体的なTips、設計の考え方</p>
+						<div class="theme-card-number">04</div>
+						<div class="theme-card-content">
+							<h3>TypeScript・Microsoft技術の解説</h3>
+							<p>現場で使える具体的なTips、設計の考え方</p>
+							<div class="theme-card-divider"></div>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -438,51 +697,47 @@ const personStructuredData = {
 				<div class="profile-section-header">
 					<h2>スキル・経験</h2>
 				</div>
-				<div class="skills-grid">
-					<div class="skill-category">
-						<h3>経験</h3>
-						<ul>
-							<li>金融システムの保守・障害対応（2年）</li>
-							<li>顧客調整・要件定義</li>
-							<li>後輩育成・ドキュメント作成</li>
-						</ul>
+				<div class="skills-container">
+					<div class="skill-group">
+						<div class="skill-group-label">技術スタック</div>
+						<div class="skills-list">
+							<span class="skill-item skill-item-highlight">TypeScript</span>
+							<span class="skill-item skill-item-highlight">React</span>
+							<span class="skill-item skill-item-highlight">Astro</span>
+							<span class="skill-item">Microsoft 365</span>
+							<span class="skill-item">PowerShell</span>
+							<span class="skill-item">PowerApps</span>
+						</div>
 					</div>
-					<div class="skill-category">
-						<h3>技術</h3>
-						<ul>
-							<li>TypeScript</li>
-							<li>React</li>
-							<li>Astro</li>
-							<li>Microsoft 365</li>
-							<li>PowerShell</li>
-						</ul>
+					<div class="skill-group">
+						<div class="skill-group-label">経験・実績</div>
+						<div class="skills-list">
+							<span class="skill-item">金融システム保守・障害対応（2年）</span>
+							<span class="skill-item">顧客調整・要件定義</span>
+							<span class="skill-item">後輩育成・ドキュメント作成</span>
+							<span class="skill-item">note累計販売実績</span>
+							<span class="skill-item">月20万円安定収益</span>
+						</div>
 					</div>
-					<div class="skill-category">
-						<h3>副業</h3>
-						<ul>
-							<li>note累計販売実績</li>
-							<li>月20万円安定収益</li>
-							<li>コンテンツマーケティング</li>
-						</ul>
-					</div>
-					<div class="skill-category">
-						<h3>強み</h3>
-						<ul>
-							<li>文章力</li>
-							<li>情報整理力</li>
-							<li>"感情を燃料にする" 継続力</li>
-						</ul>
+					<div class="skill-group">
+						<div class="skill-group-label">強み</div>
+						<div class="skills-list">
+							<span class="skill-item">文章力</span>
+							<span class="skill-item">情報整理力</span>
+							<span class="skill-item">継続力</span>
+							<span class="skill-item">コンテンツマーケティング</span>
+						</div>
 					</div>
 				</div>
 			</section>
 
 			<!-- SNS・リンク集 -->
-			<section class="links-section">
+			<!-- <section class="links-section">
 				<div class="links-grid">
 					<Button href="/blog/" variant="primary">ブログを見る</Button>
 					<Button href="/contact/" variant="secondary">お問い合わせ</Button>
 				</div>
-			</section>
+			</section> -->
 		</main>
 		<Footer />
 	</body>
