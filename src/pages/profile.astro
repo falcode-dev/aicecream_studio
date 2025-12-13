@@ -15,7 +15,7 @@ const personStructuredData = {
 	'@type': 'Person',
 	name: AUTHOR_NAME,
 	url: new URL('/profile/', siteURL).toString(),
-	description: '金融系SEとして働きながら、副業で月20万円を達成。「自由に生きたい人のための文章を書くエンジニア」として、働き方・キャリア・副業・TypeScript・Microsoft技術などを発信しています。',
+	description: '文系未経験からエンジニアへ転身。「自由に生きたい人のための文章を書くエンジニア」として、大学生時代からの個人で稼ぐ経験と技術を活かし、働き方・キャリア・副業・TypeScript・Microsoft技術などを発信しています。',
 	jobTitle: 'システムエンジニア',
 	knowsAbout: ['TypeScript', 'Microsoft 365', 'PowerApps', 'React', 'Astro', '副業', 'キャリア戦略'],
 	sameAs: [
@@ -29,7 +29,7 @@ const personStructuredData = {
 	<head>
 		<BaseHead
 			title={`プロフィール | ${SITE_TITLE}`}
-			description="金融系SEとして働きながら、副業で月20万円を達成。「自由に生きたい人のための文章を書くエンジニア」として、働き方・キャリア・副業・TypeScript・Microsoft技術などを発信しています。"
+			description="文系未経験からエンジニアへ転身。「自由に生きたい人のための文章を書くエンジニア」として、大学生時代からの個人で稼ぐ経験と技術を活かし、働き方・キャリア・副業・TypeScript・Microsoft技術などを発信しています。"
 		/>
 		<script type="application/ld+json" set:html={JSON.stringify(personStructuredData)} />
 		<style>
@@ -519,18 +519,18 @@ const personStructuredData = {
 								<Image src={authorIcon} alt="あいす" width={100} height={100} />
 							</div>
 							<div class="profile-hero-social">
-								<a href="https://note.com" class="profile-hero-social-link" target="_blank" rel="noopener noreferrer" aria-label="note">
+								<a href="https://note.com/ice_engineer" class="profile-hero-social-link" target="_blank" rel="noopener noreferrer" aria-label="note">
 									<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 										<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
 										<path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
 									</svg>
 								</a>
-								<a href="https://twitter.com" class="profile-hero-social-link" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+								<a href="https://x.com/ice_engineer_x" class="profile-hero-social-link" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
 									<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 										<path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
 									</svg>
 								</a>
-								<a href="https://github.com" class="profile-hero-social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+								<a href="https://github.com/falcode-dev" class="profile-hero-social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
 									<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 										<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
 									</svg>
@@ -539,14 +539,16 @@ const personStructuredData = {
 						</div>
 						<div class="profile-hero-info">
 							<h1>あいす</h1>
-							<div class="profile-hero-title">金融系SE × 副業クリエイター</div>
+							<div class="profile-hero-title">エンジニア × ライター</div>
 							<p class="profile-hero-intro">
-								金融系SEとして働きながら、副業で月20万円を稼ぐようになった<br />
-								<strong>"自由に生きたい人のための文章を書くエンジニア"</strong>、あいすです。
+								文系未経験からエンジニアへ転身。
+								<strong>自由に生きたい人のための文章を書くエンジニア</strong>、あいすです。
 							</p>
 							<p class="profile-hero-subtitle">
-								働き方・キャリア・副業・TypeScript・Microsoft技術など、<br />
-								<strong>「個人で生きる力」</strong>をテーマに発信しています。
+								副業でありがたいことに収益は増えました。
+								でも、頑張ってません。自分のペースでただ積み上げてるだけです。
+								その経験と、エンジニアとして培った技術を活かし、
+								<strong>「自分のペースで生きる方法」</strong>をテーマに発信しています。
 							</p>
 						</div>
 					</div>
@@ -561,11 +563,11 @@ const personStructuredData = {
 				<div class="current-activities">
 					<div class="activity-item">
 						<h3>システムエンジニア</h3>
-						<p>金融系大手グループ（4年目）</p>
+						<p>エンジニアとして働きながら</p>
 					</div>
 					<div class="activity-item">
-						<h3>コンテンツ販売</h3>
-						<p>noteで月20万円</p>
+						<h3>コンテンツ制作</h3>
+						<p>文章で価値を届ける</p>
 					</div>
 					<div class="activity-item">
 						<h3>ブログ運営</h3>
@@ -590,43 +592,51 @@ const personStructuredData = {
 				</div>
 				<div class="story-timeline">
 					<div class="story-item">
-						<h3>大学〜入社1年目：文系SEとして苦戦しながらも文章力が武器に</h3>
-						<ul>
-							<li>文学部卒 → IT未経験でSEに</li>
-							<li>研修で苦戦するも「文章力」でドキュメント担当に抜擢</li>
-							<li>残業30h/月 ＋ 休日呼び出し → 最初の冬ボーナスで理不尽を知る</li>
-						</ul>
-						<p>→ "会社だけに頼るのは危険" と強く実感</p>
+						<h3>大学生1年〜2年：ブログアフィリエイトへの挑戦と挫折</h3>
+						<p>
+							大学生1年からブログのアフィリエイトを開始しました。しかし結果が出ず、ブログの立ち上げと廃止を数十回繰り返す。何も得られず、大学2年の後半まで完全に中断。
+						</p>
+						<p>→ "個人で稼ぐ力" への強い憧れは消えず</p>
 					</div>
 
 					<div class="story-item">
-						<h3>2〜3年目：激務、夜中の呼び出し、副業noteの開始</h3>
-						<ul>
-							<li>月40h残業が常態化、深夜帰宅も増える</li>
-							<li>「若いうちは頑張りどき」という言い訳に疑問を持つ</li>
-							<li>noteで副業開始 → 初収益54円</li>
-						</ul>
-						<p>→ "自分でお金を生む快感" に目覚める</p>
-						<p>→ 怒りや悔しさを燃料に執筆習慣を継続</p>
+						<h3>大学3年：インターンで本格的な知識を習得</h3>
+						<p>
+							再度ブログに挑戦するも結果が出ませんでした。独学では限界を感じ、ブログ運営会社でインターンに参加。SEO、WEBライティングなどの実践的な知識を約1年間で習得することに成功。
+						</p>
+						<p>→ "正しい知識と環境" の重要性を実感</p>
 					</div>
 
 					<div class="story-item">
-						<h3>4年目：副業が資産化し、収益が月20万円へ</h3>
-						<ul>
-							<li>note収益が月3〜5万円 → やがて20万円へ</li>
-							<li>過去記事が自動で売れ続け、「自分の力で稼ぐ感覚」を掴む</li>
-							<li>SEでは後輩育成や顧客折衝を担当、紙資料文化に限界を感じる</li>
-						</ul>
-						<p>→ "副業を育て、自由度の高い働き方へシフトする" と決意</p>
+						<h3>大学4年：個人事業主としてWEBライターを開始、数百万円の収益</h3>
+						<p>
+							インターンで得た知識を活かし、個人事業主としてWEBライターを開始。数百万円の収益を得ることに成功しました。しかし、足元を見られる働き方に嫌気がさし一時中断。
+						</p>
+						<p>→ "稼げても、働き方には納得できない" という新たな課題</p>
 					</div>
 
 					<div class="story-item">
-						<h3>現在：自由度を高めるために発信する理由</h3>
-						<ul>
-							<li>副業で精神的な余裕ができた</li>
-							<li>将来は「副業月100万円」を目標にし、キャリア選択を完全に自由にしたい</li>
-							<li>同じように悩む人に「選べる人生の作り方」を伝えたい</li>
-						</ul>
+						<h3>社会人：文系未経験からエンジニアへ転身</h3>
+						<p>
+							何度学習しても挫折していたプログラミングスキルを身につけるため、文系未経験でSIer企業に入社。Java、C#、Azureなどの知識を習得し、SESとして転職、現在もエンジニアとして働いています。
+						</p>
+						<p>→ "技術を武器に、自分のペースで働きたい" という決意</p>
+					</div>
+
+					<div class="story-item">
+						<h3>副業再開：note副業との出会い</h3>
+						<p>
+							副業を再開するも、WEBライターとして働くのは疲れていました。新しい方法を模索し、note副業に出会う。自分のペースで継続的に価値を届けられる方法を見つけられたのです。
+						</p>
+						<p>→ "自分のペースで、継続的に稼げる方法" を見つける</p>
+					</div>
+
+					<div class="story-item">
+						<h3>現在：自分のペースで積み上げた経験を共有する</h3>
+						<p>
+							数ヶ月で数十万円の収益獲得を達成。ただ、努力はしましたが、時間や生活を削って挑んだわけではありません。あくまで、自分のペースでただ積み上げてきただけです。その経験と、エンジニアとして培った技術を共有しています。特に需要の高いMicrosoft関連の知識を公開し、「自分のペースで生きていける方法」を発信し続けています。
+						</p>
+						<p>→ "同じように悩む人に、選べる人生の作り方を伝えたい"</p>
 					</div>
 				</div>
 			</section>
@@ -680,11 +690,11 @@ const personStructuredData = {
 				</div>
 				<div class="message-box">
 					<p>
-						僕は「努力が報われない環境」でずっと自分をすり減らしてきました。<br />
-						そして、副業で54円を稼いだ瞬間に、人生が変わり始めました。
+						副業でありがたいことに収益は増えました。<br />
+						でも、頑張ってません。自分のペースでただ積み上げてるだけです。
 					</p>
 					<p>
-						自分の力で稼ぐことは、自由を取り戻す第一歩です。
+						自分の力で価値を届けることは、自由を取り戻す第一歩です。
 					</p>
 					<p>
 						このブログが、あなたが<strong>「選べる側の人生」</strong>を歩むきっかけになれば嬉しいです。
@@ -716,7 +726,7 @@ const personStructuredData = {
 							<span class="skill-item">顧客調整・要件定義</span>
 							<span class="skill-item">後輩育成・ドキュメント作成</span>
 							<span class="skill-item">note累計販売実績</span>
-							<span class="skill-item">月20万円安定収益</span>
+							<span class="skill-item">コンテンツ制作・販売</span>
 						</div>
 					</div>
 					<div class="skill-group">

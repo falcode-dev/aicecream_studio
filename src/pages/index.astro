@@ -82,23 +82,29 @@ const getUrl = (path: string) => {
 		<style>
 			/* ヒーローセクション */
 			.hero {
-				text-align: center;
-				padding: 3em 0;
+				padding: 3em 2em;
 				margin-bottom: 4em;
+				max-width: 800px;
+				margin-left: auto;
+				margin-right: auto;
 			}
 			
-			.hero h1 {
-				font-size: 2em;
-				margin-bottom: 1em;
-				line-height: 1.4;
+			.hero-content {
+				margin-bottom: 3em;
+			}
+			
+			.hero-text {
+				font-size: 1.1em;
+				line-height: 2;
+				color: rgb(var(--gray-dark));
+				margin-bottom: 1.5em;
+				font-weight: 400;
+			}
+			
+			.hero-text:first-child {
+				font-size: 1.2em;
+				color: rgb(var(--black));
 				font-weight: 500;
-			}
-			
-			.hero-subtitle {
-				font-size: 1em;
-				color: rgb(var(--gray));
-				margin-bottom: 2em;
-				line-height: 1.7;
 			}
 			
 			.hero-buttons {
@@ -106,6 +112,7 @@ const getUrl = (path: string) => {
 				gap: 1em;
 				justify-content: center;
 				flex-wrap: wrap;
+				margin-top: 2em;
 			}
 			
 			/* セクション共通 */
@@ -370,11 +377,12 @@ const getUrl = (path: string) => {
 					padding: 3em 1.5em;
 				}
 				
-				.hero h1 {
-					font-size: 2em;
+				.hero-text {
+					font-size: 1em;
+					line-height: 1.9;
 				}
 				
-				.hero-subtitle {
+				.hero-text:first-child {
 					font-size: 1.1em;
 				}
 				
@@ -430,11 +438,26 @@ const getUrl = (path: string) => {
 		<main>
 			<!-- ヒーローセクション -->
 			<section class="hero">
-				<h1>自分のペースで働く。</h1>
-				<p class="hero-subtitle">
-					働き方・キャリア戦略・副業・TypeScriptなど、<br />
-					「自分で選べる人生」を実現するための情報を発信しています。
-				</p>
+				<div class="hero-content">
+					<p class="hero-text">
+						<b>残業ばかりで、副業する体力もない。でも、本業だけじゃ稼ぎが足りない。</b>
+					</p>
+					<p class="hero-text">
+						そんなあなたに、伝えたいことがあります。
+					</p>
+					<p class="hero-text">
+						僕も、残業ばかりの日々でした。帰宅したら、もう何もしたくない。でも、お金は必要だ。そんな毎日を過ごしていました。
+					</p>
+					<p class="hero-text">
+						でも、気づいたんです。少しの時間で、最大限の収益を産む仕組みを作れることに。
+					</p>
+					<p class="hero-text">
+						頑張らなくていい。自分のペースで、ただ積み上げるだけ。それでいいんです。
+					</p>
+					<p class="hero-text">
+						一緒に、この道を歩きませんか。
+					</p>
+				</div>
 				<div class="hero-buttons">
 					<Button href="/blog/" variant="primary">ブログを見る</Button>
 					<Button href="/profile/" variant="secondary">プロフィール</Button>
@@ -505,20 +528,20 @@ const getUrl = (path: string) => {
 							</div>
 							<div class="author-info">
 								<div class="author-name">あいす</div>
-								<div class="author-title">金融系SE × 副業クリエイター</div>
+								<div class="author-title">エンジニア × ライター</div>
 								<div class="author-social">
-									<a href="https://note.com" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="note">
+									<a href="https://note.com/ice_engineer" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="note">
 										<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 											<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
 											<path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
 										</svg>
 									</a>
-									<a href="https://twitter.com" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+									<a href="https://x.com/ice_engineer_x" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
 										<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 											<path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
 										</svg>
 									</a>
-									<a href="https://github.com" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+									<a href="https://github.com/falcode-dev" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
 										<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 											<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
 										</svg>
@@ -527,8 +550,10 @@ const getUrl = (path: string) => {
 							</div>
 						</div>
 						<p class="author-description">
-							残業まみれの金融SEから、副業で月20万円を達成。<br />
-							技術と文章を武器に「会社に縛られない働き方」を追求しています。
+							副業でありがたいことに収益は増えました。
+							でも、頑張ってません。自分のペースでただ積み上げてるだけです。
+							文系未経験からエンジニアへ転身し、エンジニアとして働きながら、
+							その経験と技術を武器に「自分のペースで生きる方法」を追求しています。
 						</p>
 						<!-- <div class="author-actions">
 							<Button href="/profile/" variant="primary">プロフィールを見る</Button>
