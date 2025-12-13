@@ -26,10 +26,10 @@ const organizationStructuredData = {
 	'@type': 'Organization',
 	name: SITE_TITLE,
 	url: siteURL.toString(),
-	logo: {
-		'@type': 'ImageObject',
-		url: new URL('/favicon.svg', siteURL).toString(),
-	},
+		logo: {
+			'@type': 'ImageObject',
+			url: new URL('/icon.png', siteURL).toString(),
+		},
 	sameAs: [
 		// SNSリンクがあれば追加（例: 'https://twitter.com/username', 'https://github.com/username'）
 	],
@@ -47,7 +47,7 @@ const personStructuredData = {
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="icon" type="image/svg+xml" href={`${baseUrl}favicon.svg`} />
+<link rel="icon" type="image/png" href={`${baseUrl}icon.png`} />
 <link rel="sitemap" href={`${baseUrl}sitemap-index.xml`} />
 <link
 	rel="alternate"
