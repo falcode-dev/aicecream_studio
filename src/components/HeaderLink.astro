@@ -5,13 +5,30 @@ type Props = HTMLAttributes<'a'>;
 
 const { href, class: className, ...props } = Astro.props;
 const baseUrl = import.meta.env.BASE_URL;
+
+// baseUrlを正規化（末尾のスラッシュを統一）
+const normalizedBaseUrl = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+
 const hrefString = href ? (typeof href === 'string' ? href : href.toString()) : '';
+
+// リンクの解決
 const resolvedHref = hrefString.startsWith('/') 
-	? `${baseUrl}${baseUrl.endsWith('/') ? hrefString.slice(1) : hrefString}` 
+	? `${normalizedBaseUrl}${hrefString.slice(1)}` 
 	: hrefString;
-const pathname = Astro.url.pathname.replace(baseUrl, '');
-const subpath = pathname.match(/[^\/]+/g);
-const isActive = hrefString === pathname || hrefString === '/' + (subpath?.[0] || '');
+
+// 現在のパスからbaseUrlを除去して比較用のパスを取得
+let currentPath = Astro.url.pathname;
+if (normalizedBaseUrl !== '/') {
+	// baseUrlがルート以外の場合、baseUrlを除去
+	if (currentPath.startsWith(normalizedBaseUrl)) {
+		currentPath = currentPath.slice(normalizedBaseUrl.length - 1); // 先頭の/を残す
+	}
+}
+
+// アクティブ判定
+const isActive = hrefString === currentPath || 
+	(hrefString === '/' && currentPath === '/') ||
+	(hrefString !== '/' && currentPath.startsWith(hrefString));
 ---
 
 <a href={resolvedHref} class:list={[className, { active: isActive }]} {...props}>
