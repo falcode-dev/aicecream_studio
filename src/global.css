@@ -1,0 +1,49 @@
+/* ----------------------------------------------
+# setting
+---------------------------------------------- */
+@import "./assets/css/reset.css";
+
+html,
+body {
+    margin: 0;
+}
+
+/* レイアウト本体 */
+body {
+    min-height: 100vh;
+}
+
+/* 背景画像レイヤー */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    background-image: url("./assets/img/background-image.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    z-index: -2;
+}
+
+/* 透過＋ぼかしレイヤー */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+
+    background-color: rgba(82, 82, 82, 0.4);
+    /* #525252 を40%透過 */
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* 中身のコンテンツ */
+body>* {
+    position: relative;
+    z-index: 1;
+}

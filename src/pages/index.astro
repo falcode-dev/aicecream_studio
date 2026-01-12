@@ -1,568 +1,203 @@
 ---
-import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import BlogCard from '../components/BlogCard.astro';
-import Button from '../components/Button.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
-import authorIcon from '../asset/aice_icon_500.png.png';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ReleaseItem from "../components/ReleaseItem.astro";
+import CareerSection from "../components/CareerItem.astro";
+import AppLogo from "../assets/img/icon.png";
+import "@fontsource-variable/caveat";
 
-// 最新記事（6件）
-const allPosts = (await getCollection('blog')).filter((post) => post.data.public);
-const latestPosts = allPosts
-	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-	.slice(0, 6);
+import {careerItems} from "../data";
 
-// 人気記事/代表記事（固定スラッグで指定）
-const featuredSlugs = [
-	'first-post',
-	'second-post',
-	'third-post',
+interface ReleaseItems {
+	href: string;
+	title: string;
+	description: string;
+	src: string;
+}
+
+// interface CareerItems {
+// 	date: string;
+// 	publish: string;
+// 	src?: string;
+// 	alt: string;
+// 	comment: string;
+// 	emoji?: string;
+// }
+
+const releaseItems: ReleaseItems[] = [
+	{
+		href: "/",
+		title: "tech pro worker",
+		description:
+			"A blog for thinking about careers that will help you grow as an engineer",
+		src: AppLogo.src,
+	},
+	{
+		href: "/",
+		title: "media teacher",
+		description: "sample",
+		src: AppLogo.src,
+	},
 ];
-const featuredPosts = featuredSlugs
-	.map((slug) => allPosts.find((post) => post.data.slug === slug))
-	.filter((post) => post !== undefined) as typeof allPosts;
 
-// カテゴリ情報
-const categoryLabels: Record<string, { label: string; description: string; icon: string }> = {
-	life: {
-		label: '自由に生きる',
-		description: '働き方・価値観・生き方の話',
-		icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-			<path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-		</svg>`,
-	},
-	career: {
-		label: 'キャリア・副業',
-		description: '自分で稼ぐ力をつけるロードマップ',
-		icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-			<rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-			<path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-		</svg>`,
-	},
-	engineering: {
-		label: 'エンジニアリング',
-		description: 'SEが現場で使える知識',
-		icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-			<circle cx="12" cy="12" r="3" />
-			<path d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24" />
-		</svg>`,
-	},
-	typescript: {
-		label: 'TypeScript',
-		description: '技術Tips・実装ガイド',
-		icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-			<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-			<polyline points="14 2 14 8 20 8" />
-			<line x1="16" y1="13" x2="8" y2="13" />
-			<line x1="16" y1="17" x2="8" y2="17" />
-			<polyline points="10 9 9 9 8 9" />
-		</svg>`,
-	},
-};
-
-const baseUrl = import.meta.env.BASE_URL;
-const getUrl = (path: string) => {
-	if (path.startsWith('/')) {
-		return `${baseUrl}${baseUrl.endsWith('/') ? path.slice(1) : path}`;
-	}
-	return path;
-};
+// const careerItems: CareerItems[] = [
+// 	{
+// 		date: "2026-01-26",
+// 		publish: "3 month ago",
+// 		src: "",
+// 		alt: "クラッカー",
+// 		comment: "We have released a new blog service.",
+// 		emoji: "🎉",
+// 	},
+// ];
 ---
 
-<!doctype html>
-<html lang="ja">
-	<head>
-		<BaseHead
-			title={`${SITE_TITLE} | 自分のペースで働く。`}
-			description={SITE_DESCRIPTION}
-		/>
-		<style>
-			/* ヒーローセクション */
-			.hero {
-				padding: 3em 2em;
-				margin-bottom: 4em;
-				max-width: 800px;
-				margin-left: auto;
-				margin-right: auto;
-			}
-			
-			.hero-content {
-				margin-bottom: 3em;
-			}
-			
-			.hero-text {
-				font-size: 1.1em;
-				line-height: 2;
-				color: rgb(var(--gray-dark));
-				margin-bottom: 1.5em;
-				font-weight: 400;
-			}
-			
-			.hero-text:first-child {
-				font-size: 1.2em;
-				color: rgb(var(--black));
-				font-weight: 500;
-			}
-			
-			.hero-buttons {
-				display: flex;
-				gap: 1em;
-				justify-content: center;
-				flex-wrap: wrap;
-				margin-top: 2em;
-			}
-			
-			/* セクション共通 */
-			.section {
-				margin-bottom: 4em;
-			}
-			
-			.section-header {
-				margin-bottom: 2em;
-			}
-			
-			.section-header h2 {
-				margin: 0 0 0.5em 0;
-				font-size: 1.5em;
-				font-weight: 500;
-				color: rgb(var(--black));
-				line-height: 1.4;
-			}
-			
-			.section-description {
-				color: rgb(var(--gray));
-				margin: 0;
-				font-size: 0.9em;
-				line-height: 1.6;
-			}
-			
-			/* 記事カード */
-			.posts-grid {
-				display: grid;
-				grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-				gap: 2em;
-				margin-bottom: 2em;
-			}
-			
-			.view-all {
-				text-align: center;
-				margin-top: 2em;
-			}
-			
-			.view-all a {
-				color: var(--accent);
-				font-weight: 600;
-				text-decoration: none;
-			}
-			
-			.view-all a:hover {
-				text-decoration: underline;
-			}
-			
-			/* カテゴリガイド */
-			.categories-grid {
-				display: grid;
-				grid-template-columns: repeat(2, 1fr);
-				gap: 1.5em;
-			}
-			
-			.category-card {
-				position: relative;
-				padding: 2em 1.5em;
-				border: 1px solid rgb(var(--gray-light));
-				border-radius: var(--border-radius);
-				background: rgb(var(--white));
-				transition: var(--transition);
-				overflow: hidden;
-				cursor: pointer;
-			}
-			
-			.category-card::before {
-				content: '';
-				position: absolute;
-				top: 0;
-				left: 0;
-				width: 4px;
-				height: 100%;
-				background: var(--accent-light);
-				transform: scaleY(0);
-				transform-origin: bottom;
-				transition: transform 0.3s ease;
-			}
-			
-			.category-card:hover {
-				border-color: var(--accent-light);
-				box-shadow: var(--box-shadow);
-			}
-			
-			.category-card:hover::before {
-				transform: scaleY(1);
-			}
-			
-			.category-icon {
-				display: inline-flex;
-				align-items: center;
-				justify-content: center;
-				width: 48px;
-				height: 48px;
-				margin-bottom: 1em;
-				color: var(--accent);
-				background: var(--accent-light);
-				border-radius: 8px;
-				transition: var(--transition);
-			}
-			
-			.category-icon svg {
-				width: 24px;
-				height: 24px;
-			}
-			
-			.category-card:hover .category-icon {
-				background: var(--accent);
-				color: white;
-			}
-			
-			.category-card h3 {
-				margin: 0 0 0.75em 0;
-				color: rgb(var(--black));
-				font-weight: 600;
-				font-size: 1.15em;
-				line-height: 1.4;
-				display: flex;
-				align-items: center;
-				gap: 0.5em;
-			}
-			
-			.category-card:hover h3 {
-				color: var(--accent);
-			}
-			
-			.category-card p {
-				margin: 0 0 1.25em 0;
-				color: rgb(var(--gray));
-				font-size: 0.9em;
-				line-height: 1.6;
-			}
-			
-			.category-card-link {
-				display: inline-flex;
-				align-items: center;
-				gap: 0.5em;
-				color: var(--accent);
-				font-weight: 500;
-				font-size: 0.9em;
-				text-decoration: none;
-				transition: var(--transition);
-			}
-			
-			.category-card-link:hover {
-				color: var(--accent-dark);
-				gap: 0.75em;
-			}
-			
-			.category-card-link::after {
-				content: '→';
-				display: inline-block;
-				transition: transform 0.3s ease;
-			}
-			
-			.category-card-link:hover::after {
-				transform: translateX(4px);
-			}
-			
-			/* 著者紹介 */
-			.author-section {
-				padding: 2em 0;
-			}
-			
-			.author-card {
-				position: relative;
-				padding: 2em;
-				border: 1px solid rgb(var(--gray-light));
-				border-radius: var(--border-radius);
-				background: rgb(var(--white));
-				max-width: 800px;
-				margin: 0 auto;
-			}
-			
-			.author-header {
-				display: flex;
-				align-items: center;
-				gap: 1.5em;
-				margin-bottom: 1.5em;
-			}
-			
-			.author-avatar {
-				width: 80px;
-				height: 80px;
-				flex-shrink: 0;
-				border-radius: 50%;
-				overflow: hidden;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-			}
-			
-			.author-avatar img {
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
-			}
-			
-			.author-info {
-				flex: 1;
-			}
-			
-			.author-name {
-				font-size: 1.5em;
-				font-weight: 600;
-				margin-bottom: 0.25em;
-				color: rgb(var(--black));
-			}
-			
-			.author-title {
-				color: var(--accent);
-				font-size: 0.95em;
-				font-weight: 500;
-				margin-bottom: 0.5em;
-			}
-			
-			.author-social {
-				display: flex;
-				gap: 0.75em;
-				flex-wrap: wrap;
-			}
-			
-			.social-link {
-				display: inline-flex;
-				align-items: center;
-				justify-content: center;
-				width: 36px;
-				height: 36px;
-				border-radius: 50%;
-				background: rgb(var(--gray-lighter));
-				color: rgb(var(--gray-dark));
-				text-decoration: none;
-				transition: var(--transition);
-			}
-			
-			.social-link:hover {
-				background: var(--accent);
-				color: white;
-			}
-			
-			.social-link svg {
-				width: 18px;
-				height: 18px;
-			}
-			
-			.author-description {
-				color: rgb(var(--gray-dark));
-				line-height: 1.8;
-				margin-bottom: 1.5em;
-				font-size: 0.95em;
-			}
-			
-			.author-actions {
-				display: flex;
-				gap: 1em;
-				flex-wrap: wrap;
-			}
-			
-			@media (max-width: 768px) {
-				.hero {
-					padding: 3em 1.5em;
-				}
-				
-				.hero-text {
-					font-size: 1em;
-					line-height: 1.9;
-				}
-				
-				.hero-text:first-child {
-					font-size: 1.1em;
-				}
-				
-				.posts-grid {
-					grid-template-columns: 1fr;
-				}
-				
-				.categories-grid {
-					grid-template-columns: 1fr;
-					gap: 1.25em;
-				}
-				
-				.category-card {
-					padding: 1.75em 1.25em;
-				}
-				
-				.author-section {
-					padding: 2em 1.5em;
-				}
-				
-				.author-card {
-					padding: 1.5em;
-				}
-				
-				.author-header {
-					flex-direction: column;
-					text-align: center;
-					gap: 1em;
-				}
-				
-				.author-avatar {
-					width: 70px;
-					height: 70px;
-					font-size: 1.75em;
-				}
-				
-				.author-social {
-					justify-content: center;
-				}
-				
-				.author-actions {
-					flex-direction: column;
-				}
-				
-				.author-actions .btn {
-					width: 100%;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<!-- ヒーローセクション -->
-			<section class="hero">
-				<div class="hero-content">
-					<p class="hero-text">
-						<b>残業ばかりで、副業する体力もない。でも、本業だけじゃ稼ぎが足りない。</b>
-					</p>
-					<p class="hero-text">
-						そんなあなたに、伝えたいことがあります。
-					</p>
-					<p class="hero-text">
-						僕も、残業ばかりの日々でした。帰宅したら、もう何もしたくない。でも、お金は必要だ。そんな毎日を過ごしていました。
-					</p>
-					<p class="hero-text">
-						でも、気づいたんです。少しの時間で、最大限の収益を産む仕組みを作れることに。
-					</p>
-					<p class="hero-text">
-						頑張らなくていい。自分のペースで、ただ積み上げるだけ。それでいいんです。
-					</p>
-					<p class="hero-text">
-						一緒に、この道を歩きませんか。
-					</p>
-				</div>
-				<div class="hero-buttons">
-					<Button href="/blog/" variant="primary">ブログを見る</Button>
-					<Button href="/profile/" variant="secondary">プロフィール</Button>
-				</div>
-			</section>
+<BaseLayout>
+	<div class="container">
+		<section class="hero-section">
+			<p>There are answers that you can't see if you stay frozen.</p>
+			<button class="sns-x-btn" onclick="window.open('https://x.com/aicemethod', '_blank')">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="20"
+					height="20"
+					viewBox="0 0 24 24"
+					><path
+						fill="currentColor"
+						fill-rule="evenodd"
+						d="m13.458 9.122l7.516-7.965h2.491l-.01.011l-8.89 9.424l8.139 10.802a.906.906 0 0 1-.658 1.45H16.95a.9.9 0 0 1-.659-.359l-5.727-7.601l-7.472 7.96H.535l8.922-9.43L1.318 2.612a.906.906 0 0 1 .724-1.452h4.965c.285 0 .553.134.724.361zm-.763 2a1 1 0 0 1-.07-.093l-6.07-8.056H3.86l13.607 18.06h2.696z"
+						clip-rule="evenodd"></path></svg
+				>
+				aicemethod</button
+			>
+		</section>
+		<section class="release-section">
+			<p class="release-section-heading">release</p>
+			<!-- {
+				releaseItems.map((item) => (
+					<ReleaseItem
+						href={item.href}
+						title={item.title}
+						description={item.description}
+						src={item.src}
+					/>
+				))
+			} -->
+				<p class="coming-soon-text">coming soon...</p>
+		</section>
+		<section class="career-section">
+			<p class="career-section-heading">career</p>
 
-			<!-- 最新記事 -->
-			<section class="section">
-				<div class="section-header">
-					<h2>最新記事</h2>
-				</div>
-				<div class="posts-grid">
-					{
-						latestPosts.map((post) => (
-							<BlogCard post={post} />
-						))
-					}
-				</div>
-				<div class="view-all">
-					<a href={getUrl('/blog/')}>すべての記事を見る →</a>
-				</div>
-			</section>
+			{
+				careerItems.map((item) => (
+					<CareerSection
+						date={item.date}
+						publish={item.publish}
+						src={item.src}
+						alt={item.alt}
+						comment={item.comment}
+						emoji={item.emoji}
+					/>
+					<div class="dot-line"></div>
+				))
+			}
+		</section>
+	</div>
+</BaseLayout>
 
-			<!-- よく読まれている記事 -->
-			{featuredPosts.length > 0 && (
-				<section class="section">
-					<div class="section-header">
-						<h2>よく読まれている記事</h2>
-						<p class="section-description">まずはここから読んでみてください</p>
-					</div>
-					<div class="posts-grid">
-						{
-							featuredPosts.map((post) => (
-								<BlogCard post={post} />
-							))
-						}
-					</div>
-				</section>
-			)}
+<style>
+	/* レイアウト */
+	.container {
+		max-width: 1024px;
+		margin: 0 auto;
+		padding: 20px;
+	}
 
-			<!-- テーマ別ガイド -->
-			<section class="section">
-				<div class="section-header">
-					<h2>テーマ別ガイド</h2>
-					<p class="section-description">カテゴリから記事を探す</p>
-				</div>
-				<div class="categories-grid">
-					{
-							Object.entries(categoryLabels).map(([key, { label, description, icon }]) => (
-								<div class="category-card">
-									<div class="category-icon" set:html={icon} />
-									<h3>{label}</h3>
-									<p>{description}</p>
-									<a href={getUrl(`/blog/category/${key}/`)} class="category-card-link">記事を見る</a>
-								</div>
-							))
-					}
-				</div>
-			</section>
+	/* ヒーローセクション */
+	.hero-section {
+		max-width: 300px;
+		margin: 100px auto 0;
 
-			<!-- 著者について -->
-			<section class="section">
-				<div class="author-section">
-					<div class="author-card">
-						<div class="author-header">
-							<div class="author-avatar">
-								<Image src={authorIcon} alt="あいす" width={80} height={80} />
-							</div>
-							<div class="author-info">
-								<div class="author-name">あいす</div>
-								<div class="author-title">エンジニア × ライター</div>
-								<div class="author-social">
-									<a href="https://note.com/ice_engineer" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="note">
-										<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-											<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-											<path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-										</svg>
-									</a>
-									<a href="https://x.com/ice_engineer_x" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-										<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-											<path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
-										</svg>
-									</a>
-									<a href="https://github.com/falcode-dev" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-										<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-											<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
-										</svg>
-									</a>
-								</div>
-							</div>
-						</div>
-						<p class="author-description">
-							副業でありがたいことに収益は増えました。
-							でも、頑張ってません。自分のペースでただ積み上げてるだけです。
-							文系未経験からエンジニアへ転身し、エンジニアとして働きながら、
-							その経験と技術を武器に「自分のペースで生きる方法」を追求しています。
-						</p>
-						<!-- <div class="author-actions">
-							<Button href="/profile/" variant="primary">プロフィールを見る</Button>
-							<Button href="/contact/" variant="secondary">お問い合わせ</Button>
-						</div>  -->
-					</div>
-				</div>
-			</section>
-		</main>
-		<Footer />
-	</body>
-</html>
+		font-family: "Caveat Variable", cursive;
+		font-size: 2rem;
+		color: #ffffff;
+
+		opacity: 0;
+		transform: translateY(24px);
+		animation: floatIn 1.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+	}
+
+	/* SNSボタン */
+	.sns-x-btn {
+		display: flex;
+		justify-content: center;
+
+		width: 200px;
+		height: 40px;
+		margin: 40px auto 0;
+
+		border: 1px solid #ffffff;
+		border-radius: 50px;
+		background: transparent;
+
+		font-size: 1.5rem;
+		font-weight: 700;
+		color: #ffffff;
+	}
+
+	.sns-x-btn svg {
+		margin-right: 10px;
+	}
+
+	.release-section,
+	.career-section {
+		max-width: 500px;
+		margin: 40px auto 0;
+	}
+
+	.release-section-heading,
+	.career-section-heading {
+		font-family: "Caveat Variable", cursive;
+		font-size: 2rem;
+		color: #ffffff;
+		margin-bottom: 20px;
+	}
+
+	.coming-soon-text {
+		font-family: "Caveat Variable", cursive;
+		font-size: 1.5rem;
+		color: #ffffff;
+	}
+
+	/* フロー線 */
+	.dot-line {
+		width: 2px;
+		height: 40px;
+
+		background: repeating-linear-gradient(
+			to bottom,
+			#ffffff 0,
+			#ffffff 4px,
+			transparent 4px,
+			transparent 8px
+		);
+
+		margin-left: 27px;
+		margin-top: -10px;
+	}
+
+	.career-section .dot-line:last-child {
+  display: none;
+}
+
+	/* アニメーション */
+	@keyframes floatIn {
+		from {
+			opacity: 0;
+			transform: translateY(24px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+</style>

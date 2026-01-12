@@ -1,23 +1,15 @@
 {
-  "name": "aice_cream_studio",
+  "name": "",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro",
-    "create-post": "node scripts/create-post.js"
+    "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.3.13",
-    "@astrojs/react": "^4.4.2",
-    "@astrojs/rss": "^4.0.14",
-    "@astrojs/sitemap": "^3.6.0",
-    "@heroicons/react": "^2.2.0",
-    "astro": "^5.16.5",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "sharp": "^0.34.3"
+    "@fontsource-variable/caveat": "^5.2.8",
+    "astro": "^5.16.8"
   }
 }
